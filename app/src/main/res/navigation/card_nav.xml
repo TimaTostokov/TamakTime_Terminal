@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_nav"
+    app:startDestination="@id/cardFragmentInitial">
+
+    <fragment
+        android:id="@+id/cardFragmentInitial"
+        android:name="com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardinitial.CardFragmentInitial"
+        android:label="fragment_card_initial"
+        tools:layout="@layout/fragment_card_initial" >
+
+        <action
+            android:id="@+id/action_cardFragmentInitial_to_cardFragmentLoading"
+            app:destination="@id/cardFragmentLoading" />
+        <action
+            android:id="@+id/action_cardFragmentInitial_to_qrOrderFragment"
+            app:destination="@id/qrOrderFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/cardFragmentLoading"
+        android:name="com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardloading.CardFragmentLoading"
+        android:label="fragment_card_loading"
+        tools:layout="@layout/fragment_card_loading" >
+
+        <action
+            android:id="@+id/action_cardFragmentLoading_to_cardFragmentError"
+            app:destination="@id/cardFragmentError" />
+
+        <action
+            android:id="@+id/action_cardFragmentLoading_to_cardFragmentAuthed"
+            app:destination="@id/cardFragmentAuthed" />
+
+        <action
+            android:id="@+id/action_cardFragmentLoading_to_cardFragmentSuccess"
+            app:destination="@id/cardFragmentSuccess" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/cardFragmentAuthed"
+        android:name="com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardauthed.CardFragmentAuthed"
+        android:label="fragment_card_authed"
+        tools:layout="@layout/fragment_card_authed" >
+
+        <action
+            android:id="@+id/action_cardFragmentAuthed_to_cardFragmentLoading"
+            app:destination="@id/cardFragmentLoading" />
+
+        <action
+            android:id="@+id/action_cardFragmentAuthed_to_cardFragmentInitial"
+            app:destination="@id/cardFragmentInitial" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/cardFragmentError"
+        android:name="com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.carderror.CardFragmentError"
+        android:label="fragment_card_error"
+        tools:layout="@layout/fragment_card_error" >
+
+        <action
+            android:id="@+id/action_cardFragmentError_to_cardFragmentInitial"
+            app:destination="@id/cardFragmentInitial" />
+
+        <action
+            android:id="@+id/action_cardFragmentError_to_cardFragmentLoading"
+            app:destination="@id/cardFragmentLoading" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/cardFragmentSuccess"
+        android:name="com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardsuccess.CardFragmentSuccess"
+        android:label="fragment_card_success"
+        tools:layout="@layout/fragment_card_success" >
+
+        <action
+            android:id="@+id/action_cardFragmentSuccess_to_cardFragmentInitial"
+            app:destination="@id/cardFragmentInitial" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/qrOrderFragment"
+        android:name="com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.card_qr.QrOrderFragment"
+        android:label="fragment_qr_order"
+        tools:layout="@layout/fragment_qr_order" >
+
+        <action
+            android:id="@+id/action_qrOrderFragment_to_qrOrderFragmentLoading"
+            app:destination="@id/qrOrderFragmentLoading" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/qrOrderFragmentLoading"
+        android:name="com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardloading.QrOrderFragmentLoading"
+        android:label="QrOrderFragmentLoading" >
+
+        <action
+            android:id="@+id/action_qrOrderFragmentLoading_to_cardFragmentSuccess"
+            app:destination="@id/cardFragmentSuccess" />
+
+        <action
+            android:id="@+id/action_qrOrderFragmentLoading_to_cardFragmentError"
+            app:destination="@id/cardFragmentError" />
+
+        <action
+            android:id="@+id/action_qrOrderFragmentLoading_to_cardFragmentAuthed"
+            app:destination="@id/cardFragmentAuthed" />
+
+    </fragment>
+
+</navigation>

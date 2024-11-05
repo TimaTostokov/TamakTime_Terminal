@@ -1,0 +1,85 @@
+<resources>
+    <string name="app_name" translatable="false">TamakTime_Temirnal</string>
+
+    <string name="tamak">Kantin</string>
+    <string name="time">deyim</string>
+    <string name="tt_logo">logo_tamaktime</string>
+
+    <string name="login_title">Giriş Yap</string>
+    <string name="phone">Telefon numarası</string>
+    <string name="password">Şifre</string>
+    <string name="singIn">Giriş yap</string>
+    <string name="sign_out">Çıkış yap</string>
+    <string name="exit">Çıkış</string>
+    <string name="fill_field">Lütfen bu alanı doldurun</string>
+    <string name="invalid_phone">Yanlış telefon numarası</string>
+    <string name="invalid_password">Şifre çok kısa</string>
+
+    <string name="title">başlık</string>
+    <string name="count" translatable="false">1</string>
+    <string name="price" translatable="false">10 ₺</string>
+
+    <string name="categories">Kategoriler</string>
+    <string name="products">Ürünler</string>
+    <string name="breakfast">Kahvaltı</string>
+    <string name="tea">Çay</string>
+    <string name="noodles">Erişte</string>
+    <string name="combo">Kombin</string>
+    <string name="waffles">Waffle</string>
+    <string name="drink">İçecekler</string>
+    <string name="sandwich">Sandviçler</string>
+    <string name="chicken">Tavuk</string>
+    <string name="soup">Çorbalar</string>
+    <string name="sets">Setler</string>
+    <string name="candies">Tatlı</string>
+    <string name="bakery">Unlu mamuller</string>
+    <string name="pizza" translatable="false">Pizza</string>
+    <string name="desserts">Tatlılar</string>
+
+    <!-- Kart Fragment-->
+    <string name="attach_card">Sipariş vermek için kartınızı gösterin</string>
+    <string name="card_reading">Kart okunuyor</string>
+    <string name="wait">Lütfen bekleyin</string>
+    <string name="card_reading_wait">Kart okunuyor. Lütfen bekleyin.</string>
+    <string name="card_authentication_wait">Kart sahibi doğrulanıyor. Lütfen bekleyin</string>
+    <string name="smth_wrong">Bir şeyler ters gitti</string>
+    <string name="try_again">Tekrar deneyin</string>
+    <string name="smth_wrong_try_again">Bir şeyler ters gitti. Tekrar deneyin</string>
+    <string name="make_order">Satın al</string>
+    <string name="to_payments">Ödemeye devam et</string>
+    <string name="choose_product">Sepete eklemek için bir ürün seçin</string>
+    <string name="tryAgain">Tekrar dene</string>
+    <string name="ok" translatable="false">OK</string>
+    <string name="balance">Bakiye</string>
+    <string name="not_enough_money">*Ödeme için yeterli bakiye yok</string>
+    <string name="order_success">Ödeme başarılı oldu</string>
+    <string name="order_error">Ödeme hatası</string>
+    <string name="ordering">Sunucudan yanıt bekleniyor</string>
+
+    <string name="no_products">Bu kategoride ürün bulunmamaktadır</string>
+
+    <!-- Sipariş içeriği-->
+    <string name="order">Sipariş</string>
+    <string name="cancel">İptal</string>
+    <string name="total">Toplam</string>
+
+    <string name="emptyDescription" translatable="false">boş_kutu_resmi</string>
+    <string name="cardDescription" translatable="false">kart_resmi</string>
+    <string name="errorDescription" translatable="false">hata</string>
+    <string name="successDescription" translatable="false">başarı</string>
+    <string name="foodDescription" translatable="false">yemek_resmi</string>
+    <string name="removeDescription" translatable="false">ikon_kaldır</string>
+    <string name="deleteDescription" translatable="false">ikon_sil</string>
+    <string name="addDescription" translatable="false">ikon_ekle</string>
+    <string name="vhod_cashier" translatable="false">Kasiyer olarak giriş yap</string>
+    <string name="hello_blank_fragment" translatable="false">Merhaba boş parça</string>
+    <string name="iseedeadpeople" translatable="false">Bu yazıyı görmemen gerekiyordu</string>
+    <string name="iseedeadpeoplebtn" translatable="false">Bgnyksg</string> <!-- Note: This appears to be gibberish or a code, so it is left unchanged -->
+    <string name="mock_user_name" translatable="false">Konstantinov K.</string> <!-- Note: Names are left unchanged -->
+    <string name="devam_etmek_i_in_bir_dil_se_in_ndaha_sonra_istedi_iniz_zaman_de_i_tirebilirsiniz" translatable="false">Devam etmek için bir dil seçin, daha sonra istediğiniz zaman değiştirebilirsiniz.</string>
+    <string name="select_a_language_to_continue_you_can_always_change_it_later" translatable="false">Devam etmek için bir dil seçin, istediğiniz zaman değiştirebilirsiniz.</string>
+    <string name="english" translatable="false">İngilizce</string>
+    <string name="russian" translatable="false">Rusça</string>
+    <string name="turkey" translatable="false">Türkiye</string>
+
+</resources>

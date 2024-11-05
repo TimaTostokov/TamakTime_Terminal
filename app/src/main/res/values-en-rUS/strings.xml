@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tamak">Kantin</string>
+    <string name="time">deyim</string>
+    <string name="tt_logo">logo_tamaktime</string>
+
+    <string name="login_title">Login</string>
+    <string name="phone">Phone number</string>
+    <string name="password">Password</string>
+    <string name="singIn">Sign in</string>
+    <string name="sign_out">Sign out</string>
+    <string name="exit">Exit</string>
+    <string name="fill_field">Please fill in this field</string>
+    <string name="invalid_phone">Wrong phone number</string>
+    <string name="invalid_password">Password is too short</string>
+
+    <string name="title">title</string>
+    <string name="count" translatable="false">1</string>
+    <string name="price" translatable="false">10 ₺</string>
+
+    <string name="categories">Categories</string>
+    <string name="products">Products</string>
+    <string name="breakfast">Breakfast</string>
+    <string name="tea">Tea</string>
+    <string name="noodles">Noodles</string>
+    <string name="combo">Combo</string>
+    <string name="waffles">Waffles</string>
+    <string name="drink">Beverages</string>
+    <string name="sandwich">Sandwiches</string>
+    <string name="chicken">Chicken</string>
+    <string name="soup">Soups</string>
+    <string name="sets">Sets</string>
+    <string name="candies">Sweet</string>
+    <string name="bakery">Bakery products</string>
+    <string name="pizza" translatable="false">Pizza</string>
+    <string name="desserts">Desserts</string>
+
+    <!-- Card Fragment-->
+    <string name="attach_card">Present your card to place an order</string>
+    <string name="card_reading">Card is being read</string>
+    <string name="wait">Please wait</string>
+    <string name="card_reading_wait">Card reading in progress. Please wait.</string>
+    <string name="card_authentication_wait">Authentication card holder. Please wait</string>
+    <string name="smth_wrong">Something went wrong</string>
+    <string name="try_again">Try again</string>
+    <string name="smth_wrong_try_again">Something went wrong. Try again</string>
+    <string name="make_order">Checkout</string>
+    <string name="to_payments">Proceed to checkout</string>
+    <string name="choose_product">Select a product to add to cart</string>
+    <string name="tryAgain">Repeat</string>
+    <string name="ok" translatable="false">OK</string>
+    <string name="balance">Balance</string>
+    <string name="not_enough_money">*Insufficient funds for further payment</string>
+    <string name="order_success">Payment was successful</string>
+    <string name="order_error">Payment error</string>
+    <string name="ordering">Waiting for a response from the server</string>
+
+    <string name="no_products">There are no products in this category</string>
+    <!--    order content-->
+    <string name="order">Order</string>
+    <string name="cancel">Cancel</string>
+    <string name="total">Total</string>
+
+    <string name="emptyDescription" translatable="false">empty_box_pic</string>
+    <string name="cardDescription" translatable="false">card_pic</string>
+    <string name="errorDescription" translatable="false">error</string>
+    <string name="successDescription" translatable="false">success</string>
+    <string name="foodDescription" translatable="false">food_pic</string>
+    <string name="removeDescription" translatable="false">icon_remove</string>
+    <string name="deleteDescription" translatable="false">icon_delete</string>
+    <string name="addDescription" translatable="false">icon_add</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="iseedeadpeople" translatable="false">You shouldnt have seen this inscription</string>
+    <string name="iseedeadpeoplebtn" translatable="false">Ysnhsti</string>
+    <string name="mock_user_name" translatable="false">Константинов К.</string>
+    <string name="vhod_cashier" translatable="false">Login as cashier</string>
+</resources>

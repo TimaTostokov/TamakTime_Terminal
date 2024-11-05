@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tamak">Kantin</string>
+    <string name="time">deyim</string>
+    <string name="tt_logo">логотип_тамаквремя</string>
+    <string name="login_title">Вход</string>
+    <string name="phone">Номер телефона</string>
+    <string name="password">Пароль</string>
+    <string name="singIn">Войти</string>
+    <string name="sign_out">Выйти</string>
+    <string name="exit">Выход</string>
+    <string name="fill_field">Пожалуйста, заполните это поле</string>
+    <string name="invalid_phone">Неправильный номер телефона</string>
+    <string name="invalid_password">Пароль слишком короткий</string>
+    <string name="title">заголовок</string>
+    <string name="count" translatable="false">1</string>
+    <string name="price" translatable="false">10 ₺</string>
+    <string name="categories">Категории</string>
+    <string name="products">Продукты</string>
+    <string name="breakfast">Завтрак</string>
+    <string name="tea">Чай</string>
+    <string name="noodles">Лапша</string>
+    <string name="combo">Комбо</string>
+    <string name="waffles">Вафли</string>
+    <string name="drink">Напитки</string>
+    <string name="sandwich">Сэндвичи</string>
+    <string name="chicken">Курица</string>
+    <string name="soup">Супы</string>
+    <string name="sets">Наборы</string>
+    <string name="candies">Сладости</string>
+    <string name="bakery">Выпечка</string>
+    <string name="pizza" translatable="false">Пицца</string>
+    <string name="desserts">Десерты</string>
+
+    <!-- Фрагмент карты -->
+    <string name="attach_card">Предъявите карту для оформления заказа</string>
+    <string name="card_reading">Карта считывается</string>
+    <string name="wait">Пожалуйста, подождите</string>
+    <string name="card_reading_wait">Идёт считывание карты
+Пожалуйста, подождите</string>
+    <string name="card_authentication_wait">Аутентификация владельца карты. Пожалуйста, подождите</string>
+    <string name="smth_wrong">Что-то пошло не так</string>
+    <string name="try_again">Попробуйте снова</string>
+    <string name="smth_wrong_try_again">Что-то пошло не так. Попробуйте снова</string>
+    <string name="make_order">Оформить заказ</string>
+    <string name="to_payments">Перейти к оплате</string>
+    <string name="choose_product">Выберите продукт, чтобы добавить в корзину</string>
+    <string name="tryAgain">Повторить</string>
+    <string name="ok" translatable="false">OK</string>
+    <string name="balance">Баланс</string>
+    <string name="not_enough_money">*Недостаточно средств для дальнейшей оплаты</string>
+    <string name="order_success">Оплата прошла успешно</string>
+    <string name="order_error">Ошибка оплаты</string>
+    <string name="ordering">Ожидание ответа от сервера</string>
+    <string name="no_products">В этой категории нет продуктов</string>
+
+    <!-- Содержимое заказа -->
+    <string name="order">Заказ</string>
+    <string name="cancel">Отмена</string>
+    <string name="total">Итого</string>
+    <string name="emptyDescription" translatable="false">пустая_коробка_картинка</string>
+    <string name="cardDescription" translatable="false">карта_картинка</string>
+    <string name="errorDescription" translatable="false">ошибка</string>
+    <string name="successDescription" translatable="false">успех</string>
+    <string name="foodDescription" translatable="false">еда_картинка</string>
+    <string name="removeDescription" translatable="false">иконка_удалить</string>
+    <string name="deleteDescription" translatable="false">иконка_удалить</string>
+    <string name="addDescription" translatable="false">иконка_добавить</string>
+    <string name="hello_blank_fragment" translatable="false">Привет, пустой фрагмент</string>
+    <string name="iseedeadpeople" translatable="false">Вы не должны были видеть эту надпись</string>
+    <string name="iseedeadpeoplebtn" translatable="false">Ysnhsti</string>
+    <string name="mock_user_name" translatable="false">Константинов К.</string>
+    <string name="vhod_cashier" translatable="false">Войдите как кассир</string>
+</resources>
