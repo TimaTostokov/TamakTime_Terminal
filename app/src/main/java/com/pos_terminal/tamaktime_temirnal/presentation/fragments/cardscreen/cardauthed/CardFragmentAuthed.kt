@@ -45,6 +45,8 @@ class CardFragmentAuthed : Fragment(), OrderItemAdapter.OrderItemListener {
         setupRecyclerView()
         setupObservers()
 
+        val limit = viewModel.loadStudentLimit(studentId = 1)
+
         binding.buttonCancelOrder.setOnClickListener {
             viewModel.resetCardState()
         }
@@ -73,6 +75,14 @@ class CardFragmentAuthed : Fragment(), OrderItemAdapter.OrderItemListener {
                 student?.let {
                     binding.tvClientName.text = "${it.firstName} ${it.lastName}"
                     binding.tvClientBalance.text = it.balance
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.studentLimit.collect { limit ->
+                limit?.let {
+                    binding.tvClientTotalBalance.text = it
                 }
             }
         }
