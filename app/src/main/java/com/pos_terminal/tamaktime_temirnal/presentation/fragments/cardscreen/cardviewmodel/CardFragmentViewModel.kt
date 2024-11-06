@@ -16,7 +16,6 @@ import com.pos_terminal.tamaktime_temirnal.data.remote.model.product.Product
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.qr_order.QROrderItem
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.student.Student
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.student.StudentCardKey
-import com.pos_terminal.tamaktime_temirnal.data.remote.model.student.limit.StudentLimit
 import com.pos_terminal.tamaktime_temirnal.data.repositories.order.OrderRepository
 import com.pos_terminal.tamaktime_temirnal.data.repositories.student.StudentRepository
 import com.pos_terminal.tamaktime_temirnal.data.repositories.student.limit.StudentLimitRepository
@@ -77,8 +76,8 @@ class CardFragmentViewModel @Inject constructor(
     private val _errorMessage = MutableStateFlow("")
     val errorMessage: StateFlow<String> = _errorMessage.asStateFlow()
 
-    private val _studentLimit = MutableLiveData<StudentLimit?>()
-    val studentLimit: LiveData<StudentLimit?> get() = _studentLimit
+    private val _studentLimit = MutableStateFlow<String?>(null)
+    val studentLimit: StateFlow<String?> = _studentLimit.asStateFlow()
 
     fun setCardUuid(uuid: String) {
         _cardUuid.value = uuid
@@ -245,6 +244,19 @@ class CardFragmentViewModel @Inject constructor(
         orderMap.value.clear()
         orderId = -1L
         orderingSuccess = null
+    }
+
+    fun loadStudentLimit(studentId: Long) {
+        viewModelScope.launch {
+            val credentials = userRepository.getCredentials() ?: return@launch
+            val result = studentLimitRepository.getStudentLimit(credentials, studentId)
+            if (result.status == Resource.Status.SUCCESS) {
+                _studentLimit.emit(result.data?.limit)
+            } else {
+                Log.e("arsen_botik228", "Error loading student limit: ${result.message}")
+                _studentLimit.emit(null)
+            }
+        }
     }
 
     private fun checkStudentLimit() {

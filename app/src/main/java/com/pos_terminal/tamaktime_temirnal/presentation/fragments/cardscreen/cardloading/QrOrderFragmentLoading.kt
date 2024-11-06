@@ -59,7 +59,7 @@ class QrOrderFragmentLoading : Fragment(), CardFragmentViewModel.CardNavigationL
                             qrOrderItem.creator.cardUuid,
                             qrOrderItem.creator.isActive,
                             qrOrderItem.creator.gender,
-                            "1000",
+                            qrOrderItem.creator.balance,
                             qrOrderItem.creator.group,
                             qrOrderItem.creator.school,
                             qrOrderItem.creator.photo

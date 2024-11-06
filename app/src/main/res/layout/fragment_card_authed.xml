@@ -69,17 +69,16 @@
                         tools:text="0.0 $"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        android:paddingEnd="15dp"
+                        android:layout_marginEnd="15dp"
                         app:layout_constraintEnd_toStartOf="@id/tv_client_balance"
                         android:textColor="@android:color/white"
                         android:textSize="24sp"
-                        android:textStyle="bold"
-                        tools:ignore="HardcodedText,RtlSymmetry" />
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tv_client_balance"
                         android:layout_width="0dp"
-                        android:paddingEnd="10dp"
+                        android:layout_marginEnd="10dp"
                         android:layout_height="wrap_content"
                         tools:text="0.0 $"
                         app:layout_constraintTop_toTopOf="parent"
@@ -117,7 +116,7 @@
 
             <TextView
                 android:id="@+id/tv_choose_product"
-                android:layout_width="263dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="90dp"
