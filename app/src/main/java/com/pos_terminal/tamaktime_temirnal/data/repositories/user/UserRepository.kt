@@ -1,11 +1,11 @@
 package com.pos_terminal.tamaktime_temirnal.data.repositories.user
 
+import android.util.Log
 import com.pos_terminal.tamaktime_temirnal.common.LanguagePreference
 import com.pos_terminal.tamaktime_temirnal.data.remote.local.UserStoreImpl
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.user.User
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
-import timber.log.Timber
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(
@@ -27,7 +27,7 @@ class UserRepository @Inject constructor(
     suspend fun me(credentials: String) = remote.me("$credentials}")
 
     suspend fun showMe() {
-        Timber.e(local.flowCredentials().collect().toString())
+        Log.d("shamal", local.flowCredentials().collect().toString())
     }
 
     fun flowHasCredentials() = local.flowHasCredentials()

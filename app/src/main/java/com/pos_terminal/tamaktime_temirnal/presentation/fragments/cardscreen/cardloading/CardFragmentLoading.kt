@@ -19,7 +19,6 @@ import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.car
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class CardFragmentLoading : Fragment(
@@ -58,22 +57,18 @@ class CardFragmentLoading : Fragment(
                     .collect { state ->
                         when (state) {
                             CardState.AUTHENTICATING -> {
-                                Timber.d("CardState.AUTHENTICATING")
                                 binding.title.text = resources.getString(R.string.card_reading_wait)
                             }
 
                             CardState.AUTHENTICATED -> {
-                                Timber.d("CardState.AUTHENTICATING -> CardState.AUTHENTICATED")
                                 navigateToCategories()
                             }
 
                             CardState.ORDERING -> {
-                                Timber.d("CardState.ORDERING")
                                 binding.title.text = resources.getString(R.string.ordering)
                             }
 
                             CardState.AUTHENTICATING_ERROR -> {
-                                Timber.d("CardState.ORDERING -> CardState.ORDER_ERROR")
                                 findNavController().navigate(R.id.action_cardFragmentLoading_to_cardFragmentError)
 
                                 if (viewModel.student.value == null) {
@@ -87,7 +82,6 @@ class CardFragmentLoading : Fragment(
                             }
 
                             else -> {
-                                Timber.w("Unexpected state: $state")
                             }
                         }
                     }

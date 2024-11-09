@@ -53,8 +53,6 @@ dependencies {
 
     implementation(libs.androidthings)
 
-    implementation(libs.timber)
-
     ksp(libs.hilt.android.compiler)
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation)

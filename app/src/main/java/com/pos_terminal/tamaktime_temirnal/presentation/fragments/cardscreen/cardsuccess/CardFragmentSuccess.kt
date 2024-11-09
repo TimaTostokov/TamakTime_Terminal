@@ -17,13 +17,11 @@ import com.pos_terminal.tamaktime_temirnal.databinding.FragmentCardSuccessBindin
 import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardviewmodel.CardFragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class CardFragmentSuccess : Fragment() {
 
     private var binding: FragmentCardSuccessBinding by autoCleared()
-    private val viewModel: CardFragmentViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,20 +35,10 @@ class CardFragmentSuccess : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonOk.setOnClickListener {
-            Timber.e("OK CLICKED")
-            viewModel.resetCardState()
-        }
+    }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.cardState.collect { state ->
-                    if (state == CardState.INITIAL) {
-                        findNavController().navigate(R.id.action_cardFragmentSuccess_to_cardFragmentInitial)
-                    }
-                }
-            }
-        }
+    override fun onDestroyView() {
+        super.onDestroyView()
     }
 
 }

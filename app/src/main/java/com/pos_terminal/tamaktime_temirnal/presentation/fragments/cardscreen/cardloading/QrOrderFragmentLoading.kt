@@ -21,7 +21,6 @@ import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.car
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
 class QrOrderFragmentLoading : Fragment(), CardFragmentViewModel.CardNavigationListener {
@@ -79,25 +78,20 @@ class QrOrderFragmentLoading : Fragment(), CardFragmentViewModel.CardNavigationL
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.cardState.distinctUntilChanged { old, new -> old == new }
                     .collect { state ->
-                        Timber.tag("QrOrderFragmentLoading").d("Current Card State: %s", state)
                         when (state) {
                             CardState.AUTHENTICATING -> {
-                                Timber.d("CardState.AUTHENTICATING")
                                 binding.title.text = resources.getString(R.string.card_reading_wait)
                             }
 
                             CardState.AUTHENTICATED -> {
-                                Timber.d("CardState.AUTHENTICATED")
                                 navigateToCategories()
                             }
 
                             CardState.ORDERING -> {
-                                Timber.d("CardState.ORDERING")
                                 binding.title.text = resources.getString(R.string.ordering)
                             }
 
                             CardState.AUTHENTICATING_ERROR -> {
-                                Timber.e("Authentication error")
                                 findNavController().navigate(R.id.action_qrOrderFragmentLoading_to_cardFragmentError)
                                 Toast.makeText(
                                     requireContext(),
@@ -107,7 +101,6 @@ class QrOrderFragmentLoading : Fragment(), CardFragmentViewModel.CardNavigationL
                             }
 
                             else -> {
-                                Timber.w("Unexpected state: $state")
                             }
                         }
                     }

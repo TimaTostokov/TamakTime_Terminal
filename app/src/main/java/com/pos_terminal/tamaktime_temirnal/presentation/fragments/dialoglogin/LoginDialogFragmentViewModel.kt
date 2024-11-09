@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import okhttp3.Credentials
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,18 +44,14 @@ class LoginDialogFragmentViewModel @Inject constructor(
         viewModelScope.launch {
             _loginForm.value = LoginFormState(isLoading = true)
             val credentials = Credentials.basic(phone, password)
-            Timber.e("$phone | $password")
-            Timber.e(credentials)
 
             val result = userRepository.me(credentials)
 
             when (result.status) {
                 Resource.Status.SUCCESS -> {
                     val user = result.data?.copy(credentials = credentials)
-                    Timber.e("User data: $user")
 
                     if (user != null && user.canteens.isNotEmpty()) {
-                        Timber.e("First canteen role: ${user.canteens.first().role}")
 
                         if (user.canteens.first().role.equals("cashier", ignoreCase = true)) {
                             userRepository.saveUser(user)
@@ -66,25 +61,21 @@ class LoginDialogFragmentViewModel @Inject constructor(
                                 isLoading = false,
                                 usernameError = R.string.vhod_cashier
                             )
-                            Timber.e("Access denied for user with role: ${user.canteens.first().role}")
                         }
                     } else {
                         _loginForm.value = LoginFormState(
                             isLoading = false,
                             usernameError = R.string.vhod_cashier
                         )
-                        Timber.e("User has no canteen roles or user is null")
                     }
                 }
 
                 Resource.Status.LOADING -> {
-                    Timber.d("Loading user data...")
                     _loginForm.value = LoginFormState(isLoading = true)
                 }
 
                 Resource.Status.ERROR -> {
                     _loginForm.value = LoginFormState(isLoading = false)
-                    Timber.e("${result.status.name} | ${result.message}")
                 }
             }
         }
