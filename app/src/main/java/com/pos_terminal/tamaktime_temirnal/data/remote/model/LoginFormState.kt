@@ -1,4 +1,4 @@
-package com.pos_terminal.tamaktime_temirnal.presentation.fragments.dialoglogin
+package com.pos_terminal.tamaktime_temirnal.data.remote.model
 
 data class LoginFormState(
     val usernameError: Int? = null,

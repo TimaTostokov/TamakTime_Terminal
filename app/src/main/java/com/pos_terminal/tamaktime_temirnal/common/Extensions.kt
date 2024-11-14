@@ -5,7 +5,6 @@ import android.content.res.Configuration
 import android.widget.ImageView
 import android.widget.Toast
 import com.bumptech.glide.Glide
-import com.pos_terminal.tamaktime_temirnal.common.LanguagePreference
 import java.util.Locale
 
 object Extensions {
