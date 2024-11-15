@@ -13,7 +13,18 @@
 
         <action
             android:id="@+id/action_categoryFragment_to_productFragment"
-            app:destination="@id/productFragment" />
+            app:destination="@id/productFragment">
+            <argument
+                android:name="categoryId"
+                app:argType="long" />
+            <argument
+                android:name="credentials"
+                app:argType="string" />
+            <argument
+                android:name="canteenId"
+                app:argType="long" />
+        </action>
+
 
     </fragment>
 
@@ -28,6 +39,15 @@
             app:popUpTo="@+id/categoryFragment"
             app:popUpToInclusive="true"
             app:destination="@id/categoryFragment" />
+        <argument
+            android:name="categoryId"
+            app:argType="long" />
+        <argument
+            android:name="credentials"
+            app:argType="string" />
+        <argument
+            android:name="canteenId"
+            app:argType="long" />
 
     </fragment>
 

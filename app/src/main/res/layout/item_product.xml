@@ -19,7 +19,7 @@
             android:adjustViewBounds="true"
             android:contentDescription="@string/foodDescription"
             android:scaleType="center"
-            android:src="@drawable/product_placeholder"
+            android:src="@drawable/img_food"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -38,6 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:text="@string/two_thousand_txt"
                 android:gravity="center_horizontal"
                 android:textColor="@android:color/white"
                 android:textSize="15sp" />
@@ -50,6 +51,7 @@
         android:id="@+id/food_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Яйцо с ростфибом"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="17dp"
         android:gravity="center"
@@ -63,7 +65,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="3dp"
-        android:textColor="@android:color/black"
+        android:text="@string/count_txt"
+        android:textColor="@color/gray"
         android:textSize="18sp" />
 
 </LinearLayout>

@@ -12,11 +12,11 @@
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/category_fcv"
@@ -24,34 +24,34 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:defaultNavHost="true"
-        app:navGraph="@navigation/category_nav"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/card_fcv"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/card_fcv"
         app:layout_constraintHorizontal_bias="0"
-        android:layout_marginEnd="15dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:navGraph="@navigation/category_nav" />
 
     <View
+        android:id="@+id/view"
         android:layout_width="30dp"
         android:layout_height="match_parent"
-        app:layout_constraintStart_toEndOf="@id/category_fcv"
+        app:layout_constraintBottom_toBottomOf="@id/category_fcv"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/category_fcv"
-        app:layout_constraintBottom_toBottomOf="@id/category_fcv" />
+        app:layout_constraintStart_toEndOf="@id/category_fcv"
+        app:layout_constraintTop_toTopOf="@id/category_fcv" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/card_fcv"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginStart="15dp"
         app:defaultNavHost="true"
-        app:navGraph="@navigation/card_nav"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/category_fcv"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1"
-        android:layout_marginStart="15dp" />
+        app:layout_constraintStart_toEndOf="@id/category_fcv"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:navGraph="@navigation/card_nav" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
