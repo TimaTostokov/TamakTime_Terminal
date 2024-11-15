@@ -10,7 +10,7 @@ import com.pos_terminal.tamaktime_temirnal.data.remote.model.product.Product
 import com.pos_terminal.tamaktime_temirnal.databinding.ItemProductBinding
 
 class ProductAdapter(
-    private val click: (String) -> Unit
+    private val click: (Product) -> Unit
 ) : ListAdapter<Product, ProductAdapter.ProductViewHolder>(ProductDiffUtil()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
@@ -27,7 +27,7 @@ class ProductAdapter(
         val model = getItem(position)
         holder.onBind(model)
         holder.itemView.setOnClickListener {
-
+            click(model)
         }
     }
 
@@ -40,13 +40,14 @@ class ProductAdapter(
         }
     }
 }
+
 class ProductDiffUtil : DiffUtil.ItemCallback<Product>() {
     override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
-        return oldItem == newItem
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
         return oldItem == newItem
     }
-
 }
+

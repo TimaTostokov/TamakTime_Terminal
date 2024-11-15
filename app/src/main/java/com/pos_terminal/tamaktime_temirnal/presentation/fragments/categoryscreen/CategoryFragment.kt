@@ -62,6 +62,7 @@ class CategoryFragment : Fragment() {
                         is UiState.Success -> {
                             binding.progress.visibility = View.GONE
                             binding.recyclerView.visibility = View.VISIBLE
+                            Log.d("arsenchik" ,"${uiState.data}")
                             adapter.submitList(uiState.data)
                         }
                         is UiState.Error -> {

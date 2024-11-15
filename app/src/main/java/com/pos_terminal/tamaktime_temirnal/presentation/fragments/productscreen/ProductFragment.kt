@@ -12,16 +12,21 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.pos_terminal.tamaktime_temirnal.R
 import com.pos_terminal.tamaktime_temirnal.common.UiState
 import com.pos_terminal.tamaktime_temirnal.common.autoCleared
+import com.pos_terminal.tamaktime_temirnal.data.remote.model.product.Product
 import com.pos_terminal.tamaktime_temirnal.databinding.FragmentProductBinding
+import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardauthed.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -30,8 +35,8 @@ class ProductFragment : Fragment(), MenuProvider {
 
     private var binding: FragmentProductBinding by autoCleared()
     private val viewModel: ProductViewModel by viewModels()
-    private val adapter: ProductAdapter by lazy { ProductAdapter(this::click) }
-
+    private val sharedViewModel: SharedViewModel by activityViewModels()
+    private lateinit var productAdapter: ProductAdapter
     private val args: ProductFragmentArgs by navArgs()
 
     override fun onCreateView(
@@ -41,11 +46,9 @@ class ProductFragment : Fragment(), MenuProvider {
     ): View {
         binding = FragmentProductBinding.inflate(inflater, container, false)
         requireActivity().addMenuProvider(this, viewLifecycleOwner)
-        setupRecyclerView()
         Log.d("ProductFragment", "onCreateView: View created")
         return binding.root
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(this) { navigateBack() }
@@ -73,6 +76,20 @@ class ProductFragment : Fragment(), MenuProvider {
         super.onViewCreated(view, savedInstanceState)
         Log.d("ProductFragment", "onViewCreated: View created")
 
+        productAdapter = ProductAdapter { product ->
+            sharedViewModel.addProductToOrder(product)
+        }
+
+        binding.recyclerView.apply {
+            layoutManager = GridLayoutManager(requireContext(), 4)
+            adapter = productAdapter
+        }
+        lifecycleScope.launchWhenStarted {
+            sharedViewModel.products.collect { products ->
+                productAdapter.submitList(products)
+            }
+        }
+
         val categoryId = args.categoryId
         val credentials = args.credentials
         val canteenId = args.canteenId
@@ -80,11 +97,6 @@ class ProductFragment : Fragment(), MenuProvider {
         viewModel.loadProducts(credentials,canteenId,categoryId)
         Log.d("ProductFragment", "onViewCreated: loadProducts called with categoryId: $categoryId")
         observeViewModel()
-    }
-
-    private fun setupRecyclerView() {
-        binding.recyclerView.adapter = adapter
-        Log.d("ProductFragment", "setupRecyclerView: RecyclerView setup completed")
     }
 
     private fun observeViewModel() {
@@ -101,7 +113,7 @@ class ProductFragment : Fragment(), MenuProvider {
                             Log.d("ProductFragment", "observeViewModel: Success state detected with data: ${uiState.data.results}")
                             binding.progress.visibility = View.GONE
                             binding.recyclerView.visibility = View.VISIBLE
-                            adapter.submitList(uiState.data.results)
+                            productAdapter.submitList(uiState.data.results)
                         }
                         is UiState.Error -> {
                             Log.e("ProductFragment", "observeViewModel: Error state detected with message: ${uiState.message}")
@@ -115,8 +127,8 @@ class ProductFragment : Fragment(), MenuProvider {
         }
     }
 
-    private fun click(productId: String) {
-        Log.d("ProductFragment", "click: Item clicked with productId: $productId")
-        // Обработать клик на продукт, например, перейти к подробной информации о продукте
+    private fun onProductClick(product: Product) {
+        sharedViewModel.addProductToOrder(product)
+        Toast.makeText(requireContext(), "${product.title} added to order", Toast.LENGTH_SHORT).show()
     }
 }
