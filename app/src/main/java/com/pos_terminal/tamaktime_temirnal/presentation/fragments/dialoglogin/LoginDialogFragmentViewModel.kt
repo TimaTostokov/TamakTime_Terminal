@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pos_terminal.tamaktime_temirnal.R
 import com.pos_terminal.tamaktime_temirnal.common.Resource
+import com.pos_terminal.tamaktime_temirnal.data.remote.model.LoginFormState
 import com.pos_terminal.tamaktime_temirnal.data.repositories.user.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow

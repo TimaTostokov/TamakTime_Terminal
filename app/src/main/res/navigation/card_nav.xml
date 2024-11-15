@@ -14,6 +14,7 @@
         <action
             android:id="@+id/action_cardFragmentInitial_to_cardFragmentLoading"
             app:destination="@id/cardFragmentLoading" />
+
         <action
             android:id="@+id/action_cardFragmentInitial_to_qrOrderFragment"
             app:destination="@id/qrOrderFragment" />
