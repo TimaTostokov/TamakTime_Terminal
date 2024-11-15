@@ -40,7 +40,6 @@ class CardFragmentLoading : Fragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.authenticateCard()
-
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.student.collect { student ->
@@ -61,11 +60,15 @@ class CardFragmentLoading : Fragment(
                             }
 
                             CardState.AUTHENTICATED -> {
-                                navigateToCategories()
+                                viewModel.mockupOrdering()
                             }
 
                             CardState.ORDERING -> {
                                 binding.title.text = resources.getString(R.string.ordering)
+                                viewModel.mockupOrdering()
+                            }
+                            CardState.ORDER_SUCCESS -> {
+                                navigateToCategories()
                             }
 
                             CardState.AUTHENTICATING_ERROR -> {

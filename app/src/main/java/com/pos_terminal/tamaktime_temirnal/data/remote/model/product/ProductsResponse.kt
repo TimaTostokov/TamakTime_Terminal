@@ -1,10 +1,7 @@
 package com.pos_terminal.tamaktime_temirnal.data.remote.model.product
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
 data class ProductsResponse(
     @SerializedName("items_count")
     val itemsCount: Int? = null,
@@ -16,4 +13,4 @@ data class ProductsResponse(
     val previous: String? = null,
     @SerializedName("results")
     val results: List<Product>,
-) : Parcelable
+)

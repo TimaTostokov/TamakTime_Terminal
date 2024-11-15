@@ -45,13 +45,13 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
 
-        nfcAdapter = NfcAdapter.getDefaultAdapter(this)
+       /* nfcAdapter = NfcAdapter.getDefaultAdapter(this)*/
 
-        if (nfcAdapter == null) {
+       /* if (nfcAdapter == null) {
             Extensions.showToast(this, "NFC недоступно")
             finish()
             return
-        }
+        }*/
 
         loadSavedLanguage()
 

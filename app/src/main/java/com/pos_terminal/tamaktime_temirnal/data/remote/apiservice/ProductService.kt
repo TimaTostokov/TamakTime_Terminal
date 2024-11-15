@@ -9,7 +9,6 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ProductService {
-
     @GET(PRODUCTS_END_POINT)
     suspend fun getProductsByCanteenIdAndCategoryId(
         @Header("Authorization") authHeader: String,

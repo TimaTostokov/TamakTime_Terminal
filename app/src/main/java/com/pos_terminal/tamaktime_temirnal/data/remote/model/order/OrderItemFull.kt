@@ -10,5 +10,4 @@ data class OrderItemFull(
     override fun toString(): String {
         return "OrderItemFull(product=$product, count=$count)"
     }
-
 }

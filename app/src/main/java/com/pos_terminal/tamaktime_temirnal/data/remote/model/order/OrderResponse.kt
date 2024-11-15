@@ -20,7 +20,6 @@ data class OrderResponse(
     @SerializedName("transaction_id")
     val transactionId: String? = null,
 ) {
-
     override fun toString(): String {
         return "OrderResponse(id=$id, status=$status, items=$items, total='$total', creatorId=$creatorId, createdAt='$createdAt', updatedAt='$updatedAt', transactionId='$transactionId')"
     }

@@ -14,10 +14,8 @@ import javax.inject.Inject
 class UserStoreImpl @Inject constructor(
     @ApplicationContext context: Context,
 ) : IUserStore {
-
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-
     private val _hasCredentials = MutableStateFlow(false)
     private val _credentials = MutableStateFlow<String?>(null)
     private val _canteenId = MutableStateFlow<Long?>(null)
