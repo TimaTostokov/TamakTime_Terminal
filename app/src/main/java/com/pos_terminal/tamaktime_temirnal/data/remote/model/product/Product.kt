@@ -23,10 +23,6 @@ data class Product(
     @SerializedName("available")
     val available: Boolean = false,
     @SerializedName("count")
-    var count: Int? = null,
-    @SerializedName("issue_date")
-    val issueDate: String? = null,
-    @SerializedName("expiration_date")
-    val expirationDate: String? = null,
+    var count: Int = 0,
     var cartCount: Int = 0
 ) : Parcelable

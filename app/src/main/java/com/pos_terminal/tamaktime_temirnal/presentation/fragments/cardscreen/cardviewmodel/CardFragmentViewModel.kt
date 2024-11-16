@@ -7,8 +7,8 @@ import com.pos_terminal.tamaktime_temirnal.common.CardState
 import com.pos_terminal.tamaktime_temirnal.common.CardUUIDInteractor
 import com.pos_terminal.tamaktime_temirnal.common.Resource
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.order.OrderItem
-import com.pos_terminal.tamaktime_temirnal.data.remote.model.order.OrderItemFull
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.order.OrderToPost
+import com.pos_terminal.tamaktime_temirnal.data.remote.model.product.Product
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.qr_order.QROrderItem
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.student.Student
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.student.StudentCardKey
@@ -23,7 +23,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.random.Random
 
 @HiltViewModel
 class CardFragmentViewModel @Inject constructor(
@@ -34,8 +33,10 @@ class CardFragmentViewModel @Inject constructor(
     private val orderRepository: OrderRepository,
     private val qrOrderRepository: QrOrderRepository
 ) : ViewModel() {
+
     private var orderingSuccess: Boolean? = null
     private var orderSuccessChange = false
+
     private val _student = MutableStateFlow<Student?>(null)
     val student: StateFlow<Student?> = _student.asStateFlow()
 
@@ -62,7 +63,6 @@ class CardFragmentViewModel @Inject constructor(
 
     val _totalPrice = MutableStateFlow(0.0)
 
-    val orderMap = MutableStateFlow<MutableMap<Long, OrderItemFull>>(mutableMapOf())
     private var orderId = -1L
 
     private val _studentLimit = MutableStateFlow<String?>(null)
@@ -80,11 +80,10 @@ class CardFragmentViewModel @Inject constructor(
 
             val credentials = userRepository.getCredentials() ?: return@launch
             val schoolId = userRepository.getSchoolId() ?: return@launch
-//            val cardUUID = _cardUuid.value ?: return@launch
-//            cardUUIDInteractor.cardUuid.takeIf { it.isNotEmpty() }
-//                ?: _cardUuid.value ?: return@launch
+            val cardUUID = _cardUuid.value ?: return@launch
+            cardUUIDInteractor.cardUuid.takeIf { it.isNotEmpty() }
+                ?: _cardUuid.value ?: return@launch
 
-            val cardUUID = "62A2742E"
             if (schoolId > 0) {
 
                 val result = studentRepository.getStudentBySchoolIdAndCardUUID(
@@ -159,12 +158,11 @@ class CardFragmentViewModel @Inject constructor(
         _key1.value = ""
         _key2.value = ""
         _cardUuid.value = ""
-        _totalPrice.value = 0.0
         _errorMessage.value = ""
-        orderMap.value.clear()
         orderId = -1L
         orderingSuccess = null
     }
+
 
     fun loadStudentLimit(studentId: Long) {
         viewModelScope.launch {
@@ -179,7 +177,7 @@ class CardFragmentViewModel @Inject constructor(
         }
     }
 
-    private fun checkStudentLimit() {
+    fun checkStudentLimit(totalPrice: Double) {
         viewModelScope.launch {
             val credentials = userRepository.getCredentials() ?: run {
                 Log.e("checkStudentLimit", "Credentials are null")
@@ -193,40 +191,38 @@ class CardFragmentViewModel @Inject constructor(
 
             val studentLimit = studentLimitRepository.getStudentLimit(credentials, studentId)
 
+
             when (studentLimit.status) {
                 Resource.Status.LOADING -> {
+                    // Обработка состояния загрузки, если необходимо
                 }
 
                 Resource.Status.ERROR -> {
                     _cardState.value = CardState.ORDER_ERROR
-                    orderingSuccess = false
                     Log.e("checkStudentLimit", "Error: ${studentLimit.message}")
                 }
 
                 Resource.Status.SUCCESS -> {
-                    val totalPrice = _totalPrice.value
                     Log.d("checkStudentLimit", "Limit: ${studentLimit.data?.limit}")
 
                     if (studentLimit.data?.limit != null && totalPrice >= studentLimit.data.limit.toDouble()) {
                         _cardState.value = CardState.ORDER_ERROR
-                        orderingSuccess = false
+                        // Уведомляем пользователя о превышении лимита
                     } else {
                         _cardState.value = CardState.ORDER
-                        orderingSuccess = true
+                        // Продолжаем обработку заказа
                     }
                 }
             }
         }
     }
 
-    fun postOrder() {
+    fun postOrder(orderItems: List<Product>) {
         _cardState.value = CardState.ORDERING
         val orderList = mutableListOf<OrderItem>()
-        if (orderMap.value.values.isNotEmpty()) {
-            orderMap.value.values.forEach {
-                it.product?.let { product ->
-                    orderList.add(OrderItem(product.id, it.count))
-                }
+        if (orderItems.isNotEmpty()) {
+            orderItems.forEach { product ->
+                orderList.add(OrderItem(product.id, product.cartCount))
             }
 
             viewModelScope.launch {
@@ -281,18 +277,18 @@ class CardFragmentViewModel @Inject constructor(
         }
     }
 
-    fun mockupOrdering() = viewModelScope.launch {
-        _cardState.value = CardState.ORDERING
-        orderingSuccess = orderingSuccess ?: Random.nextBoolean()
-
-        if (orderingSuccess == true) {
-            _cardState.value = CardState.ORDER_SUCCESS
-        } else {
-            _cardState.value = CardState.ORDER_ERROR
-            orderingSuccess = true
-            orderSuccessChange = true
-        }
-    }
+//    fun mockupOrdering() = viewModelScope.launch {
+//        _cardState.value = CardState.ORDERING
+//        orderingSuccess = orderingSuccess ?: Random.nextBoolean()
+//
+//        if (orderingSuccess == true) {
+//            _cardState.value = CardState.ORDER_SUCCESS
+//        } else {
+//            _cardState.value = CardState.ORDER_ERROR
+//            orderingSuccess = true
+//            orderSuccessChange = true
+//        }
+//    }
 
     interface CardNavigationListener {
         fun navigateToCategories()

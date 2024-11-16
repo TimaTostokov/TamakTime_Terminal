@@ -78,7 +78,7 @@ class ProductFragment : Fragment(), ProductAdapter.OnProductClickListener, MenuP
 
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        productAdapter = ProductAdapter(mutableListOf(), this)
+        productAdapter = ProductAdapter(this)
         binding.recyclerView.apply {
             layoutManager = GridLayoutManager(requireContext(), 4)
             adapter = productAdapter
@@ -86,7 +86,7 @@ class ProductFragment : Fragment(), ProductAdapter.OnProductClickListener, MenuP
 
         lifecycleScope.launch {
             sharedViewModel.products.collect { products ->
-                productAdapter.updateProducts(products)
+                productAdapter.submitList(products)
             }
         }
 
@@ -94,14 +94,7 @@ class ProductFragment : Fragment(), ProductAdapter.OnProductClickListener, MenuP
         val credentials = args.credentials
         val canteenId = args.canteenId
         viewModel.loadProducts(credentials, canteenId, categoryId)
-        viewLifecycleOwner.lifecycleScope.launch {
-            sharedViewModel.products.collect { products ->
-                productAdapter.updateProducts(products)
-            }
-        }
         observeViewModel()
-
-
     }
 
     private fun observeViewModel() {
@@ -117,7 +110,7 @@ class ProductFragment : Fragment(), ProductAdapter.OnProductClickListener, MenuP
                         is UiState.Success -> {
                             binding.progress.visibility = View.GONE
                             binding.recyclerView.visibility = View.VISIBLE
-                            productAdapter.updateProducts(uiState.data.results)
+                            sharedViewModel.loadProducts(uiState.data.results)
                         }
 
                         is UiState.Error -> {
@@ -133,14 +126,7 @@ class ProductFragment : Fragment(), ProductAdapter.OnProductClickListener, MenuP
     }
 
     override fun onProductClick(product: Product) {
-        if (product.count!! > 0) {
-            sharedViewModel.addProductToOrder(product)
-            Toast.makeText(requireContext(), "${product.title} добавлен в заказ", Toast.LENGTH_SHORT)
-                .show()
-        } else {
-            Toast.makeText(requireContext(), "${product.title} отсутствует на складе", Toast.LENGTH_SHORT)
-                .show()
-        }
+        sharedViewModel.addProductToOrder(product)
     }
 
 }

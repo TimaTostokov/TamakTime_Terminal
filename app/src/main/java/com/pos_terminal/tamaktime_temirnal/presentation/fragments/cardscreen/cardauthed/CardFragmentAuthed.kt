@@ -2,19 +2,16 @@ package com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.ca
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.pos_terminal.tamaktime_temirnal.R
-import com.pos_terminal.tamaktime_temirnal.common.CardState
 import com.pos_terminal.tamaktime_temirnal.common.autoCleared
-import com.pos_terminal.tamaktime_temirnal.data.remote.model.order.OrderItemFull
+import com.pos_terminal.tamaktime_temirnal.data.remote.model.product.Product
 import com.pos_terminal.tamaktime_temirnal.databinding.FragmentCardAuthedBinding
 import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.OrderItemAdapter
 import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardviewmodel.CardFragmentViewModel
@@ -26,9 +23,9 @@ import kotlinx.coroutines.launch
 class CardFragmentAuthed : Fragment() {
 
     private var binding: FragmentCardAuthedBinding by autoCleared()
+    private lateinit var orderItemAdapter: OrderItemAdapter
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private val viewModel: CardFragmentViewModel by activityViewModels()
-    private lateinit var orderItemAdapter: OrderItemAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -40,26 +37,13 @@ class CardFragmentAuthed : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupObservers()
-
-        val limit = viewModel.loadStudentLimit(studentId = 1)
-
-        binding.buttonCancelOrder.setOnClickListener {
-            viewModel.resetCardState()
-        }
-
-        binding.mrlBtnPay.setOnClickListener {
-            viewModel.postOrder()
-        }
-
-
         orderItemAdapter = OrderItemAdapter(object : OrderItemAdapter.OrderItemListener {
-            override fun onAdd(orderItemFull: OrderItemFull) {
-                sharedViewModel.addProductToOrder(orderItemFull.product!!)
+            override fun onAdd(product: Product) {
+                sharedViewModel.addProductToOrder(product)
             }
 
-            override fun onRemove(orderItemFull: OrderItemFull) {
-                sharedViewModel.removeProductFromOrder(orderItemFull)
+            override fun onRemove(product: Product) {
+                sharedViewModel.removeProductFromOrder(product)
             }
         })
 
@@ -68,9 +52,25 @@ class CardFragmentAuthed : Fragment() {
             adapter = orderItemAdapter
         }
 
+        setupObservers()
+        viewModel.loadStudentLimit(studentId = 1)
+
+        binding.buttonCancelOrder.setOnClickListener {
+            viewModel.resetCardState()
+            sharedViewModel.resetOrder()
+        }
+
+        binding.mrlBtnPay.setOnClickListener {
+            viewModel.postOrder(sharedViewModel.orderItems.value)
+        }
+
+
         lifecycleScope.launch {
             sharedViewModel.orderItems.collect { orderItems ->
                 orderItemAdapter.submitList(orderItems)
+                // Проверяем лимит студента
+                val totalPrice = sharedViewModel.totalPrice.value
+                viewModel.checkStudentLimit(totalPrice)
             }
         }
     }
@@ -103,64 +103,33 @@ class CardFragmentAuthed : Fragment() {
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel._totalPrice.collect {
-                Log.d("TotalPriceObserver", "Total price updated: $it")
-                binding.tvTotal.text = it.toString()
+        lifecycleScope.launch {
+            sharedViewModel.totalPrice.collect { totalPrice ->
+                binding.tvTotal.text = "%.2f".format(totalPrice)
             }
+        }
 
-            viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.cardState.collect { state ->
-                    when (state) {
-                        CardState.AUTHENTICATED -> {
-                            binding.lytContent.visibility = View.VISIBLE
-                            binding.lytOrderContent.visibility = View.GONE
-                        }
+        lifecycleScope.launch {
+            sharedViewModel.orderItems.collect { orderItems ->
+                orderItemAdapter.submitList(orderItems)
+                // Обновляем состояние кнопки оплаты на основе общей стоимости и баланса студента
+                val totalPrice = sharedViewModel.totalPrice.value
+                val balance = viewModel.student.value?.balance?.toDoubleOrNull() ?: 0.0
 
-                        CardState.ORDER -> {
-                            binding.lytContent.visibility = View.GONE
-                            binding.lytOrderContent.visibility = View.VISIBLE
-                        }
-
-                        CardState.ORDERING -> {
-                            findNavController().navigate(R.id.action_cardFragmentAuthed_to_cardFragmentLoading)
-                        }
-
-                        CardState.INITIAL -> {
-                            findNavController().navigate(R.id.action_cardFragmentAuthed_to_cardFragmentInitial)
-                        }
-
-                        else -> {
-                        }
-                    }
-                }
-            }
-
-            viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.orderMap.collect { map ->
-                    val items = map.values.toList()
-
-                    if (viewModel.cardState.value == CardState.ORDER) {
-                        map.values.let {
-                            if ((viewModel.student.value?.balance?.toDouble()
-                                    ?: 0.0) < viewModel._totalPrice.value
-                            ) {
-                                binding.tvTotal.setTextColor(requireContext().getColor(R.color.balance_error))
-                                binding.tvTotalLabel.setTextColor(requireContext().getColor(R.color.balance_error))
-                                binding.tvNotEnoughMoney.visibility = View.VISIBLE
-                                binding.mrlBtnPay.isEnabled = false
-                                binding.mrlBtnPay.isClickable = false
-                                binding.mrlBtnPay.setBackgroundColor(requireContext().getColor(R.color.disabled_btn))
-                            } else {
-                                binding.tvTotal.setTextColor(requireContext().getColor(android.R.color.black))
-                                binding.tvTotalLabel.setTextColor(requireContext().getColor(android.R.color.black))
-                                binding.tvNotEnoughMoney.visibility = View.INVISIBLE
-                                binding.mrlBtnPay.isEnabled = true
-                                binding.mrlBtnPay.isClickable = true
-                                binding.mrlBtnPay.setBackgroundColor(requireContext().getColor(R.color.primaryDark))
-                            }
-                        }
-                    }
+                if (balance < totalPrice) {
+                    binding.tvTotal.setTextColor(requireContext().getColor(R.color.balance_error))
+                    binding.tvTotalLabel.setTextColor(requireContext().getColor(R.color.balance_error))
+                    binding.tvNotEnoughMoney.visibility = View.VISIBLE
+                    binding.mrlBtnPay.isEnabled = false
+                    binding.mrlBtnPay.isClickable = false
+                    binding.mrlBtnPay.setBackgroundColor(requireContext().getColor(R.color.disabled_btn))
+                } else {
+                    binding.tvTotal.setTextColor(requireContext().getColor(android.R.color.black))
+                    binding.tvTotalLabel.setTextColor(requireContext().getColor(android.R.color.black))
+                    binding.tvNotEnoughMoney.visibility = View.INVISIBLE
+                    binding.mrlBtnPay.isEnabled = true
+                    binding.mrlBtnPay.isClickable = true
+                    binding.mrlBtnPay.setBackgroundColor(requireContext().getColor(R.color.primaryDark))
                 }
             }
         }

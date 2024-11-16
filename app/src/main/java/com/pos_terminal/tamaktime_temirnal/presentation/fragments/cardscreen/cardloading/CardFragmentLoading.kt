@@ -60,12 +60,10 @@ class CardFragmentLoading : Fragment(
                             }
 
                             CardState.AUTHENTICATED -> {
-                                viewModel.mockupOrdering()
                             }
 
                             CardState.ORDERING -> {
                                 binding.title.text = resources.getString(R.string.ordering)
-                                viewModel.mockupOrdering()
                             }
                             CardState.ORDER_SUCCESS -> {
                                 navigateToCategories()
