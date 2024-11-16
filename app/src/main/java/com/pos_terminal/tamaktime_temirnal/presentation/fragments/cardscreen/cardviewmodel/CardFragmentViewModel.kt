@@ -69,10 +69,11 @@ class CardFragmentViewModel @Inject constructor(
 
             val credentials = userRepository.getCredentials() ?: return@launch
             val schoolId = userRepository.getSchoolId() ?: return@launch
-            val cardUUID = _cardUuid.value ?: return@launch
+            val cardUUID = "62A2742E"
+           /* val cardUUID = _cardUuid.value ?: return@launch
             cardUUIDInteractor.cardUuid.takeIf { it.isNotEmpty() }
                 ?: _cardUuid.value ?: return@launch
-
+*/
             if (schoolId > 0) {
 
                 val result = studentRepository.getStudentBySchoolIdAndCardUUID(

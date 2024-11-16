@@ -1,5 +1,6 @@
 package com.pos_terminal.tamaktime_temirnal.presentation.fragments.categoryscreen
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pos_terminal.tamaktime_temirnal.common.Resource
@@ -39,6 +40,7 @@ class CategoryViewModel @Inject constructor(
                 Resource.Status.SUCCESS -> {
                     result.data?.let {
                         _uiState.value = UiState.Success(it)
+                        Log.d("arsenchik","$it")
                     } ?: run {
                         _uiState.value = UiState.Error(Throwable("No categories found"), "No categories available.")
                     }
