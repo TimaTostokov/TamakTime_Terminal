@@ -1,11 +1,11 @@
 [versions]
-agp = "8.5.2"
+agp = "8.7.2"
 codeScanner = "2.3.0"
 conscryptAndroid = "2.5.2"
 core = "3.3.0"
 fragmentKtx = "1.8.4"
 glide = "4.16.0"
-gradle = "7.0.4"
+gradle = "8.7.2"
 kotlin = "2.0.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
