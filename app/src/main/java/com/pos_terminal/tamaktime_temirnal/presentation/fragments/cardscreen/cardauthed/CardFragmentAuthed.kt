@@ -30,7 +30,6 @@ class CardFragmentAuthed : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         orderItemAdapter = OrderItemAdapter(object : OrderItemAdapter.OrderItemListener {
             override fun onAdd(orderItemFull: OrderItemFull) {
                 sharedViewModel.addProductToOrder(orderItemFull.product!!)
@@ -49,11 +48,11 @@ class CardFragmentAuthed : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = orderItemAdapter
         }
-
         lifecycleScope.launchWhenStarted {
             sharedViewModel.orderItems.collect { orderItems ->
                 orderItemAdapter.submitList(orderItems)
             }
         }
+
     }
 }

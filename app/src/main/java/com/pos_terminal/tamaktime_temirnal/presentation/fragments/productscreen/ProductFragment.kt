@@ -31,7 +31,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ProductFragment : Fragment(), MenuProvider {
+class ProductFragment : Fragment(), ProductAdapter.OnProductClickListener {
 
     private var binding: FragmentProductBinding by autoCleared()
     private val viewModel: ProductViewModel by viewModels()
@@ -40,63 +40,33 @@ class ProductFragment : Fragment(), MenuProvider {
     private val args: ProductFragmentArgs by navArgs()
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentProductBinding.inflate(inflater, container, false)
-        requireActivity().addMenuProvider(this, viewLifecycleOwner)
-        Log.d("ProductFragment", "onCreateView: View created")
         return binding.root
-    }
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback(this) { navigateBack() }
-        Log.d("ProductFragment", "onCreate: Fragment created")
-    }
-
-    private fun navigateBack() =
-        findNavController().navigate(R.id.action_productFragment_to_categoryFragment)
-
-    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.menu, menu)
-        Log.d("ProductFragment", "onCreateMenu: Menu created")
-    }
-
-    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        return if (menuItem.itemId == android.R.id.home) {
-            navigateBack()
-            true
-        } else {
-            false
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("ProductFragment", "onViewCreated: View created")
 
-        productAdapter = ProductAdapter { product ->
-            sharedViewModel.addProductToOrder(product)
-        }
+        productAdapter = ProductAdapter(mutableListOf(), this)
 
         binding.recyclerView.apply {
             layoutManager = GridLayoutManager(requireContext(), 4)
             adapter = productAdapter
         }
-        lifecycleScope.launchWhenStarted {
-            sharedViewModel.products.collect { products ->
-                productAdapter.submitList(products)
-            }
-        }
-
         val categoryId = args.categoryId
         val credentials = args.credentials
         val canteenId = args.canteenId
-        Log.d("ProductFragment", "onViewCreated: Received arguments - categoryId: $categoryId")
-        viewModel.loadProducts(credentials,canteenId,categoryId)
-        Log.d("ProductFragment", "onViewCreated: loadProducts called with categoryId: $categoryId")
-        observeViewModel()
+        viewModel.loadProducts(credentials, canteenId, categoryId)
+        viewLifecycleOwner.lifecycleScope.launch {
+            sharedViewModel.products.collect { products ->
+                if (products.isNotEmpty()) {
+                    productAdapter.updateProducts(products)
+                }
+            }
+        }
+        observeViewModel() 
     }
 
     private fun observeViewModel() {
@@ -105,18 +75,15 @@ class ProductFragment : Fragment(), MenuProvider {
                 viewModel.uiState.collect { uiState ->
                     when (uiState) {
                         is UiState.Loading -> {
-                            Log.d("ProductFragment", "observeViewModel: Loading state detected")
                             binding.progress.visibility = View.VISIBLE
                             binding.recyclerView.visibility = View.GONE
                         }
                         is UiState.Success -> {
-                            Log.d("ProductFragment", "observeViewModel: Success state detected with data: ${uiState.data.results}")
                             binding.progress.visibility = View.GONE
                             binding.recyclerView.visibility = View.VISIBLE
-                            productAdapter.submitList(uiState.data.results)
+                            productAdapter.updateProducts(uiState.data.results)
                         }
                         is UiState.Error -> {
-                            Log.e("ProductFragment", "observeViewModel: Error state detected with message: ${uiState.message}")
                             binding.progress.visibility = View.GONE
                             binding.recyclerView.visibility = View.GONE
                             Toast.makeText(requireContext(), uiState.message, Toast.LENGTH_LONG).show()
@@ -127,7 +94,7 @@ class ProductFragment : Fragment(), MenuProvider {
         }
     }
 
-    private fun onProductClick(product: Product) {
+    override fun onProductClick(product: Product) {
         sharedViewModel.addProductToOrder(product)
         Toast.makeText(requireContext(), "${product.title} added to order", Toast.LENGTH_SHORT).show()
     }
