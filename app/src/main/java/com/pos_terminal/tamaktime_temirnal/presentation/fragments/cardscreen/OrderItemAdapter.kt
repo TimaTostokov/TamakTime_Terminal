@@ -9,13 +9,13 @@ import com.bumptech.glide.Glide
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.order.OrderItemFull
 import com.pos_terminal.tamaktime_temirnal.databinding.ItemOrderBinding
 
-class OrderItemAdapter(private val listener: OrderItemListener) :
-    ListAdapter<OrderItemFull, OrderItemAdapter.OrderItemViewHolder>(DiffCallback()) {
+class OrderItemAdapter(
+    private val listener: OrderItemListener
+) : ListAdapter<OrderItemFull, OrderItemAdapter.OrderItemViewHolder>(DiffCallback()) {
 
     interface OrderItemListener {
         fun onAdd(orderItemFull: OrderItemFull)
         fun onRemove(orderItemFull: OrderItemFull)
-        fun onDelete(orderItemFull: OrderItemFull)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderItemViewHolder {
@@ -30,38 +30,27 @@ class OrderItemAdapter(private val listener: OrderItemListener) :
     class OrderItemViewHolder(
         private val binding: ItemOrderBinding,
         private val listener: OrderItemListener
-    ) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         private var orderItemFull: OrderItemFull? = null
 
         init {
-            binding.ibAdd.setOnClickListener(this)
-            binding.ibRemove.setOnClickListener(this)
-            binding.ibDelete.setOnClickListener(this)
+            binding.ibAdd.setOnClickListener {
+                orderItemFull?.let {
+                    if (it.product?.count ?: 0 > 0) {
+                        listener.onAdd(it)
+                    }
+                }
+            }
+            binding.ibRemove.setOnClickListener {
+                orderItemFull?.let { listener.onRemove(it) }
+            }
         }
 
         fun bind(orderItem: OrderItemFull) {
             orderItemFull = orderItem
-            Glide.with(binding.image.context)
-                .load(orderItem.product?.thumbnail ?: "https://example.com/default.png")
-                .into(binding.image)
             binding.title.text = orderItem.product?.title
             binding.count.text = orderItem.count.toString()
-            binding.total.text = ((orderItem.product?.sellingPrice?.toDouble() ?: 0.0) * orderItem.count).toString()
-        }
-
-        override fun onClick(view: View?) {
-            when (view) {
-                binding.ibAdd -> orderItemFull?.let {
-                    listener.onAdd(it)
-                }
-                binding.ibRemove -> orderItemFull?.let {
-                    listener.onRemove(it)
-                }
-                binding.ibDelete -> orderItemFull?.let {
-                    listener.onDelete(it)
-                }
-            }
         }
     }
 
@@ -73,4 +62,5 @@ class OrderItemAdapter(private val listener: OrderItemListener) :
             oldItem == newItem
     }
 }
+
 

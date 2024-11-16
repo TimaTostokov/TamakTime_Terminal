@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment: NavHostFragment =
             supportFragmentManager.findFragmentById(R.id.category_fcv) as NavHostFragment
         val navController: NavController = navHostFragment.navController
-        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+        navController.addOnDestinationChangedListener { _, _, _ ->
             invalidateOptionsMenu()
         }
         val appBarConfiguration: AppBarConfiguration = AppBarConfiguration(navController.graph)
