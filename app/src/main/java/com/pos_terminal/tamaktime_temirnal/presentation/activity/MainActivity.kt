@@ -49,8 +49,8 @@ class MainActivity : AppCompatActivity() {
 
        if (nfcAdapter == null) {
             Extensions.showToast(this, "NFC недоступно")
-            finish()
-            return
+//            finish()
+//            return
         }
 
         loadSavedLanguage()

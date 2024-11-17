@@ -24,12 +24,11 @@ import kotlinx.coroutines.launch
 class CardFragmentError : Fragment() {
 
     private var binding: FragmentCardErrorBinding by autoCleared()
-    private val viewModel: CardFragmentViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?,
+        savedInstanceState: Bundle?
     ): View {
         binding = FragmentCardErrorBinding.inflate(inflater, container, false)
         return binding.root
@@ -37,54 +36,13 @@ class CardFragmentError : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.cardState.collect { state ->
-                    when (state) {
-                        CardState.AUTHENTICATING_ERROR -> handleErrorState(
-                            titleRes = R.string.smth_wrong_try_again,
-                            imageRes = R.drawable.card_error,
-                            onRepeatClick = {
-                                findNavController().navigate(R.id.action_cardFragmentError_to_cardFragmentInitial)
-                            },
-                            showCancel = false
-                        )
 
-                        CardState.ORDER_ERROR -> handleErrorState(
-                            titleRes = R.string.order_error,
-                            imageRes = R.drawable.ordering_error,
-                            onRepeatClick = { viewModel.ordering() },
-                            showCancel = true
-                        )
-
-                        CardState.ORDERING -> {
-                            findNavController().navigate(R.id.action_cardFragmentError_to_cardFragmentLoading)
-                        }
-
-                        CardState.INITIAL -> {
-                            findNavController().navigate(R.id.action_cardFragmentError_to_cardFragmentInitial)
-                        }
-
-                        else -> {
-                        }
-                    }
-                }
-            }
+        binding.buttonRepeat.setOnClickListener {
+            findNavController().navigate(R.id.action_cardFragmentError_to_cardFragmentLoading)
         }
-    }
 
-    private fun handleErrorState(
-        @StringRes titleRes: Int,
-        @DrawableRes imageRes: Int,
-        onRepeatClick: () -> Unit,
-        showCancel: Boolean,
-    ) {
-        binding.title.setText(titleRes)
-        binding.image.setImageResource(imageRes)
-        binding.buttonRepeat.setOnClickListener { onRepeatClick() }
-        binding.buttonCancel.visibility = if (showCancel) View.VISIBLE else View.GONE
-        if (showCancel) {
-            binding.buttonCancel.setOnClickListener { viewModel.resetCardState() }
+        binding.buttonCancel.setOnClickListener {
+            findNavController().navigate(R.id.action_cardFragmentError_to_cardFragmentInitial)
         }
     }
 

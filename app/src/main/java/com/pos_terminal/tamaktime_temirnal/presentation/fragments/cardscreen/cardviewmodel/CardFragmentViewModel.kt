@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.random.Random
 
 @HiltViewModel
 class CardFragmentViewModel @Inject constructor(
@@ -35,6 +36,7 @@ class CardFragmentViewModel @Inject constructor(
 ) : ViewModel() {
 
     private var orderingSuccess: Boolean? = null
+    private var orderSuccessChange = false
 
     private val _student = MutableStateFlow<Student?>(null)
     val student: StateFlow<Student?> = _student.asStateFlow()
@@ -77,9 +79,12 @@ class CardFragmentViewModel @Inject constructor(
 
             val credentials = userRepository.getCredentials() ?: return@launch
             val schoolId = userRepository.getSchoolId() ?: return@launch
-            val cardUUID = _cardUuid.value ?: return@launch
-            cardUUIDInteractor.cardUuid.takeIf { it.isNotEmpty() }
-                ?: _cardUuid.value ?: return@launch
+
+//            val cardUUID = _cardUuid.value ?: return@launch
+//            cardUUIDInteractor.cardUuid.takeIf { it.isNotEmpty() }
+//                ?: _cardUuid.value ?: return@launch
+
+            val cardUUID = "62A2742E"
 
             if (schoolId > 0) {
 
@@ -160,7 +165,6 @@ class CardFragmentViewModel @Inject constructor(
         orderingSuccess = null
     }
 
-
     fun loadStudentLimit(studentId: Long) {
         viewModelScope.launch {
             val credentials = userRepository.getCredentials() ?: return@launch
@@ -168,7 +172,6 @@ class CardFragmentViewModel @Inject constructor(
             if (result.status == Resource.Status.SUCCESS) {
                 _studentLimit.emit(result.data?.limit)
             } else {
-                Log.e("arsen_botik228", "Error loading student limit: ${result.message}")
                 _studentLimit.emit(null)
             }
         }
@@ -270,18 +273,18 @@ class CardFragmentViewModel @Inject constructor(
         }
     }
 
-//    fun mockupOrdering() = viewModelScope.launch {
-//        _cardState.value = CardState.ORDERING
-//        orderingSuccess = orderingSuccess ?: Random.nextBoolean()
-//
-//        if (orderingSuccess == true) {
-//            _cardState.value = CardState.ORDER_SUCCESS
-//        } else {
-//            _cardState.value = CardState.ORDER_ERROR
-//            orderingSuccess = true
-//            orderSuccessChange = true
-//        }
-//    }
+    fun mockupOrdering() = viewModelScope.launch {
+        _cardState.value = CardState.ORDERING
+        orderingSuccess = orderingSuccess ?: Random.nextBoolean()
+
+        if (orderingSuccess == true) {
+            _cardState.value = CardState.ORDER_SUCCESS
+        } else {
+            _cardState.value = CardState.ORDER_ERROR
+            orderingSuccess = true
+            orderSuccessChange = true
+        }
+    }
 
     interface CardNavigationListener {
         fun navigateToCategories()

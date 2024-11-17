@@ -19,7 +19,7 @@ import javax.inject.Inject
         }
 
         fun getSavedLanguage(): String {
-            return languagePreference.getLanguage ?: "tr"
+            return languagePreference.getLanguage ?: "en"
         }
 
         suspend fun logOut() = local.clear()

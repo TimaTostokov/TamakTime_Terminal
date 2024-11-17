@@ -29,8 +29,17 @@ class SharedViewModel @Inject constructor(
     }
 
     fun resetOrder() {
+        val updatedProducts = _products.value.map { originalProduct ->
+            val orderItem = _orderItems.value.find { it.id == originalProduct.id }
+            if (orderItem != null) {
+                originalProduct.copy(count = originalProduct.count + orderItem.cartCount, cartCount = 0)
+            } else {
+                originalProduct.copy(cartCount = 0)
+            }
+        }
+
+        _products.value = updatedProducts
         _orderItems.value = emptyList()
-        _products.value = _products.value.map { it.copy(cartCount = 0) }
     }
 
     fun addProductToOrder(product: Product) {
@@ -69,6 +78,16 @@ class SharedViewModel @Inject constructor(
         } else {
             _orderItems.value = _orderItems.value.filter { it.id != product.id }
         }
+    }
+
+    fun deleteProductFromOrder(product: Product) {
+        _orderItems.value = _orderItems.value.filter { it.id != product.id }
+        val updatedProducts = _products.value.map {
+            if (it.id == product.id) {
+                it.copy(count = it.count + product.cartCount, cartCount = 0)
+            } else it
+        }
+        _products.value = updatedProducts
     }
 
     val totalPrice: StateFlow<Double> = orderItems.map { items ->

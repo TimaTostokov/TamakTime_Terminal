@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.pos_terminal.tamaktime_temirnal.common.Extensions.formatPrice
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.product.Product
 import com.pos_terminal.tamaktime_temirnal.databinding.ItemOrderBinding
 
@@ -16,6 +17,7 @@ class OrderItemAdapter(
     interface OrderItemListener {
         fun onAdd(product: Product)
         fun onRemove(product: Product)
+        fun onDelete(product: Product)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderItemViewHolder {
@@ -41,6 +43,9 @@ class OrderItemAdapter(
             binding.ibRemove.setOnClickListener {
                 product?.let { listener.onRemove(it) }
             }
+            binding.ibDelete.setOnClickListener {
+                product?.let { listener.onDelete(it) }
+            }
         }
 
         @SuppressLint("SetTextI18n")
@@ -49,7 +54,7 @@ class OrderItemAdapter(
             binding.title.text = product.title
             binding.count.text = product.cartCount.toString()
             val total = (product.sellingPrice?.toDoubleOrNull() ?: 0.0) * product.cartCount
-            binding.total.text = "%.2f".format(total)
+            binding.total.text =  formatPrice(total)
         }
     }
 }

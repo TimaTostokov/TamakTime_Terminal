@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.pos_terminal.tamaktime_temirnal.R
+import com.pos_terminal.tamaktime_temirnal.common.Extensions.formatPrice
 import com.pos_terminal.tamaktime_temirnal.common.autoCleared
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.product.Product
 import com.pos_terminal.tamaktime_temirnal.databinding.FragmentCardAuthedBinding
@@ -22,8 +23,11 @@ import kotlinx.coroutines.launch
 class CardFragmentAuthed : Fragment() {
 
     private var binding: FragmentCardAuthedBinding by autoCleared()
+
     private lateinit var orderItemAdapter: OrderItemAdapter
+
     private val sharedViewModel: SharedViewModel by activityViewModels()
+
     private val viewModel: CardFragmentViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -44,6 +48,10 @@ class CardFragmentAuthed : Fragment() {
             override fun onRemove(product: Product) {
                 sharedViewModel.removeProductFromOrder(product)
             }
+
+            override fun onDelete(product: Product) {
+                sharedViewModel.deleteProductFromOrder(product)
+            }
         })
 
         binding.recyclerView.apply {
@@ -63,7 +71,6 @@ class CardFragmentAuthed : Fragment() {
             viewModel.postOrder(sharedViewModel.orderItems.value)
         }
 
-
         lifecycleScope.launch {
             sharedViewModel.orderItems.collect { orderItems ->
                 orderItemAdapter.submitList(orderItems)
@@ -79,7 +86,8 @@ class CardFragmentAuthed : Fragment() {
             viewModel.student.collect { student ->
                 student?.let {
                     binding.tvClientName.text = "${it.firstName} ${it.lastName}"
-                    binding.tvClientBalance.text = it.balance
+                    binding.tvClientBalance.text =
+                        it.balance?.let { it1 -> formatPrice(it1.toDouble()) }
                 }
             }
         }
@@ -87,7 +95,7 @@ class CardFragmentAuthed : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.studentLimit.collect { limit ->
                 limit?.let {
-                    binding.tvClientTotalBalance.text = it
+                    binding.tvClientTotalBalance.text = formatPrice(it.toDouble())
                 }
             }
         }
@@ -103,7 +111,7 @@ class CardFragmentAuthed : Fragment() {
 
         lifecycleScope.launch {
             sharedViewModel.totalPrice.collect { totalPrice ->
-                binding.tvTotal.text = "%.2f".format(totalPrice)
+                binding.tvTotal.text = formatPrice(totalPrice)
             }
         }
 
@@ -112,14 +120,24 @@ class CardFragmentAuthed : Fragment() {
                 orderItemAdapter.submitList(orderItems)
                 val totalPrice = sharedViewModel.totalPrice.value
                 val balance = viewModel.student.value?.balance?.toDoubleOrNull() ?: 0.0
+                val limit = viewModel.studentLimit.value?.toDoubleOrNull() ?: Double.MAX_VALUE
 
-                if (balance < totalPrice) {
+                val canPay = balance >= totalPrice
+                val withinLimit = totalPrice <= limit
+
+                if (!canPay || !withinLimit) {
                     binding.tvTotal.setTextColor(requireContext().getColor(R.color.balance_error))
                     binding.tvTotalLabel.setTextColor(requireContext().getColor(R.color.balance_error))
                     binding.tvNotEnoughMoney.visibility = View.VISIBLE
                     binding.mrlBtnPay.isEnabled = false
                     binding.mrlBtnPay.isClickable = false
                     binding.mrlBtnPay.setBackgroundColor(requireContext().getColor(R.color.disabled_btn))
+
+                    binding.tvNotEnoughMoney.text = when {
+                        !canPay -> "Недостаточно средств для оплаты"
+                        !withinLimit -> "Превышен лимит заказа"
+                        else -> "Недостаточно средств для дальнейшей оплаты"
+                    }
                 } else {
                     binding.tvTotal.setTextColor(requireContext().getColor(android.R.color.black))
                     binding.tvTotalLabel.setTextColor(requireContext().getColor(android.R.color.black))

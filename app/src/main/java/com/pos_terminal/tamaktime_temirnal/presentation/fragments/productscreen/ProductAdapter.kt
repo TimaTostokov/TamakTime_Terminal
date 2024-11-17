@@ -7,8 +7,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.pos_terminal.tamaktime_temirnal.R
+import com.pos_terminal.tamaktime_temirnal.common.Extensions.formatPrice
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.product.Product
 import com.pos_terminal.tamaktime_temirnal.databinding.ItemProductBinding
+import kotlinx.coroutines.coroutineScope
 
 class ProductAdapter(
     private val listener: OnProductClickListener
@@ -40,7 +42,7 @@ class ProductAdapter(
         fun bind(product: Product) {
             binding.foodName.text = product.title
             binding.foodCount.text = "${product.count} шт"
-            binding.foodPrice.text = product.sellingPrice
+            binding.foodPrice.text = formatPrice(product.sellingPrice?.toDoubleOrNull() ?: 0.0)
 
             if (product.count > 0) {
                 binding.foodPrice.setTextColor(itemView.context.getColor(android.R.color.black))

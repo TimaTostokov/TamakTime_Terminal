@@ -105,17 +105,27 @@ class ProductFragment : Fragment(), ProductAdapter.OnProductClickListener, MenuP
                         is UiState.Loading -> {
                             binding.progress.visibility = View.VISIBLE
                             binding.recyclerView.visibility = View.GONE
+                            binding.emptyPh.visibility = View.GONE
                         }
 
                         is UiState.Success -> {
                             binding.progress.visibility = View.GONE
-                            binding.recyclerView.visibility = View.VISIBLE
-                            sharedViewModel.loadProducts(uiState.data.results)
+                            val products = uiState.data.results
+                            if (products.isEmpty()) {
+                                binding.recyclerView.visibility = View.GONE
+                                binding.emptyPh.visibility = View.VISIBLE
+                            } else {
+                                binding.recyclerView.visibility = View.VISIBLE
+                                binding.emptyPh.visibility = View.GONE
+                                sharedViewModel.loadProducts(products)
+                            }
                         }
 
                         is UiState.Error -> {
                             binding.progress.visibility = View.GONE
                             binding.recyclerView.visibility = View.GONE
+                            binding.emptyPh.visibility = View.VISIBLE
+                            binding.emptyPh.text = uiState.message
                             Toast.makeText(requireContext(), uiState.message, Toast.LENGTH_LONG)
                                 .show()
                         }
