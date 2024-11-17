@@ -30,6 +30,7 @@ okhttppClient = "4.12.0"
 loggingInterceptor = "4.12.0"
 swiperefreshlayout = "1.1.0"
 androidthings = "1.0"
+multidex = "1.0.3"
 
 [libraries]
 
@@ -55,6 +56,8 @@ androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-view
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
 androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationFragmentKtx" }
+
+multidex = { module = "com.android.support:multidex", version.ref = "multidex" }
 
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
 bottomsheets = { module = "com.afollestad.material-dialogs:bottomsheets", version.ref = "core" }

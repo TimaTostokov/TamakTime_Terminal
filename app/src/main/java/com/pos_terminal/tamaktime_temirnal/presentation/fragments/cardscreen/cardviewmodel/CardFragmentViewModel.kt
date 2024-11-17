@@ -35,7 +35,6 @@ class CardFragmentViewModel @Inject constructor(
 ) : ViewModel() {
 
     private var orderingSuccess: Boolean? = null
-    private var orderSuccessChange = false
 
     private val _student = MutableStateFlow<Student?>(null)
     val student: StateFlow<Student?> = _student.asStateFlow()
@@ -60,8 +59,6 @@ class CardFragmentViewModel @Inject constructor(
 
     private val _errorMessage = MutableStateFlow("")
     val errorMessage: StateFlow<String> = _errorMessage.asStateFlow()
-
-    val _totalPrice = MutableStateFlow(0.0)
 
     private var orderId = -1L
 
@@ -193,9 +190,7 @@ class CardFragmentViewModel @Inject constructor(
 
 
             when (studentLimit.status) {
-                Resource.Status.LOADING -> {
-                    // Обработка состояния загрузки, если необходимо
-                }
+                Resource.Status.LOADING -> {}
 
                 Resource.Status.ERROR -> {
                     _cardState.value = CardState.ORDER_ERROR
@@ -207,10 +202,8 @@ class CardFragmentViewModel @Inject constructor(
 
                     if (studentLimit.data?.limit != null && totalPrice >= studentLimit.data.limit.toDouble()) {
                         _cardState.value = CardState.ORDER_ERROR
-                        // Уведомляем пользователя о превышении лимита
                     } else {
                         _cardState.value = CardState.ORDER
-                        // Продолжаем обработку заказа
                     }
                 }
             }

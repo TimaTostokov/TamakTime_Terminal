@@ -32,7 +32,8 @@ class CategoryAdapter(
         }
     }
 
-    inner class CategoryViewHolder(private val binding: ItemCategoryBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class CategoryViewHolder(private val binding: ItemCategoryBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun onBind(category: Category) {
             binding.catTitle.text = category.name
             binding.catIcon.loadImageURL(category.icon)
@@ -49,4 +50,5 @@ class CategoryDiffUtil : DiffUtil.ItemCallback<Category>() {
     override fun areContentsTheSame(oldItem: Category, newItem: Category): Boolean {
         return oldItem == newItem
     }
+
 }

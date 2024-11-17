@@ -18,7 +18,6 @@ import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.car
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-@Suppress("UNREACHABLE_CODE")
 @AndroidEntryPoint
 class CardFragmentAuthed : Fragment() {
 
@@ -68,7 +67,6 @@ class CardFragmentAuthed : Fragment() {
         lifecycleScope.launch {
             sharedViewModel.orderItems.collect { orderItems ->
                 orderItemAdapter.submitList(orderItems)
-                // Проверяем лимит студента
                 val totalPrice = sharedViewModel.totalPrice.value
                 viewModel.checkStudentLimit(totalPrice)
             }
@@ -112,7 +110,6 @@ class CardFragmentAuthed : Fragment() {
         lifecycleScope.launch {
             sharedViewModel.orderItems.collect { orderItems ->
                 orderItemAdapter.submitList(orderItems)
-                // Обновляем состояние кнопки оплаты на основе общей стоимости и баланса студента
                 val totalPrice = sharedViewModel.totalPrice.value
                 val balance = viewModel.student.value?.balance?.toDoubleOrNull() ?: 0.0
 

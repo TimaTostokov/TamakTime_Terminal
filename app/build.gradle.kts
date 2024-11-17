@@ -80,6 +80,8 @@ dependencies {
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.recyclerview)
 
+    implementation (libs.multidex)
+
     implementation(libs.okHttpClient)
     implementation(libs.logging.interceptor)
 

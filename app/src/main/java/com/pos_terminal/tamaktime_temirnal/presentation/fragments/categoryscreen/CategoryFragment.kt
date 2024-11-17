@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -23,10 +22,13 @@ import kotlinx.coroutines.launch
 class CategoryFragment : Fragment() {
 
     private var binding: FragmentCategoryBinding by autoCleared()
+
     private val viewModel: CategoryViewModel by viewModels()
+
     private val adapter: CategoryAdapter by lazy {
         CategoryAdapter { category -> onCategoryClick(category) }
     }
+
     private var creds: String? = null
     private var canteenId: Long = -1L
 
@@ -44,9 +46,11 @@ class CategoryFragment : Fragment() {
         setupRecyclerView()
         setupObservers()
     }
+
     private fun setupRecyclerView() {
         binding.recyclerView.adapter = adapter
     }
+
     private fun setupObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -56,12 +60,14 @@ class CategoryFragment : Fragment() {
                             binding.progress.visibility = View.VISIBLE
                             binding.recyclerView.visibility = View.GONE
                         }
+
                         is UiState.Success -> {
                             binding.progress.visibility = View.GONE
                             binding.recyclerView.visibility = View.VISIBLE
-                            Log.d("arsenchik" ,"${uiState.data}")
+                            Log.d("arsenchik", "${uiState.data}")
                             adapter.submitList(uiState.data)
                         }
+
                         is UiState.Error -> {
                             binding.progress.visibility = View.GONE
                             binding.recyclerView.visibility = View.GONE
@@ -107,4 +113,5 @@ class CategoryFragment : Fragment() {
         )
         findNavController().navigate(action)
     }
+
 }

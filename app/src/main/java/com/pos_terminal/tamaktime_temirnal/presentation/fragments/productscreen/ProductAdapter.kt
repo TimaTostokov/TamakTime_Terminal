@@ -1,5 +1,6 @@
 package com.pos_terminal.tamaktime_temirnal.presentation.fragments.productscreen
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -35,6 +36,7 @@ class ProductAdapter(
 
     inner class ProductViewHolder(private val binding: ItemProductBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
         fun bind(product: Product) {
             binding.foodName.text = product.title
             binding.foodCount.text = "${product.count} шт"

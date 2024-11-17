@@ -17,6 +17,7 @@ object Extensions {
         Glide.with(this).load(url).into(this)
     }
 
+    @Suppress("DEPRECATION")
     private fun setLocale(s: String, context: Context) {
         val locale = Locale(s)
         Locale.setDefault(locale)

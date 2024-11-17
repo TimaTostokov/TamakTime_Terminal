@@ -21,10 +21,14 @@ class CategoryViewModel @Inject constructor(
     private val categoryRepository: CategoryRepository,
     private val userRepository: UserRepository,
 ) : ViewModel() {
+
     private val _uiState = MutableStateFlow<UiState<List<Category>>>(UiState.Loading)
     val uiState: StateFlow<UiState<List<Category>>> = _uiState
+
     val credentials: Flow<String?> = userRepository.flowCredentials()
+    
     val canteenId: StateFlow<Long?> = userRepository.flowCanteenId() as StateFlow<Long?>
+
     suspend fun logOut() = userRepository.logOut()
 
     fun getAllCategories(header: String, canteenId: Long) {
@@ -40,9 +44,11 @@ class CategoryViewModel @Inject constructor(
                 Resource.Status.SUCCESS -> {
                     result.data?.let {
                         _uiState.value = UiState.Success(it)
-                        Log.d("arsenchik","$it")
                     } ?: run {
-                        _uiState.value = UiState.Error(Throwable("No categories found"), "No categories available.")
+                        _uiState.value = UiState.Error(
+                            Throwable("No categories found"),
+                            "No categories available."
+                        )
                     }
                 }
 
@@ -50,10 +56,12 @@ class CategoryViewModel @Inject constructor(
                     result.message?.let { message ->
                         _uiState.value = UiState.Error(Throwable(message), message)
                     } ?: run {
-                        _uiState.value = UiState.Error(Throwable("Unknown error"), "Unknown error occurred.")
+                        _uiState.value =
+                            UiState.Error(Throwable("Unknown error"), "Unknown error occurred.")
                     }
                 }
             }
         }
     }
+
 }

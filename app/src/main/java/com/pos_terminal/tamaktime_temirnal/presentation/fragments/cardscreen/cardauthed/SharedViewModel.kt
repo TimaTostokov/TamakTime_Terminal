@@ -34,15 +34,13 @@ class SharedViewModel @Inject constructor(
     }
 
     fun addProductToOrder(product: Product) {
-        // Уменьшаем количество в списке продуктов
         val updatedProducts = _products.value.map {
-            if (it.id == product.id && it.count!! > 0) {
-                it.copy(count = it.count!! - 1, cartCount = it.cartCount + 1)
+            if (it.id == product.id && it.count > 0) {
+                it.copy(count = it.count - 1, cartCount = it.cartCount + 1)
             } else it
         }
         _products.value = updatedProducts
 
-        // Добавляем или обновляем товар в списке заказов
         val existingItem = _orderItems.value.find { it.id == product.id }
         if (existingItem != null) {
             val updatedItem = existingItem.copy(cartCount = existingItem.cartCount + 1)
@@ -50,20 +48,18 @@ class SharedViewModel @Inject constructor(
                 if (it.id == updatedItem.id) updatedItem else it
             }
         } else {
-            _orderItems.value = _orderItems.value + product.copy(cartCount = 1)
+            _orderItems.value += product.copy(cartCount = 1)
         }
     }
 
     fun removeProductFromOrder(product: Product) {
-        // Увеличиваем количество в списке продуктов
         val updatedProducts = _products.value.map {
             if (it.id == product.id) {
-                it.copy(count = it.count!! + 1, cartCount = it.cartCount - 1)
+                it.copy(count = it.count + 1, cartCount = it.cartCount - 1)
             } else it
         }
         _products.value = updatedProducts
 
-        // Уменьшаем количество или удаляем товар из списка заказов
         val existingItem = _orderItems.value.find { it.id == product.id }
         if (existingItem != null && existingItem.cartCount > 1) {
             val updatedItem = existingItem.copy(cartCount = existingItem.cartCount - 1)
@@ -75,8 +71,8 @@ class SharedViewModel @Inject constructor(
         }
     }
 
-    // Вычисляем общую стоимость
     val totalPrice: StateFlow<Double> = orderItems.map { items ->
         items.sumOf { (it.sellingPrice?.toDoubleOrNull() ?: 0.0) * it.cartCount }
     }.stateIn(viewModelScope, SharingStarted.Eagerly, 0.0)
+
 }
