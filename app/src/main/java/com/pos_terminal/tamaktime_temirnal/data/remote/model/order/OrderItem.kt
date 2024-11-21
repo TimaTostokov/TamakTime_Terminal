@@ -11,7 +11,6 @@ data class OrderItem(
     @SerializedName("quantity")
     var count: Int? = null,
 ) : Parcelable {
-
     override fun toString(): String {
         return "OrderItem(id=$id, count=$count)"
     }

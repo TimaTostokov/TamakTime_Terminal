@@ -6,18 +6,25 @@ import androidx.lifecycle.viewModelScope
 import com.pos_terminal.tamaktime_temirnal.common.CardState
 import com.pos_terminal.tamaktime_temirnal.common.CardUUIDInteractor
 import com.pos_terminal.tamaktime_temirnal.common.Resource
+import com.pos_terminal.tamaktime_temirnal.common.UiState
+import com.pos_terminal.tamaktime_temirnal.data.remote.model.documents.DocumentRequestBody
+import com.pos_terminal.tamaktime_temirnal.data.remote.model.documents.DocumentResponse
+import com.pos_terminal.tamaktime_temirnal.data.remote.model.documents.LineRequest
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.order.OrderItem
+import com.pos_terminal.tamaktime_temirnal.data.remote.model.order.OrderResponse
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.order.OrderToPost
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.product.Product
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.qr_order.QROrderItem
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.student.Student
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.student.StudentCardKey
+import com.pos_terminal.tamaktime_temirnal.data.repositories.documents.DocumentRepository
 import com.pos_terminal.tamaktime_temirnal.data.repositories.order.OrderRepository
 import com.pos_terminal.tamaktime_temirnal.data.repositories.student.StudentRepository
 import com.pos_terminal.tamaktime_temirnal.data.repositories.student.limit.StudentLimitRepository
 import com.pos_terminal.tamaktime_temirnal.data.repositories.student.qr.QrOrderRepository
 import com.pos_terminal.tamaktime_temirnal.data.repositories.user.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,13 +37,27 @@ class CardFragmentViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val studentRepository: StudentRepository,
     private val cardUUIDInteractor: CardUUIDInteractor,
+    private val docsRepository: DocumentRepository,
     private val studentLimitRepository: StudentLimitRepository,
     private val orderRepository: OrderRepository,
-    private val qrOrderRepository: QrOrderRepository
+    private val qrOrderRepository: QrOrderRepository,
 ) : ViewModel() {
 
     private var orderingSuccess: Boolean? = null
     private var orderSuccessChange = false
+
+    private val _postOrderState = MutableStateFlow<UiState<OrderResponse>>(UiState.Loading)
+    val postOrderState: StateFlow<UiState<OrderResponse>> = _postOrderState.asStateFlow()
+
+    private val _orderingState = MutableStateFlow<UiState<OrderResponse>>(UiState.Loading)
+    val orderingState: StateFlow<UiState<OrderResponse>> = _orderingState.asStateFlow()
+
+    private val _updateDocumentState = MutableStateFlow<UiState<DocumentResponse>>(UiState.Loading)
+    val updateDocumentState: StateFlow<UiState<DocumentResponse>> = _updateDocumentState.asStateFlow()
+
+    val credentials: Flow<String?> = userRepository.flowCredentials()
+
+    val canteenId: StateFlow<Long?> = userRepository.flowCanteenId() as StateFlow<Long?>
 
     private val _student = MutableStateFlow<Student?>(null)
     val student: StateFlow<Student?> = _student.asStateFlow()
@@ -114,6 +135,57 @@ class CardFragmentViewModel @Inject constructor(
             }
         }
     }
+    fun updateDocument(date: String) {
+        _updateDocumentState.value = UiState.Loading
+
+        viewModelScope.launch {
+            _updateDocumentState.value = UiState.Loading
+            try {
+                val authHeader = userRepository.getCredentials() ?: return@launch
+                val canteenId = userRepository.getCanteenId().toString() ?: return@launch
+
+                val documentRequestBody = DocumentRequestBody(
+                    date = date,
+                    docsType = 1,
+                )
+
+
+                val result = docsRepository.updateDocument(
+                    authHeader = authHeader,
+                    canteenId = canteenId,
+                    documentId = "1L",
+                    documentRequestBody = documentRequestBody
+                )
+
+                when (result.status) {
+                    Resource.Status.SUCCESS -> {
+                        val data = result.data ?: throw Exception("Пустой ответ от сервера")
+                        Log.d("arsenchik228","${result.data}")
+                        Log.d("arsenchik228","${result}")
+                        _updateDocumentState.value = UiState.Success(data)
+                    }
+
+                    Resource.Status.ERROR -> {
+                        _updateDocumentState.value = UiState.Error(
+                            throwable = Exception(result.message ?: "Неизвестная ошибка"),
+                            message = result.message ?: "Произошла ошибка"
+                        )
+                    }
+
+                    Resource.Status.LOADING -> {
+                        _updateDocumentState.value = UiState.Loading
+                    }
+                }
+            } catch (e: Exception) {
+                _updateDocumentState.value = UiState.Error(
+                    throwable = e,
+                    message = e.localizedMessage ?: "Неизвестная ошибка"
+                )
+            }
+        }
+    }
+
+
 
     fun authenticateStudentByQR(cardUUID: String) {
         _cardState.value = CardState.AUTHENTICATING
@@ -237,6 +309,7 @@ class CardFragmentViewModel @Inject constructor(
 
                         Resource.Status.SUCCESS -> {
                             _cardState.value = CardState.ORDER_SUCCESS
+
                         }
                     }
                 }
@@ -250,7 +323,6 @@ class CardFragmentViewModel @Inject constructor(
             val credentials = userRepository.getCredentials() ?: return@launch
             val canteenId = userRepository.getCanteenId() ?: return@launch
             val cardKey = "${_key1.value}${_key2.value}".replace("-", "")
-
             val result = orderRepository.ordering(
                 credentials,
                 canteenId,
@@ -261,7 +333,6 @@ class CardFragmentViewModel @Inject constructor(
             when (result.status) {
                 Resource.Status.LOADING -> {
                 }
-
                 Resource.Status.ERROR -> {
                     _cardState.value = CardState.ORDER_ERROR
                 }

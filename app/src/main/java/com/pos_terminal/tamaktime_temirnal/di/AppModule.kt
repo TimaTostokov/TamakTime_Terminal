@@ -8,6 +8,7 @@ import com.pos_terminal.tamaktime_temirnal.common.Constants.BASE_URL
 import com.pos_terminal.tamaktime_temirnal.common.Constants.NETWORK_TIMEOUT
 import com.pos_terminal.tamaktime_temirnal.common.LanguagePreference
 import com.pos_terminal.tamaktime_temirnal.data.remote.apiservice.CategoryService
+import com.pos_terminal.tamaktime_temirnal.data.remote.apiservice.DocsService
 import com.pos_terminal.tamaktime_temirnal.data.remote.apiservice.OrderService
 import com.pos_terminal.tamaktime_temirnal.data.remote.apiservice.ProductService
 import com.pos_terminal.tamaktime_temirnal.data.remote.apiservice.QRService
@@ -218,5 +219,14 @@ object AppModule {
     @Singleton
     fun provideStudentQrRepository(remote: QrOrderRemoteDataSource): QrOrderRepository =
         QrOrderRepository(remote)
+
+
+
+    @Provides
+    @Singleton
+    fun provideDocs(retrofit: Retrofit): DocsService =
+        retrofit.create(DocsService::class.java)
+
+
 
 }

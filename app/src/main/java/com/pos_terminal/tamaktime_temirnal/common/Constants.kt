@@ -6,6 +6,7 @@ object Constants {
     const val CATEGORY_ID_END_POINT = "/api/v1/canteens/{canteenId}/product/categories/"
     const val ORDER_END_POINT = "/api/v1/canteens/{canteenId}/order/"
     const val ORDER_ID_END_POINT = "/api/v1/canteens/{canteenId}/order/{orderId}/process/"
+    const val PUT_DOCUMENT_END_POINT = "/api/v1/canteens/{canteen_id}/document/{document_id}/"
     const val PRODUCTS_END_POINT = "/api/v1/canteens/{canteenId}/products"
     const val STUDENTS_END_POINT = "/api/v1/schools/{school_id}/students/card/{card_uuid}/"
     const val USERS_END_POINT = "/api/v1/users/me/"

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.pos_terminal.tamaktime_temirnal.R
 import com.pos_terminal.tamaktime_temirnal.common.Extensions.formatPrice
+import com.pos_terminal.tamaktime_temirnal.common.loadImageURL
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.product.Product
 import com.pos_terminal.tamaktime_temirnal.databinding.ItemProductBinding
 import kotlinx.coroutines.coroutineScope
@@ -40,6 +41,7 @@ class ProductAdapter(
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
         fun bind(product: Product) {
+            binding.foodImage.loadImageURL(product.thumbnail)
             binding.foodName.text = product.title
             binding.foodCount.text = "${product.count} шт"
             binding.foodPrice.text = formatPrice(product.sellingPrice?.toDoubleOrNull() ?: 0.0)

@@ -1,6 +1,7 @@
 package com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardloading
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,6 +53,7 @@ class CardFragmentLoading : Fragment(
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.student.collect { student ->
                     if (student != null) {
+                        Log.d("arsenchik","${student.balance}")
                         navigateToCategories()
                     }
                 }
