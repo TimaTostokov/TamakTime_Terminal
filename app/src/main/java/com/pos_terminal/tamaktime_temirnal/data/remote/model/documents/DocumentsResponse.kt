@@ -1,11 +1,14 @@
 package com.pos_terminal.tamaktime_temirnal.data.remote.model.documents
 
+import com.google.gson.annotations.SerializedName
+
 data class DocumentResponse(
     val id: Long,
-    val document_type: Int,
-    /*val date: String,
+    @SerializedName("document_type")
+    val documentType: Int,
+    val date: String,
     val lines: List<LineResponse>
-*/)
+)
 
 data class LineResponse(
     val product: Product,
@@ -22,12 +25,16 @@ data class Product(
     val category: Category,
     val thumbnail: String,
     val code: String,
-    val buying_price: String,
-    val selling_price: String,
+    @SerializedName("buying_price")
+    val buyingPrice: String,
+    @SerializedName("selling_price")
+    val sellingPrice: String,
     val available: Boolean,
     val count: Int,
-    val issue_date: String,
-    val expiration_date: String
+    @SerializedName("issue_date")
+    val issueDate: String,
+    @SerializedName("expiration_date")
+    val expirationDate: String
 )
 
 data class Canteen(

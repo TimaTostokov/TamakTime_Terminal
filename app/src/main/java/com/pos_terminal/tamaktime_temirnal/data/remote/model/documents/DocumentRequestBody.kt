@@ -14,3 +14,7 @@ data class LineRequest(
     val quantity: String,
     val price: String?
 )
+
+data class OrderToPost(
+    val lines: List<LineRequest>
+)

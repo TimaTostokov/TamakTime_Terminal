@@ -40,16 +40,6 @@ class CardFragmentSuccess : Fragment() {
             viewModel.resetCardState()
             findNavController().navigate(R.id.action_cardFragmentSuccess_to_cardFragmentInitial)
         }
-
-        /*viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.cardState.collect { state ->
-                    if (state == CardState.INITIAL) {
-                        findNavController().navigate(R.id.action_cardFragmentSuccess_to_cardFragmentInitial)
-                    }
-                }
-            }
-        }*/
     }
 
 }

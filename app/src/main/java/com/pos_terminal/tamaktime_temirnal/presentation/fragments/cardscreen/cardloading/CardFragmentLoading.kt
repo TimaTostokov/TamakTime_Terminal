@@ -107,7 +107,6 @@ class CardFragmentLoading : Fragment(
         setupTimeoutForNfc()
     }
 
-
     override fun navigateToCategories() {
         kotlin.runCatching {
             findNavController().navigate(R.id.action_cardFragmentLoading_to_cardFragmentAuthed)

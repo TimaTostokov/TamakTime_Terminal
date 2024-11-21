@@ -100,8 +100,7 @@ class QrOrderFragmentLoading : Fragment(), CardFragmentViewModel.CardNavigationL
                                 ).show()
                             }
 
-                            else -> {
-                            }
+                            else -> {}
                         }
                     }
             }

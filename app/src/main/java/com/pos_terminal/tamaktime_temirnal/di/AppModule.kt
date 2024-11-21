@@ -18,6 +18,8 @@ import com.pos_terminal.tamaktime_temirnal.data.remote.apiservice.UserService
 import com.pos_terminal.tamaktime_temirnal.data.remote.local.UserStoreImpl
 import com.pos_terminal.tamaktime_temirnal.data.repositories.category.CategoryRemoteDataSource
 import com.pos_terminal.tamaktime_temirnal.data.repositories.category.CategoryRepository
+import com.pos_terminal.tamaktime_temirnal.data.repositories.documents.DocumentRemoteDataSourse
+import com.pos_terminal.tamaktime_temirnal.data.repositories.documents.DocumentRepository
 import com.pos_terminal.tamaktime_temirnal.data.repositories.order.OrderRemoteDataSource
 import com.pos_terminal.tamaktime_temirnal.data.repositories.order.OrderRepository
 import com.pos_terminal.tamaktime_temirnal.data.repositories.product.ProductRemoteDataSource
@@ -220,13 +222,14 @@ object AppModule {
     fun provideStudentQrRepository(remote: QrOrderRemoteDataSource): QrOrderRepository =
         QrOrderRepository(remote)
 
-
-
     @Provides
     @Singleton
     fun provideDocs(retrofit: Retrofit): DocsService =
         retrofit.create(DocsService::class.java)
 
-
+    @Provides
+    @Singleton
+    fun provideDocumentRepository(remote: DocumentRemoteDataSourse): DocumentRepository =
+        DocumentRepository(remote)
 
 }

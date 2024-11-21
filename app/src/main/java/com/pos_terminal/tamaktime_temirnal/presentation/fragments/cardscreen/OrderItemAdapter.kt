@@ -3,6 +3,7 @@ package com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -36,9 +37,20 @@ class OrderItemAdapter(
 
         private var product: Product? = null
 
+
         init {
             binding.ibAdd.setOnClickListener {
-                product?.let { listener.onAdd(it) }
+                product?.let {
+                    if (it.count > 0) {
+                        listener.onAdd(it)
+                    } else {
+                        Toast.makeText(
+                            binding.root.context,
+                            "Товар закончился",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
             }
             binding.ibRemove.setOnClickListener {
                 product?.let { listener.onRemove(it) }
@@ -54,7 +66,9 @@ class OrderItemAdapter(
             binding.title.text = product.title
             binding.count.text = product.cartCount.toString()
             val total = (product.sellingPrice?.toDoubleOrNull() ?: 0.0) * product.cartCount
-            binding.total.text =  formatPrice(total)
+            binding.total.text = formatPrice(total)
+
+            binding.ibAdd.isEnabled = product.count > 0
         }
     }
 }

@@ -78,7 +78,7 @@ class ProductFragment : Fragment(), ProductAdapter.OnProductClickListener, MenuP
 
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        productAdapter = ProductAdapter(this)
+        productAdapter = ProductAdapter(this, sharedViewModel.isUserAuthenticated)
         binding.recyclerView.apply {
             layoutManager = GridLayoutManager(requireContext(), 4)
             adapter = productAdapter

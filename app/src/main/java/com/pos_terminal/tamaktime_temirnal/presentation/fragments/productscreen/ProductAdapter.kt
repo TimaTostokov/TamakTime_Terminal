@@ -3,6 +3,7 @@ package com.pos_terminal.tamaktime_temirnal.presentation.fragments.productscreen
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -12,9 +13,11 @@ import com.pos_terminal.tamaktime_temirnal.common.loadImageURL
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.product.Product
 import com.pos_terminal.tamaktime_temirnal.databinding.ItemProductBinding
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.StateFlow
 
 class ProductAdapter(
-    private val listener: OnProductClickListener
+    private val listener: OnProductClickListener,
+    private val isUserAuthenticated: StateFlow<Boolean>
 ) : ListAdapter<Product, ProductAdapter.ProductViewHolder>(ProductDiffCallback()) {
 
     interface OnProductClickListener {
@@ -31,8 +34,10 @@ class ProductAdapter(
         holder.bind(product)
 
         holder.itemView.setOnClickListener {
-            if (product.count > 0) {
+            if (product.count > 0 && isUserAuthenticated.value) {
                 listener.onProductClick(product)
+            } else {
+                Toast.makeText(holder.itemView.context, "Пожалуйста, пройдите считывание NFC либо QR Code", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -46,6 +51,9 @@ class ProductAdapter(
             binding.foodCount.text = "${product.count} шт"
             binding.foodPrice.text = formatPrice(product.sellingPrice?.toDoubleOrNull() ?: 0.0)
 
+            val isClickable = product.count > 0 && isUserAuthenticated.value
+            binding.root.isEnabled = isClickable
+            binding.root.alpha = if (isClickable) 1.0f else 0.5f
             if (product.count > 0) {
                 binding.foodPrice.setTextColor(itemView.context.getColor(android.R.color.black))
             } else {

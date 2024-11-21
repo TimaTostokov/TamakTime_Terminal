@@ -86,7 +86,9 @@
 
         <action
             android:id="@+id/action_cardFragmentSuccess_to_cardFragmentInitial"
-            app:destination="@id/cardFragmentInitial" />
+            app:destination="@id/cardFragmentInitial"
+            app:popUpTo="@id/cardFragmentInitial"
+            app:popUpToInclusive="true"/>
 
     </fragment>
 

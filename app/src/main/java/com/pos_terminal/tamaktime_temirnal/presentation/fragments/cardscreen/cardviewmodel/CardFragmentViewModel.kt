@@ -9,7 +9,6 @@ import com.pos_terminal.tamaktime_temirnal.common.Resource
 import com.pos_terminal.tamaktime_temirnal.common.UiState
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.documents.DocumentRequestBody
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.documents.DocumentResponse
-import com.pos_terminal.tamaktime_temirnal.data.remote.model.documents.LineRequest
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.order.OrderItem
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.order.OrderResponse
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.order.OrderToPost
@@ -23,6 +22,7 @@ import com.pos_terminal.tamaktime_temirnal.data.repositories.student.StudentRepo
 import com.pos_terminal.tamaktime_temirnal.data.repositories.student.limit.StudentLimitRepository
 import com.pos_terminal.tamaktime_temirnal.data.repositories.student.qr.QrOrderRepository
 import com.pos_terminal.tamaktime_temirnal.data.repositories.user.UserRepository
+import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardauthed.SharedViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,6 +41,7 @@ class CardFragmentViewModel @Inject constructor(
     private val studentLimitRepository: StudentLimitRepository,
     private val orderRepository: OrderRepository,
     private val qrOrderRepository: QrOrderRepository,
+    private val sharedViewModel: SharedViewModel
 ) : ViewModel() {
 
     private var orderingSuccess: Boolean? = null
@@ -53,7 +54,8 @@ class CardFragmentViewModel @Inject constructor(
     val orderingState: StateFlow<UiState<OrderResponse>> = _orderingState.asStateFlow()
 
     private val _updateDocumentState = MutableStateFlow<UiState<DocumentResponse>>(UiState.Loading)
-    val updateDocumentState: StateFlow<UiState<DocumentResponse>> = _updateDocumentState.asStateFlow()
+    val updateDocumentState: StateFlow<UiState<DocumentResponse>> =
+        _updateDocumentState.asStateFlow()
 
     val credentials: Flow<String?> = userRepository.flowCredentials()
 
@@ -105,7 +107,8 @@ class CardFragmentViewModel @Inject constructor(
 //            cardUUIDInteractor.cardUuid.takeIf { it.isNotEmpty() }
 //                ?: _cardUuid.value ?: return@launch
 
-            val cardUUID = "62A2742E"
+//            val cardUUID = "62A2742E"
+            val cardUUID = "36c2b7f44fdb473ea19d527c6220a959"
 
             if (schoolId > 0) {
 
@@ -130,11 +133,13 @@ class CardFragmentViewModel @Inject constructor(
                             _cardState.value = CardState.AUTHENTICATING_ERROR
                             null
                         }
+                        sharedViewModel.setUserAuthenticated(true)
                     }
                 }
             }
         }
     }
+
     fun authenticateStudentByQR(cardUUID: String) {
         _cardState.value = CardState.AUTHENTICATING
         _loading.value = true
@@ -174,8 +179,6 @@ class CardFragmentViewModel @Inject constructor(
             }
         }
     }
-
-
 
     fun resetCardState() {
         _cardState.value = CardState.INITIAL
@@ -242,26 +245,25 @@ class CardFragmentViewModel @Inject constructor(
             _updateDocumentState.value = UiState.Loading
             try {
                 val authHeader = userRepository.getCredentials() ?: return@launch
-                val canteenId = userRepository.getCanteenId().toString() ?: return@launch
+                val canteenId = userRepository.getCanteenId().toString()
 
                 val documentRequestBody = DocumentRequestBody(
                     date = date,
                     docsType = 1,
                 )
 
-
                 val result = docsRepository.updateDocument(
                     authHeader = authHeader,
                     canteenId = canteenId,
-                    documentId = "1L",
+                    documentId = "1",
                     documentRequestBody = documentRequestBody
                 )
 
                 when (result.status) {
                     Resource.Status.SUCCESS -> {
                         val data = result.data ?: throw Exception("Пустой ответ от сервера")
-                        Log.d("arsenchik228","${result.data}")
-                        Log.d("arsenchik228","${result}")
+                        Log.d("arsenchik228", "${result.data}")
+                        Log.d("arsenchik228", "${result}")
                         _updateDocumentState.value = UiState.Success(data)
                     }
 
@@ -276,6 +278,7 @@ class CardFragmentViewModel @Inject constructor(
                         _updateDocumentState.value = UiState.Loading
                     }
                 }
+
             } catch (e: Exception) {
                 _updateDocumentState.value = UiState.Error(
                     throwable = e,
@@ -286,9 +289,6 @@ class CardFragmentViewModel @Inject constructor(
     }
 
     fun postOrder(orderItems: List<Product>) {
-/*
-        _cardState.value = CardState.ORDERING
-*/
         _postOrderState.value = UiState.Loading
         val orderList = mutableListOf<OrderItem>()
         if (orderItems.isNotEmpty()) {
@@ -343,6 +343,7 @@ class CardFragmentViewModel @Inject constructor(
             when (result.status) {
                 Resource.Status.LOADING -> {
                 }
+
                 Resource.Status.ERROR -> {
                     _cardState.value = CardState.ORDER_ERROR
                 }

@@ -3,14 +3,21 @@ package com.pos_terminal.tamaktime_temirnal.presentation.fragments.categoryscree
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.pos_terminal.tamaktime_temirnal.R
 import com.pos_terminal.tamaktime_temirnal.common.UiState
 import com.pos_terminal.tamaktime_temirnal.common.autoCleared
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.category.Category
@@ -19,7 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class CategoryFragment : Fragment() {
+class CategoryFragment : Fragment(), MenuProvider {
 
     private var binding: FragmentCategoryBinding by autoCleared()
 
@@ -43,6 +50,12 @@ class CategoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+
         setupRecyclerView()
         setupObservers()
     }
@@ -50,6 +63,7 @@ class CategoryFragment : Fragment() {
     private fun setupRecyclerView() {
         binding.recyclerView.adapter = adapter
     }
+
 
     private fun setupObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -112,6 +126,23 @@ class CategoryFragment : Fragment() {
             canteenId = canteenId
         )
         findNavController().navigate(action)
+    }
+
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.menu, menu)
+    }
+
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        when (menuItem.itemId) {
+            R.id.action_exit -> {
+                return true
+            }
+
+            R.id.ic_menu -> {
+                return true
+            }
+        }
+        return false
     }
 
 }
