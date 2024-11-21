@@ -33,17 +33,10 @@ class CardFragmentError : Fragment() {
         binding = FragmentCardErrorBinding.inflate(inflater, container, false)
         return binding.root
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.buttonRepeat.setOnClickListener {
-            findNavController().navigate(R.id.action_cardFragmentError_to_cardFragmentLoading)
-        }
-
         binding.buttonCancel.setOnClickListener {
             findNavController().navigate(R.id.action_cardFragmentError_to_cardFragmentInitial)
         }
     }
-
 }

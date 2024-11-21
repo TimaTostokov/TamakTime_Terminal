@@ -13,6 +13,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.pos_terminal.tamaktime_temirnal.R
+import com.pos_terminal.tamaktime_temirnal.common.CardState
+import com.pos_terminal.tamaktime_temirnal.common.Extensions
 import com.pos_terminal.tamaktime_temirnal.common.Extensions.formatPrice
 import com.pos_terminal.tamaktime_temirnal.common.UiState
 import com.pos_terminal.tamaktime_temirnal.common.autoCleared
@@ -80,14 +82,15 @@ class CardFragmentAuthed : Fragment() {
         }
 
         binding.mrlBtnPay.setOnClickListener {
-            viewModel.postOrder(sharedViewModel.orderItems.value)
+            postOrdering()
             viewModel.ordering()
-            findNavController().navigate(R.id.action_cardFragmentAuthed_to_cardFragmentInitial)
             updateDocument()
             Log.d("arsenchik12","${sharedViewModel.orderItems.value}")
             Log.d("arsenchik123","${updateDocument()}")
-        }
+            val currentDestination = findNavController().currentDestination
+            Log.d("NavController", "Current destination: ${currentDestination?.id}")
 
+        }
         lifecycleScope.launch {
             sharedViewModel.orderItems.collect { orderItems ->
                 orderItemAdapter.submitList(orderItems)
@@ -96,11 +99,31 @@ class CardFragmentAuthed : Fragment() {
             }
         }
     }
+    private fun postOrdering(){
+        lifecycleScope.launch{
+            viewModel.postOrder(sharedViewModel.orderItems.value)
+            viewModel.postOrderState.collect{ state ->
+                when (state) {
+                 is UiState.Loading ->{
+
+                 }
+                 is UiState.Success -> {
+                     findNavController().navigate(R.id.action_cardFragmentAuthed_to_cardFragmentSuccess)
+                 }
+                 is UiState.Error -> {
+                     findNavController().navigate(R.id.action_cardFragmentAuthed_to_cardFragmentError)
+                     val errorMessage = state.message
+                     Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
+                 }
+
+                }
+            }
+        }
+    }
     private fun updateDocument() {
         val date = "2024-11-21"
 
         viewModel.updateDocument(date)
-
         lifecycleScope.launchWhenStarted {
             viewModel.updateDocumentState.collect { state ->
                 when (state) {
@@ -108,7 +131,6 @@ class CardFragmentAuthed : Fragment() {
                     }
                     is UiState.Success -> {
                         val updatedDocument = state.data
-                        findNavController().navigate(R.id.action_cardFragmentAuthed_to_cardFragmentInitial)
                         Toast.makeText(requireContext(), "Документ обновлён", Toast.LENGTH_LONG).show()
                     }
                     is UiState.Error -> {

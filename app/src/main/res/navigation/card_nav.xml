@@ -18,6 +18,10 @@
         <action
             android:id="@+id/action_cardFragmentInitial_to_qrOrderFragment"
             app:destination="@id/qrOrderFragment" />
+        <action
+            android:id="@+id/action_cardFragmentInitial_to_cardFragmentAuthed"
+            app:destination="@id/cardFragmentAuthed" />
+
 
     </fragment>
 
@@ -54,6 +58,12 @@
         <action
             android:id="@+id/action_cardFragmentAuthed_to_cardFragmentInitial"
             app:destination="@id/cardFragmentInitial" />
+        <action
+            android:id="@+id/action_cardFragmentAuthed_to_cardFragmentSuccess"
+            app:destination="@id/cardFragmentSuccess" />
+        <action
+            android:id="@+id/action_cardFragmentAuthed_to_cardFragmentError"
+            app:destination="@id/cardFragmentError" />
 
     </fragment>
 
@@ -66,11 +76,6 @@
         <action
             android:id="@+id/action_cardFragmentError_to_cardFragmentInitial"
             app:destination="@id/cardFragmentInitial" />
-
-        <action
-            android:id="@+id/action_cardFragmentError_to_cardFragmentLoading"
-            app:destination="@id/cardFragmentLoading" />
-
     </fragment>
 
     <fragment

@@ -36,11 +36,12 @@ class CardFragmentSuccess : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonOk.setOnClickListener {
+        binding.navAuth.setOnClickListener {
             viewModel.resetCardState()
+            findNavController().navigate(R.id.action_cardFragmentSuccess_to_cardFragmentInitial)
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
+        /*viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.cardState.collect { state ->
                     if (state == CardState.INITIAL) {
@@ -48,7 +49,7 @@ class CardFragmentSuccess : Fragment() {
                     }
                 }
             }
-        }
+        }*/
     }
 
 }

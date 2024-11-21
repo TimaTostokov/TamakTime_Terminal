@@ -135,58 +135,6 @@ class CardFragmentViewModel @Inject constructor(
             }
         }
     }
-    fun updateDocument(date: String) {
-        _updateDocumentState.value = UiState.Loading
-
-        viewModelScope.launch {
-            _updateDocumentState.value = UiState.Loading
-            try {
-                val authHeader = userRepository.getCredentials() ?: return@launch
-                val canteenId = userRepository.getCanteenId().toString() ?: return@launch
-
-                val documentRequestBody = DocumentRequestBody(
-                    date = date,
-                    docsType = 1,
-                )
-
-
-                val result = docsRepository.updateDocument(
-                    authHeader = authHeader,
-                    canteenId = canteenId,
-                    documentId = "1L",
-                    documentRequestBody = documentRequestBody
-                )
-
-                when (result.status) {
-                    Resource.Status.SUCCESS -> {
-                        val data = result.data ?: throw Exception("Пустой ответ от сервера")
-                        Log.d("arsenchik228","${result.data}")
-                        Log.d("arsenchik228","${result}")
-                        _updateDocumentState.value = UiState.Success(data)
-                    }
-
-                    Resource.Status.ERROR -> {
-                        _updateDocumentState.value = UiState.Error(
-                            throwable = Exception(result.message ?: "Неизвестная ошибка"),
-                            message = result.message ?: "Произошла ошибка"
-                        )
-                    }
-
-                    Resource.Status.LOADING -> {
-                        _updateDocumentState.value = UiState.Loading
-                    }
-                }
-            } catch (e: Exception) {
-                _updateDocumentState.value = UiState.Error(
-                    throwable = e,
-                    message = e.localizedMessage ?: "Неизвестная ошибка"
-                )
-            }
-        }
-    }
-
-
-
     fun authenticateStudentByQR(cardUUID: String) {
         _cardState.value = CardState.AUTHENTICATING
         _loading.value = true
@@ -226,6 +174,8 @@ class CardFragmentViewModel @Inject constructor(
             }
         }
     }
+
+
 
     fun resetCardState() {
         _cardState.value = CardState.INITIAL
@@ -285,8 +235,61 @@ class CardFragmentViewModel @Inject constructor(
         }
     }
 
+    fun updateDocument(date: String) {
+        _updateDocumentState.value = UiState.Loading
+
+        viewModelScope.launch {
+            _updateDocumentState.value = UiState.Loading
+            try {
+                val authHeader = userRepository.getCredentials() ?: return@launch
+                val canteenId = userRepository.getCanteenId().toString() ?: return@launch
+
+                val documentRequestBody = DocumentRequestBody(
+                    date = date,
+                    docsType = 1,
+                )
+
+
+                val result = docsRepository.updateDocument(
+                    authHeader = authHeader,
+                    canteenId = canteenId,
+                    documentId = "1L",
+                    documentRequestBody = documentRequestBody
+                )
+
+                when (result.status) {
+                    Resource.Status.SUCCESS -> {
+                        val data = result.data ?: throw Exception("Пустой ответ от сервера")
+                        Log.d("arsenchik228","${result.data}")
+                        Log.d("arsenchik228","${result}")
+                        _updateDocumentState.value = UiState.Success(data)
+                    }
+
+                    Resource.Status.ERROR -> {
+                        _updateDocumentState.value = UiState.Error(
+                            throwable = Exception(result.message ?: "Неизвестная ошибка"),
+                            message = result.message ?: "Произошла ошибка"
+                        )
+                    }
+
+                    Resource.Status.LOADING -> {
+                        _updateDocumentState.value = UiState.Loading
+                    }
+                }
+            } catch (e: Exception) {
+                _updateDocumentState.value = UiState.Error(
+                    throwable = e,
+                    message = e.localizedMessage ?: "Неизвестная ошибка"
+                )
+            }
+        }
+    }
+
     fun postOrder(orderItems: List<Product>) {
+/*
         _cardState.value = CardState.ORDERING
+*/
+        _postOrderState.value = UiState.Loading
         val orderList = mutableListOf<OrderItem>()
         if (orderItems.isNotEmpty()) {
             orderItems.forEach { product ->
@@ -294,6 +297,7 @@ class CardFragmentViewModel @Inject constructor(
             }
 
             viewModelScope.launch {
+                _postOrderState.value = UiState.Loading
                 val credentials = userRepository.getCredentials() ?: return@launch
                 val canteenId = userRepository.getCanteenId() ?: return@launch
                 val orderToPost = OrderToPost(orderList)
@@ -301,15 +305,21 @@ class CardFragmentViewModel @Inject constructor(
                     val result = orderRepository.postOrder(credentials, canteenId, orderToPost)
                     when (result.status) {
                         Resource.Status.LOADING -> {
+                            _postOrderState.value = UiState.Loading
                         }
 
                         Resource.Status.ERROR -> {
+                            _postOrderState.value = UiState.Error(
+                                throwable = Exception(result.message ?: "Неизвестная ошибка"),
+                                message = result.message ?: "Произошла ошибка"
+                            )
                             _cardState.value = CardState.ORDER_ERROR
                         }
 
                         Resource.Status.SUCCESS -> {
+                            val data = result.data ?: throw Exception("Пустой ответ от сервера")
                             _cardState.value = CardState.ORDER_SUCCESS
-
+                            _postOrderState.value = UiState.Success(data)
                         }
                     }
                 }
