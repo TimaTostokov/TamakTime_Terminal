@@ -33,16 +33,20 @@ class CardFragmentSuccess : Fragment() {
     ): View {
         binding = FragmentCardSuccessBinding.inflate(inflater, container, false)
         return binding.root
+        resetState()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.navAuth.setOnClickListener {
-            viewModel.resetCardState()
-            sharedViewModel.resetOrder()
+            resetState()
             findNavController().navigate(R.id.action_cardFragmentSuccess_to_cardFragmentInitial)
         }
+    }
+    private fun resetState() {
+        viewModel.resetCardState()
+        sharedViewModel.resetOrder()
     }
 
 }

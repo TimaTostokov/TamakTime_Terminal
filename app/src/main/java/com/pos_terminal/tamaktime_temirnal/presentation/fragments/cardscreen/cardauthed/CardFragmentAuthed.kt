@@ -23,6 +23,7 @@ import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.Ord
 import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardviewmodel.CardFragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -72,14 +73,11 @@ class CardFragmentAuthed : Fragment() {
         viewModel.loadStudentLimit(studentId = 1)
 
         binding.buttonCancelOrder.setOnClickListener {
-            viewModel.resetCardState()
-            sharedViewModel.resetOrder()
+            resetStateAndNavigate()
         }
 
         binding.mrlBtnPay.setOnClickListener {
-            postOrdering()
-            viewModel.ordering()
-            updateDocument()
+            processOrder()
         }
 
         observePostOrderState()
@@ -92,13 +90,39 @@ class CardFragmentAuthed : Fragment() {
             }
         }
     }
-
-    private fun postOrdering() {
+    private fun processOrder() {
+        val orderItems = sharedViewModel.orderItems.value
         val totalPrice = sharedViewModel.totalPrice.value
-        viewModel.postOrder(sharedViewModel.orderItems.value, totalPrice)
+        viewModel.postOrder(orderItems, totalPrice)
+        updateDocument()
         Log.d("arsenchik","{${sharedViewModel.orderItems.value}}")
         Log.d("arsenchik","{${totalPrice}}")
+        viewModel.resetCardState()
+        sharedViewModel.resetOrder()
+
     }
+
+    private fun resetStateAndNavigate() {
+        sharedViewModel.resetOrder()
+        findNavController().navigate(R.id.action_cardFragmentAuthed_to_cardFragmentInitial)
+    }
+
+    private fun resetStateAndNavigateSuccess() {
+        sharedViewModel.resetOrder()
+        findNavController().navigate(R.id.action_cardFragmentAuthed_to_cardFragmentSuccess)
+    }
+
+    private fun resetStateAndNavigateError(errorMessage: String?) {
+        sharedViewModel.resetOrder()
+        findNavController().navigate(R.id.action_cardFragmentAuthed_to_cardFragmentError)
+        Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
+    }
+
+  /*  private fun postOrdering() {
+        val totalPrice = sharedViewModel.totalPrice.value
+        viewModel.postOrder(sharedViewModel.orderItems.value, totalPrice)
+
+    }*/
 
     private fun observePostOrderState() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -106,16 +130,12 @@ class CardFragmentAuthed : Fragment() {
                 when (state) {
                     is UiState.Loading -> {}
                     is UiState.Success -> {
+                        resetStateAndNavigateSuccess()
                         viewModel.resetCardState()
                         sharedViewModel.resetOrder()
-                        findNavController().navigate(R.id.action_cardFragmentAuthed_to_cardFragmentSuccess)
                     }
                     is UiState.Error -> {
-                        viewModel.resetCardState()
-                        sharedViewModel.resetOrder()
-                        findNavController().navigate(R.id.action_cardFragmentAuthed_to_cardFragmentError)
-                        val errorMessage = state.message
-                        Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
+                        resetStateAndNavigateError(state.message)
                     }
                 }
             }

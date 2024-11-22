@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.pos_terminal.tamaktime_temirnal.R
 import com.pos_terminal.tamaktime_temirnal.common.autoCleared
@@ -33,9 +34,8 @@ class CardFragmentInitial : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         resetState()
-
         binding.mrlBtnUnAuth.setOnClickListener {
-            findNavController().navigate(R.id.action_cardFragmentInitial_to_cardFragmentLoading)
+            navigateToNextFragment()
         }
 
         binding.mrlBtnUnAuthQR.setOnClickListener {
@@ -46,6 +46,15 @@ class CardFragmentInitial : Fragment() {
     override fun onStart() {
         super.onStart()
         binding.mrlBtnUnAuth.requestFocus()
+    }
+    private fun navigateToNextFragment() {
+        findNavController().navigate(
+            R.id.action_cardFragmentInitial_to_cardFragmentLoading,
+            null,
+            NavOptions.Builder()
+                .setPopUpTo(R.id.cardFragmentInitial, true)
+                .build()
+        )
     }
 
     private fun resetState() {

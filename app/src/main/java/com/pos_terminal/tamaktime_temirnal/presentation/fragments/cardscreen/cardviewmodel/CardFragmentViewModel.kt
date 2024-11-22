@@ -178,6 +178,7 @@ class CardFragmentViewModel @Inject constructor(
                             _cardState.value = CardState.AUTHENTICATING_ERROR
                             Log.e("authenticateStudentByQR", "Received student data is null")
                         }
+                        resetCardState()
                     } else {
                         _cardState.value = CardState.AUTHENTICATING_ERROR
                         Log.e("authenticateStudentByQR", "No items received")
@@ -201,10 +202,16 @@ class CardFragmentViewModel @Inject constructor(
         _key2.value = ""
         _cardUuid.value = ""
         _student.value = null
+        _studentLimit.value = null
+        _studentQR.value = null
         _errorMessage.value = ""
+        _postOrderState.value = UiState.Loading
+        _updateDocumentState.value = UiState.Loading
         orderId = -1L
         orderingSuccess = null
     }
+
+
 
     fun loadStudentLimit(studentId: Long) {
         viewModelScope.launch {
@@ -239,6 +246,7 @@ class CardFragmentViewModel @Inject constructor(
                 Resource.Status.ERROR -> {
                     _cardState.value = CardState.ORDER_ERROR
                     Log.e("checkStudentLimit", "Error: ${studentLimit.message}")
+                    resetCardState()
                 }
 
                 Resource.Status.SUCCESS -> {
@@ -249,6 +257,7 @@ class CardFragmentViewModel @Inject constructor(
                     } else {
                         _cardState.value = CardState.ORDER
                     }
+                    resetCardState()
                 }
             }
         }
@@ -305,6 +314,7 @@ class CardFragmentViewModel @Inject constructor(
     }
 
     fun postOrder(orderItems: List<Product>,totalPrice: Double) {
+        resetCardState()
         _postOrderState.value = UiState.Loading
         val orderList = mutableListOf<OrderItem>()
         if (orderItems.isNotEmpty()) {
@@ -330,17 +340,20 @@ class CardFragmentViewModel @Inject constructor(
                                 message = result.message ?: "Произошла ошибка"
                             )
                             _cardState.value = CardState.ORDER_ERROR
+                            resetCardState()
                         }
 
                         Resource.Status.SUCCESS -> {
                             val data = result.data ?: throw Exception("Пустой ответ от сервера")
                             _cardState.value = CardState.ORDER_SUCCESS
                             _postOrderState.value = UiState.Success(data)
+                            resetCardState()
                         }
                     }
                 }
             }
         }
+        resetCardState()
     }
 
     fun ordering() {
