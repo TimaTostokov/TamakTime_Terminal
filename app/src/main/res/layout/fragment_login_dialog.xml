@@ -102,6 +102,7 @@
                 android:layout_height="66dp"
                 android:layout_marginTop="20dp"
                 android:hint="@string/password"
+                app:endIconMode="password_toggle"
                 app:hintTextColor="@android:color/white"
                 app:startIconDrawable="@drawable/ic_lock">
 

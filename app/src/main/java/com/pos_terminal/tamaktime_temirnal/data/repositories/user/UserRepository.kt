@@ -1,6 +1,7 @@
 package com.pos_terminal.tamaktime_temirnal.data.repositories.user
 
 import android.util.Log
+import com.pos_terminal.tamaktime_temirnal.common.LanguagePreference
 import com.pos_terminal.tamaktime_temirnal.data.remote.local.UserStoreImpl
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.user.User
 import kotlinx.coroutines.flow.Flow
@@ -10,7 +11,16 @@ import javax.inject.Inject
     class UserRepository @Inject constructor(
         private val local: UserStoreImpl,
         private val remote: UserRemoteDataSource,
-    ) {
+        private val languagePreference: LanguagePreference,
+        ) {
+
+        fun saveSelectedLanguage(languageCode: String) {
+            languagePreference.saveLanguage(languageCode)
+        }
+
+        fun getSavedLanguage(): String {
+            return languagePreference.getLanguage() ?: "en"
+        }
 
         suspend fun logOut() = local.clear()
 

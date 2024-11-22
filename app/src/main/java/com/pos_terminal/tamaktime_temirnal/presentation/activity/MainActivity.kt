@@ -21,6 +21,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.pos_terminal.tamaktime_temirnal.R
 import com.pos_terminal.tamaktime_temirnal.common.Extensions
+import com.pos_terminal.tamaktime_temirnal.common.Extensions.changeLanguage
+import com.pos_terminal.tamaktime_temirnal.common.Extensions.loadLocale
 import com.pos_terminal.tamaktime_temirnal.databinding.ActivityMainBinding
 import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardloading.CardFragmentLoading
 import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardloading.QrOrderFragmentLoading
@@ -38,16 +40,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        loadLocale(this)
         super.onCreate(savedInstanceState)
         val binding: ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         setSupportActionBar(binding.toolbar)
 
        nfcAdapter = NfcAdapter.getDefaultAdapter(this)
 
        if (nfcAdapter == null) {
-            Extensions.showToast(this, "NFC недоступно")
+            Extensions.showToast(this, "")
 //            finish()
 //            return
         }
@@ -167,35 +169,11 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.ic_menu -> {
-                alertDialog()
+                changeLanguage()
             }
         }
 
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun alertDialog() {
-        val builder = AlertDialog.Builder(this, R.style.CustomAlertDialog)
-            .create()
-        val view = layoutInflater.inflate(R.layout.change_language_alert_diaolog, null)
-        val buttonEn = view.findViewById<Button>(R.id.dialogButtonEn)
-        val buttonRu = view.findViewById<Button>(R.id.dialogButtonRu)
-        val buttonTur = view.findViewById<Button>(R.id.dialogButtonTur)
-        builder.setView(view)
-        buttonEn.setOnClickListener {
-            builder.dismiss()
-//            updateLocale("en")
-        }
-        buttonRu.setOnClickListener {
-            builder.dismiss()
-//            updateLocale("ru")
-        }
-        buttonTur.setOnClickListener {
-            builder.dismiss()
-//            updateLocale("tr")
-        }
-        builder.setCanceledOnTouchOutside(false)
-        builder.show()
     }
 
     private fun showSignInDialog() {

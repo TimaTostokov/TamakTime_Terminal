@@ -72,7 +72,7 @@
                 android:backgroundTint="@color/primaryDark"
                 android:elevation="0dp"
                 android:focusable="true"
-                android:text="Оформить заказ"
+                android:text="@string/orders"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:cornerRadius="14dp"
@@ -80,7 +80,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:rippleColor="@color/purple_200" />
-
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/mrlBtnUnAuthQR"
@@ -90,7 +89,7 @@
                 android:backgroundTint="@color/primaryDark"
                 android:elevation="0dp"
                 android:focusable="true"
-                android:text="Оформить заказ по QR"
+                android:text="@string/orderqr"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:cornerRadius="14dp"

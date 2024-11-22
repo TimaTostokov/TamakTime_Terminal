@@ -76,12 +76,10 @@
     <string name="iseedeadpeople" translatable="false">Bu yazıyı görmemen gerekiyordu</string>
     <string name="iseedeadpeoplebtn" translatable="false">Bgnyksg</string> <!-- Note: This appears to be gibberish or a code, so it is left unchanged -->
     <string name="mock_user_name" translatable="false">Konstantinov K.</string> <!-- Note: Names are left unchanged -->
-    <string name="devam_etmek_i_in_bir_dil_se_in_ndaha_sonra_istedi_iniz_zaman_de_i_tirebilirsiniz" translatable="false">Devam etmek için bir dil seçin, daha sonra istediğiniz zaman değiştirebilirsiniz.</string>
-    <string name="select_a_language_to_continue_you_can_always_change_it_later" translatable="false">Devam etmek için bir dil seçin, istediğiniz zaman değiştirebilirsiniz.</string>
-    <string name="english" translatable="false">İngilizce</string>
-    <string name="russian" translatable="false">Rusça</string>
-    <string name="turkey" translatable="false">Türkiye</string>
     <string name="two_thousand_txt" translatable="false">200 с</string>
     <string name="count_txt" translatable="false">30 шт</string>
+    <string name="orders">Sipariş ver</string>
+    <string name="orderqr">QR ile sipariş ver</string>
+    <string name="qr_code">Okuma QR Code</string>
 
 </resources>

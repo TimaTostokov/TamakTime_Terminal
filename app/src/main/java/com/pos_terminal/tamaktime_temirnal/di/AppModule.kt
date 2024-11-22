@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder
 import com.pos_terminal.tamaktime_temirnal.common.CardUUIDInteractor
 import com.pos_terminal.tamaktime_temirnal.common.Constants.BASE_URL
 import com.pos_terminal.tamaktime_temirnal.common.Constants.NETWORK_TIMEOUT
+import com.pos_terminal.tamaktime_temirnal.common.LanguagePreference
 import com.pos_terminal.tamaktime_temirnal.data.remote.apiservice.CategoryService
 import com.pos_terminal.tamaktime_temirnal.data.remote.apiservice.DocsService
 import com.pos_terminal.tamaktime_temirnal.data.remote.apiservice.OrderService
@@ -63,6 +64,12 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideLanguageInterceptor(
+        languagePreference: LanguagePreference,
+    ): LanguageInterceptor = LanguageInterceptor(languagePreference)
+
+    @Provides
+    @Singleton
     fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
@@ -112,11 +119,18 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideLanguagePreference(@ApplicationContext context: Context): LanguagePreference {
+        return LanguagePreference.getInstance(context)
+    }
+
+    @Provides
+    @Singleton
     fun provideUserRepository(
         local: UserStoreImpl,
         remote: UserRemoteDataSource,
-    ): UserRepository =
-        UserRepository(local, remote)
+        languagePreference: LanguagePreference,
+        ): UserRepository =
+        UserRepository(local, remote,languagePreference)
 
     @Provides
     @Singleton

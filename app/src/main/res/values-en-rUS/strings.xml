@@ -74,4 +74,8 @@
     <string name="iseedeadpeoplebtn" translatable="false">Ysnhsti</string>
     <string name="mock_user_name" translatable="false">Константинов К.</string>
     <string name="vhod_cashier" translatable="false">Login as cashier</string>
+    <string name="orders">Place an order</string>
+    <string name="orderqr">Place an order via QR</string>
+    <string name="qr_code">readout QR Code</string>
+
 </resources>

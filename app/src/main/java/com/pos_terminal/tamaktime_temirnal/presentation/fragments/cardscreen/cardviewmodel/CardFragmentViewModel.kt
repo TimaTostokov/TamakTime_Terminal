@@ -139,7 +139,7 @@ class CardFragmentViewModel @Inject constructor(
             val isAuthenticated = true
             if (isAuthenticated) {
                 _cardState.value = CardState.AUTHENTICATED
-                sharedViewModel.setUserAuthenticated(true) // Устанавливаем аутентификацию
+                sharedViewModel.setUserAuthenticated(true)
             } else {
                 _cardState.value = CardState.AUTHENTICATING_ERROR
                 sharedViewModel.setUserAuthenticated(false)
@@ -187,7 +187,7 @@ class CardFragmentViewModel @Inject constructor(
             val isAuthenticated = true
             if (isAuthenticated) {
                 _cardState.value = CardState.AUTHENTICATED
-                sharedViewModel.setUserAuthenticated(true) // Устанавливаем аутентификацию
+                sharedViewModel.setUserAuthenticated(true)
             } else {
                 _cardState.value = CardState.AUTHENTICATING_ERROR
                 sharedViewModel.setUserAuthenticated(false)

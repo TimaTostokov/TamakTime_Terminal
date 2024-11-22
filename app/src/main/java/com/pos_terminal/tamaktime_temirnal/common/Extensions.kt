@@ -1,10 +1,15 @@
 package com.pos_terminal.tamaktime_temirnal.common
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.content.res.Configuration
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
+import java.util.Locale
 
 object Extensions {
 
@@ -22,6 +27,45 @@ object Extensions {
             return String.format("%.0f с", price)
         } else {
             return String.format("%.2f с", price)
+        }
+    }
+
+    fun Activity.changeLanguage() {
+        val listItems = arrayOf("English", "Русский", "Türkçe")
+        val mBuilder = AlertDialog.Builder(this)
+        mBuilder.setTitle("Выберите язык")
+        mBuilder.setSingleChoiceItems(listItems, -1) { dialog, which ->
+            when (which) {
+                0 -> setLocale("en", this)
+                1 -> setLocale("ru", this)
+                2 -> setLocale("tr", this)
+            }
+            dialog.dismiss()
+            val intent = Intent(this, this::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+        }
+        val mDialog = mBuilder.create()
+        mDialog.show()
+    }
+
+    fun setLocale(languageCode: String, context: Context) {
+        val locale = Locale(languageCode)
+        Locale.setDefault(locale)
+        val config = Configuration()
+        config.setLocale(locale)
+        context.resources.updateConfiguration(config, context.resources.displayMetrics)
+        LanguagePreference.getInstance(context).saveLanguage(languageCode)
+    }
+
+    fun loadLocale(context: Context) {
+        val language = LanguagePreference.getInstance(context).getLanguage()
+        if (!language.isNullOrEmpty()) {
+            val locale = Locale(language)
+            Locale.setDefault(locale)
+            val config = Configuration()
+            config.setLocale(locale)
+            context.resources.updateConfiguration(config, context.resources.displayMetrics)
         }
     }
 
