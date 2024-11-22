@@ -26,6 +26,10 @@ class ProductAdapter(
 
     private var isUserAuthenticated = false
 
+    override fun submitList(list: List<Product>?) {
+        super.submitList(list?.map { it.copy() })
+    }
+
     init {
         CoroutineScope(Dispatchers.Main).launch {
             isUserAuthenticatedFlow.collect { authenticated ->
@@ -82,14 +86,15 @@ class ProductAdapter(
                     ).show()
                 }
             }
-            if (product.count > 0) {
-                binding.foodPrice.setTextColor(itemView.context.getColor(android.R.color.black))
-            } else {
-                binding.foodPrice.setTextColor(itemView.context.getColor(R.color.gray))
-            }
+
+            val textColor = if (product.count > 0) android.R.color.black else R.color.gray
+            binding.foodPrice.setTextColor(itemView.context.getColor(textColor))
+            binding.foodCount.setTextColor(itemView.context.getColor(textColor))
+            binding.foodName.setTextColor(itemView.context.getColor(textColor))
         }
     }
 }
+
 
 class ProductDiffCallback : DiffUtil.ItemCallback<Product>() {
     override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean =

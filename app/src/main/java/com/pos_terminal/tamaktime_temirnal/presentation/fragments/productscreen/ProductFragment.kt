@@ -1,5 +1,6 @@
 package com.pos_terminal.tamaktime_temirnal.presentation.fragments.productscreen
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -66,6 +67,7 @@ class ProductFragment : Fragment(), ProductAdapter.OnProductClickListener, MenuP
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -73,6 +75,7 @@ class ProductFragment : Fragment(), ProductAdapter.OnProductClickListener, MenuP
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            sharedViewModel.resetOrderAndProducts()
             navigateBack()
         }
 
@@ -84,9 +87,9 @@ class ProductFragment : Fragment(), ProductAdapter.OnProductClickListener, MenuP
             adapter = productAdapter
         }
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             sharedViewModel.products.collect { products ->
-                productAdapter.submitList(products)
+                productAdapter.submitList(sharedViewModel.products.value)
             }
         }
 
@@ -95,6 +98,13 @@ class ProductFragment : Fragment(), ProductAdapter.OnProductClickListener, MenuP
         val canteenId = args.canteenId
         viewModel.loadProducts(credentials, canteenId, categoryId)
         observeViewModel()
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            sharedViewModel.isUserAuthenticated.collect { isAuthenticated ->
+                productAdapter.notifyDataSetChanged()
+            }
+        }
+
     }
 
     private fun observeViewModel() {
@@ -136,7 +146,11 @@ class ProductFragment : Fragment(), ProductAdapter.OnProductClickListener, MenuP
     }
 
     override fun onProductClick(product: Product) {
-        sharedViewModel.addProductToOrder(product)
+        if (product.count > 0) {
+            sharedViewModel.addProductToOrder(product)
+        } else {
+            Toast.makeText(requireContext(), "Товар закончился", Toast.LENGTH_SHORT).show()
+        }
     }
 
 }

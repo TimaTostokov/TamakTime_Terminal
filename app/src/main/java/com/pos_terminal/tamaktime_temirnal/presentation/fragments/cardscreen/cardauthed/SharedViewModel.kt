@@ -33,6 +33,10 @@ class SharedViewModel @Inject constructor(
         _isUserAuthenticated.value = isAuthenticated
     }
 
+    fun resetUserAuthentication() {
+        _isUserAuthenticated.value = false
+    }
+
     init {
         viewModelScope.launch {
             _products.collect { products ->
@@ -43,6 +47,22 @@ class SharedViewModel @Inject constructor(
 
     fun loadProducts(newProducts: List<Product>) {
         _products.value = newProducts
+    }
+
+    fun resetOrderAndProducts() {
+        val updatedProducts = _products.value.map { originalProduct ->
+            val orderItem = _orderItems.value.find { it.id == originalProduct.id }
+            if (orderItem != null) {
+                originalProduct.copy(
+                    count = originalProduct.count + orderItem.cartCount,
+                    cartCount = 0
+                )
+            } else {
+                originalProduct.copy(cartCount = 0)
+            }
+        }
+        _products.value = updatedProducts
+        _orderItems.value = emptyList()
     }
 
     fun resetOrder() {

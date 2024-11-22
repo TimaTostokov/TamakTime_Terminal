@@ -207,7 +207,7 @@ class CardFragmentViewModel @Inject constructor(
         _errorMessage.value = ""
         _postOrderState.value = UiState.Loading
         _updateDocumentState.value = UiState.Loading
-        orderId = -1L
+        orderId = 0
         orderingSuccess = null
     }
 

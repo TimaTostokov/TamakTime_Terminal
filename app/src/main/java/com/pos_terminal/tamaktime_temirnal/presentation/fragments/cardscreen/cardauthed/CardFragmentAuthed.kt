@@ -103,7 +103,9 @@ class CardFragmentAuthed : Fragment() {
     }
 
     private fun resetStateAndNavigate() {
+        sharedViewModel.resetUserAuthentication()
         sharedViewModel.resetOrder()
+        sharedViewModel.resetOrderAndProducts()
         findNavController().navigate(R.id.action_cardFragmentAuthed_to_cardFragmentInitial)
     }
 
@@ -147,7 +149,8 @@ class CardFragmentAuthed : Fragment() {
             )
         }
         viewModel.updateDocument(date, lineRequests)
-        lifecycleScope.launch {
+
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.updateDocumentState.collect { state ->
                 when (state) {
                     is UiState.Loading -> {
@@ -167,7 +170,7 @@ class CardFragmentAuthed : Fragment() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
     private fun setupObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.student.collect { student ->
@@ -205,6 +208,7 @@ class CardFragmentAuthed : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             sharedViewModel.orderItems.collect { orderItems ->
                 orderItemAdapter.submitList(orderItems)
+                orderItemAdapter.notifyDataSetChanged()
                 val totalPrice = sharedViewModel.totalPrice.value
                 // Закомментированы проверки баланса и лимита
                 // val balance = viewModel.student.value?.balance?.toDoubleOrNull() ?: 0.0

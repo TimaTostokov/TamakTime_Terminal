@@ -37,6 +37,7 @@ class CardFragmentError : Fragment() {
         binding.buttonCancel.setOnClickListener {
             viewModel.resetCardState()
             sharedViewModel.resetOrder()
+            sharedViewModel.resetUserAuthentication()
             findNavController().navigate(R.id.action_cardFragmentError_to_cardFragmentInitial)
         }
     }

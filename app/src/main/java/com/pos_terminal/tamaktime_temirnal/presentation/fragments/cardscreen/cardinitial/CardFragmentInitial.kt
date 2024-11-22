@@ -62,6 +62,7 @@ class CardFragmentInitial : Fragment() {
     private fun resetState() {
         viewModel.resetCardState()
         sharedViewModel.resetOrder()
+        sharedViewModel.resetUserAuthentication()
     }
 
 }

@@ -19,10 +19,12 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
+import com.google.android.material.snackbar.Snackbar
 import com.pos_terminal.tamaktime_temirnal.R
 import com.pos_terminal.tamaktime_temirnal.common.Extensions
 import com.pos_terminal.tamaktime_temirnal.common.Extensions.changeLanguage
 import com.pos_terminal.tamaktime_temirnal.common.Extensions.loadLocale
+import com.pos_terminal.tamaktime_temirnal.common.Extensions.showSnackbar
 import com.pos_terminal.tamaktime_temirnal.databinding.ActivityMainBinding
 import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardloading.CardFragmentLoading
 import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardloading.QrOrderFragmentLoading
@@ -49,7 +51,7 @@ class MainActivity : AppCompatActivity() {
        nfcAdapter = NfcAdapter.getDefaultAdapter(this)
 
        if (nfcAdapter == null) {
-            Extensions.showToast(this, "")
+           showSnackbar(binding.root, "NFC в данном устройстве недоступно")
 //            finish()
 //            return
         }

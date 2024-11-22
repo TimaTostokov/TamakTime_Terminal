@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.pos_terminal.tamaktime_temirnal.common
 
 import android.annotation.SuppressLint
@@ -5,16 +7,34 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
-import android.widget.ImageView
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import java.util.Locale
 
 object Extensions {
 
     fun showToast(context: Context, message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+
+    fun showSnackbar(view: View, message: String, duration: Int = Snackbar.LENGTH_SHORT) {
+        Snackbar.make(view, message, duration).show()
+    }
+
+    fun showSnackbarWithAction(
+        view: View,
+        message: String,
+        actionText: String,
+        action: () -> Unit,
+        duration: Int = Snackbar.LENGTH_LONG
+    ) {
+        Snackbar.make(view, message, duration)
+            .setAction(actionText) {
+                action()
+            }
+            .show()
     }
 
     @SuppressLint("DefaultLocale")
