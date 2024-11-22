@@ -39,7 +39,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)
-        Extensions.loadLocale(this)
         val binding: ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -52,8 +51,6 @@ class MainActivity : AppCompatActivity() {
 //            finish()
 //            return
         }
-
-        loadSavedLanguage()
 
         val navHostFragment: NavHostFragment =
             supportFragmentManager.findFragmentById(R.id.category_fcv) as NavHostFragment
@@ -187,39 +184,18 @@ class MainActivity : AppCompatActivity() {
         builder.setView(view)
         buttonEn.setOnClickListener {
             builder.dismiss()
-            updateLocale("en")
+//            updateLocale("en")
         }
         buttonRu.setOnClickListener {
             builder.dismiss()
-            updateLocale("ru")
+//            updateLocale("ru")
         }
         buttonTur.setOnClickListener {
             builder.dismiss()
-            updateLocale("tr")
+//            updateLocale("tr")
         }
         builder.setCanceledOnTouchOutside(false)
         builder.show()
-    }
-
-    private fun loadSavedLanguage() {
-        val savedLanguage = viewModel.getSavedLanguage()
-        if (resources.configuration.locales[0].language != savedLanguage) {
-            updateLocale(savedLanguage)
-        }
-    }
-
-    private fun updateLocale(languageCode: String) {
-        val locale = Locale(languageCode.lowercase(Locale.ROOT))
-
-        val config = resources.configuration.apply {
-            setLocale(locale)
-        }
-
-        val intent = this.intent
-        this.apply {
-            viewModel.saveSelectedLanguage(languageCode)
-            recreate()
-        }
     }
 
     private fun showSignInDialog() {

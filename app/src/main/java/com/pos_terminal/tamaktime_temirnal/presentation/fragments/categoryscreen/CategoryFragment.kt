@@ -64,7 +64,6 @@ class CategoryFragment : Fragment(), MenuProvider {
         binding.recyclerView.adapter = adapter
     }
 
-
     private fun setupObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {

@@ -9,16 +9,30 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.pos_terminal.tamaktime_temirnal.R
 import com.pos_terminal.tamaktime_temirnal.common.Extensions.formatPrice
-import com.pos_terminal.tamaktime_temirnal.common.loadImageURL
+import com.pos_terminal.tamaktime_temirnal.common.loadImageApi
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.product.Product
 import com.pos_terminal.tamaktime_temirnal.databinding.ItemProductBinding
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
+@SuppressLint("NotifyDataSetChanged")
 class ProductAdapter(
     private val listener: OnProductClickListener,
-    private val isUserAuthenticated: StateFlow<Boolean>
+    private val isUserAuthenticatedFlow: StateFlow<Boolean>
 ) : ListAdapter<Product, ProductAdapter.ProductViewHolder>(ProductDiffCallback()) {
+
+    private var isUserAuthenticated = false
+
+    init {
+        CoroutineScope(Dispatchers.Main).launch {
+            isUserAuthenticatedFlow.collect { authenticated ->
+                isUserAuthenticated = authenticated
+                notifyDataSetChanged()
+            }
+        }
+    }
 
     interface OnProductClickListener {
         fun onProductClick(product: Product)
@@ -32,28 +46,35 @@ class ProductAdapter(
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = getItem(position)
         holder.bind(product)
-
-        holder.itemView.setOnClickListener {
-            if (product.count > 0 && isUserAuthenticated.value) {
-                listener.onProductClick(product)
-            } else {
-                Toast.makeText(holder.itemView.context, "Пожалуйста, пройдите считывание NFC либо QR Code", Toast.LENGTH_SHORT).show()
-            }
-        }
     }
 
     inner class ProductViewHolder(private val binding: ItemProductBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
         @SuppressLint("SetTextI18n")
-        fun bind(product: Product) {
-            binding.foodImage.loadImageURL(product.thumbnail)
+        fun bind(product: Product?) {
+            if (product == null) return
+
+            binding.foodImage.loadImageApi(product.thumbnail.toString())
             binding.foodName.text = product.title
             binding.foodCount.text = "${product.count} шт"
             binding.foodPrice.text = formatPrice(product.sellingPrice?.toDoubleOrNull() ?: 0.0)
 
-            val isClickable = product.count > 0 && isUserAuthenticated.value
+            val isClickable = product.count > 0 && isUserAuthenticated
             binding.root.isEnabled = isClickable
             binding.root.alpha = if (isClickable) 1.0f else 0.5f
+
+            binding.root.setOnClickListener {
+                if (isClickable) {
+                    listener.onProductClick(product)
+                } else {
+                    Toast.makeText(
+                        itemView.context,
+                        "Пожалуйста, пройдите аутентификацию",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
             if (product.count > 0) {
                 binding.foodPrice.setTextColor(itemView.context.getColor(android.R.color.black))
             } else {

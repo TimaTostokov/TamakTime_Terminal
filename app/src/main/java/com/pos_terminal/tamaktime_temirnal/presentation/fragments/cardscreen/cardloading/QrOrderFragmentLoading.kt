@@ -17,6 +17,7 @@ import com.pos_terminal.tamaktime_temirnal.common.CardState
 import com.pos_terminal.tamaktime_temirnal.common.autoCleared
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.student.Student
 import com.pos_terminal.tamaktime_temirnal.databinding.FragmentCardLoadingBinding
+import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardauthed.SharedViewModel
 import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardviewmodel.CardFragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -28,6 +29,7 @@ class QrOrderFragmentLoading : Fragment(), CardFragmentViewModel.CardNavigationL
     private var binding: FragmentCardLoadingBinding by autoCleared()
 
     private val viewModel: CardFragmentViewModel by activityViewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -109,7 +111,8 @@ class QrOrderFragmentLoading : Fragment(), CardFragmentViewModel.CardNavigationL
 
     fun handleQrTag(cardUuid: String) {
         viewModel.setCardUuid(cardUuid)
-        viewModel.authenticateStudentByQR(cardUuid)
+        viewModel.authenticateStudentByQR(cardUuid,sharedViewModel)
+        viewModel.authenticateCard(sharedViewModel)
     }
 
     override fun navigateToCategories() {

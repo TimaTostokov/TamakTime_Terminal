@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.pos_terminal.tamaktime_temirnal.common.loadImageURL
+import com.pos_terminal.tamaktime_temirnal.common.loadImageApi
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.category.Category
 import com.pos_terminal.tamaktime_temirnal.databinding.ItemCategoryBinding
 
@@ -36,7 +36,7 @@ class CategoryAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun onBind(category: Category) {
             binding.catTitle.text = category.name
-            binding.catIcon.loadImageURL(category.icon)
+            binding.catIcon.loadImageApi(category.icon.toString())
             binding.llCat.setBackgroundColor(Color.parseColor(category.color))
         }
     }

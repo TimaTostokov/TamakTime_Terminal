@@ -10,9 +10,7 @@ import retrofit2.http.Header
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
-
 interface DocsService {
-
     @PUT(PUT_DOCUMENT_END_POINT)
     suspend fun updateDocument(
         @Header("Authorization") authHeader: String,

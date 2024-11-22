@@ -16,6 +16,7 @@ import com.pos_terminal.tamaktime_temirnal.R
 import com.pos_terminal.tamaktime_temirnal.common.Extensions.formatPrice
 import com.pos_terminal.tamaktime_temirnal.common.UiState
 import com.pos_terminal.tamaktime_temirnal.common.autoCleared
+import com.pos_terminal.tamaktime_temirnal.data.remote.model.documents.LineRequest
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.product.Product
 import com.pos_terminal.tamaktime_temirnal.databinding.FragmentCardAuthedBinding
 import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.OrderItemAdapter
@@ -93,7 +94,10 @@ class CardFragmentAuthed : Fragment() {
     }
 
     private fun postOrdering() {
-        viewModel.postOrder(sharedViewModel.orderItems.value)
+        val totalPrice = sharedViewModel.totalPrice.value
+        viewModel.postOrder(sharedViewModel.orderItems.value, totalPrice)
+        Log.d("arsenchik","{${sharedViewModel.orderItems.value}}")
+        Log.d("arsenchik","{${totalPrice}}")
     }
 
     private fun observePostOrderState() {
@@ -120,8 +124,15 @@ class CardFragmentAuthed : Fragment() {
 
     private fun updateDocument() {
         val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-
-        viewModel.updateDocument(date)
+        val orderItems = sharedViewModel.orderItems.value
+        val lineRequests = orderItems.map { product ->
+            LineRequest(
+                productId = product.id,
+                quantity = product.cartCount.toString(),
+                price = product.sellingPrice
+            )
+        }
+        viewModel.updateDocument(date, lineRequests)
         lifecycleScope.launch {
             viewModel.updateDocumentState.collect { state ->
                 when (state) {

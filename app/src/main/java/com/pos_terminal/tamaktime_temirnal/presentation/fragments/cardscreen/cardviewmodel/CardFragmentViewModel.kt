@@ -9,6 +9,7 @@ import com.pos_terminal.tamaktime_temirnal.common.Resource
 import com.pos_terminal.tamaktime_temirnal.common.UiState
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.documents.DocumentRequestBody
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.documents.DocumentResponse
+import com.pos_terminal.tamaktime_temirnal.data.remote.model.documents.LineRequest
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.order.OrderItem
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.order.OrderResponse
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.order.OrderToPost
@@ -41,7 +42,6 @@ class CardFragmentViewModel @Inject constructor(
     private val studentLimitRepository: StudentLimitRepository,
     private val orderRepository: OrderRepository,
     private val qrOrderRepository: QrOrderRepository,
-    private val sharedViewModel: SharedViewModel
 ) : ViewModel() {
 
     private var orderingSuccess: Boolean? = null
@@ -94,7 +94,7 @@ class CardFragmentViewModel @Inject constructor(
         _cardUuid.value = uuid
     }
 
-    fun authenticateCard() {
+    fun authenticateCard(sharedViewModel: SharedViewModel) {
         _cardState.value = CardState.AUTHENTICATING
         _loading.value = true
 
@@ -107,8 +107,8 @@ class CardFragmentViewModel @Inject constructor(
 //            cardUUIDInteractor.cardUuid.takeIf { it.isNotEmpty() }
 //                ?: _cardUuid.value ?: return@launch
 
-//            val cardUUID = "62A2742E"
-            val cardUUID = "36c2b7f44fdb473ea19d527c6220a959"
+            val cardUUID = "62A2742E"
+//            val cardUUID = "36c2b7f44fdb473ea19d527c6220a959"
 
             if (schoolId > 0) {
 
@@ -133,14 +133,21 @@ class CardFragmentViewModel @Inject constructor(
                             _cardState.value = CardState.AUTHENTICATING_ERROR
                             null
                         }
-                        sharedViewModel.setUserAuthenticated(true)
                     }
                 }
+            }
+            val isAuthenticated = true
+            if (isAuthenticated) {
+                _cardState.value = CardState.AUTHENTICATED
+                sharedViewModel.setUserAuthenticated(true) // Устанавливаем аутентификацию
+            } else {
+                _cardState.value = CardState.AUTHENTICATING_ERROR
+                sharedViewModel.setUserAuthenticated(false)
             }
         }
     }
 
-    fun authenticateStudentByQR(cardUUID: String) {
+    fun authenticateStudentByQR(cardUUID: String,sharedViewModel: SharedViewModel) {
         _cardState.value = CardState.AUTHENTICATING
         _loading.value = true
 
@@ -177,6 +184,14 @@ class CardFragmentViewModel @Inject constructor(
                     }
                 }
             }
+            val isAuthenticated = true
+            if (isAuthenticated) {
+                _cardState.value = CardState.AUTHENTICATED
+                sharedViewModel.setUserAuthenticated(true) // Устанавливаем аутентификацию
+            } else {
+                _cardState.value = CardState.AUTHENTICATING_ERROR
+                sharedViewModel.setUserAuthenticated(false)
+            }
         }
     }
 
@@ -185,6 +200,7 @@ class CardFragmentViewModel @Inject constructor(
         _key1.value = ""
         _key2.value = ""
         _cardUuid.value = ""
+        _student.value = null
         _errorMessage.value = ""
         orderId = -1L
         orderingSuccess = null
@@ -238,11 +254,10 @@ class CardFragmentViewModel @Inject constructor(
         }
     }
 
-    fun updateDocument(date: String) {
+    fun updateDocument(date: String, lines: List<LineRequest>) {
         _updateDocumentState.value = UiState.Loading
 
         viewModelScope.launch {
-            _updateDocumentState.value = UiState.Loading
             try {
                 val authHeader = userRepository.getCredentials() ?: return@launch
                 val canteenId = userRepository.getCanteenId().toString()
@@ -250,6 +265,7 @@ class CardFragmentViewModel @Inject constructor(
                 val documentRequestBody = DocumentRequestBody(
                     date = date,
                     docsType = 1,
+                    lines = lines
                 )
 
                 val result = docsRepository.updateDocument(
@@ -288,7 +304,7 @@ class CardFragmentViewModel @Inject constructor(
         }
     }
 
-    fun postOrder(orderItems: List<Product>) {
+    fun postOrder(orderItems: List<Product>,totalPrice: Double) {
         _postOrderState.value = UiState.Loading
         val orderList = mutableListOf<OrderItem>()
         if (orderItems.isNotEmpty()) {
@@ -300,7 +316,7 @@ class CardFragmentViewModel @Inject constructor(
                 _postOrderState.value = UiState.Loading
                 val credentials = userRepository.getCredentials() ?: return@launch
                 val canteenId = userRepository.getCanteenId() ?: return@launch
-                val orderToPost = OrderToPost(orderList)
+                val orderToPost = OrderToPost(orderList,total = totalPrice)
                 if (canteenId > 0) {
                     val result = orderRepository.postOrder(credentials, canteenId, orderToPost)
                     when (result.status) {

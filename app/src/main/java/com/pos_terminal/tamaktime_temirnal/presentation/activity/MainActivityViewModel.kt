@@ -17,14 +17,6 @@ class MainActivityViewModel @Inject constructor(
 
     suspend fun exit() = userRepository.clear()
 
-    fun getSavedLanguage(): String {
-        return userRepository.getSavedLanguage()
-    }
-
-    fun saveSelectedLanguage(languageCode: String) {
-        userRepository.saveSelectedLanguage(languageCode)
-    }
-
     fun setUuid(newUuid: String) {
         cardUUIDInteractor.setCardUuid(newUuid)
     }

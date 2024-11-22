@@ -14,6 +14,7 @@ import com.pos_terminal.tamaktime_temirnal.R
 import com.pos_terminal.tamaktime_temirnal.common.CardState
 import com.pos_terminal.tamaktime_temirnal.common.autoCleared
 import com.pos_terminal.tamaktime_temirnal.databinding.FragmentCardSuccessBinding
+import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardauthed.SharedViewModel
 import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardviewmodel.CardFragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -23,6 +24,7 @@ class CardFragmentSuccess : Fragment() {
 
     private var binding: FragmentCardSuccessBinding by autoCleared()
     private val viewModel: CardFragmentViewModel by activityViewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,6 +40,7 @@ class CardFragmentSuccess : Fragment() {
 
         binding.navAuth.setOnClickListener {
             viewModel.resetCardState()
+            sharedViewModel.resetOrder()
             findNavController().navigate(R.id.action_cardFragmentSuccess_to_cardFragmentInitial)
         }
     }

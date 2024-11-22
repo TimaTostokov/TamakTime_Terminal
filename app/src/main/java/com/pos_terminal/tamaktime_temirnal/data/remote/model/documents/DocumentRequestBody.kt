@@ -6,6 +6,7 @@ data class DocumentRequestBody(
     val date: String,
     @SerializedName("document_type")
     val docsType: Int = 1,
+    val lines: List<LineRequest>
 )
 
 data class LineRequest(
@@ -13,8 +14,4 @@ data class LineRequest(
     val productId: Long,
     val quantity: String,
     val price: String?
-)
-
-data class OrderToPost(
-    val lines: List<LineRequest>
 )

@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.pos_terminal.tamaktime_temirnal.R
 import com.pos_terminal.tamaktime_temirnal.common.autoCleared
 import com.pos_terminal.tamaktime_temirnal.databinding.FragmentCardErrorBinding
+import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardauthed.SharedViewModel
 import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardviewmodel.CardFragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.getValue
@@ -19,6 +20,7 @@ class CardFragmentError : Fragment() {
 
     private var binding: FragmentCardErrorBinding by autoCleared()
     private val viewModel: CardFragmentViewModel by activityViewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,6 +36,7 @@ class CardFragmentError : Fragment() {
 
         binding.buttonCancel.setOnClickListener {
             viewModel.resetCardState()
+            sharedViewModel.resetOrder()
             findNavController().navigate(R.id.action_cardFragmentError_to_cardFragmentInitial)
         }
     }

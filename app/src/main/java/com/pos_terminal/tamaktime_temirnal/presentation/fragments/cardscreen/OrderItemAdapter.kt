@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.pos_terminal.tamaktime_temirnal.common.Extensions.formatPrice
+import com.pos_terminal.tamaktime_temirnal.common.loadImageApi
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.product.Product
 import com.pos_terminal.tamaktime_temirnal.databinding.ItemOrderBinding
 
@@ -37,7 +38,6 @@ class OrderItemAdapter(
 
         private var product: Product? = null
 
-
         init {
             binding.ibAdd.setOnClickListener {
                 product?.let {
@@ -65,6 +65,7 @@ class OrderItemAdapter(
             this.product = product
             binding.title.text = product.title
             binding.count.text = product.cartCount.toString()
+            binding.image.loadImageApi(product.thumbnail.toString())
             val total = (product.sellingPrice?.toDoubleOrNull() ?: 0.0) * product.cartCount
             binding.total.text = formatPrice(total)
 

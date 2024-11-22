@@ -16,6 +16,7 @@ import com.pos_terminal.tamaktime_temirnal.R
 import com.pos_terminal.tamaktime_temirnal.common.CardState
 import com.pos_terminal.tamaktime_temirnal.common.autoCleared
 import com.pos_terminal.tamaktime_temirnal.databinding.FragmentCardLoadingBinding
+import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardauthed.SharedViewModel
 import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardviewmodel.CardFragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -31,6 +32,7 @@ class CardFragmentLoading : Fragment(
     private var binding: FragmentCardLoadingBinding by autoCleared()
 
     private val viewModel: CardFragmentViewModel by activityViewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     private var timeoutJob: Job? = null
 
@@ -46,14 +48,17 @@ class CardFragmentLoading : Fragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.resetCardState()
+        sharedViewModel.resetOrder()
+
         setupTimeoutForNfc()
 
-        viewModel.authenticateCard()
+        viewModel.authenticateCard(sharedViewModel)
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.student.collect { student ->
                     if (student != null) {
-                        Log.d("arsenchik","${student.balance}")
+                        Log.d("arsenchik", "${student.balance}")
                         navigateToCategories()
                     }
                 }
@@ -66,19 +71,24 @@ class CardFragmentLoading : Fragment(
                     when (state) {
                         CardState.AUTHENTICATING -> {
                             binding.title.text = resources.getString(R.string.card_reading_wait)
-                            viewModel.mockupOrdering()
                         }
-                        CardState.AUTHENTICATED -> cancelTimeout()
-                        CardState.ORDER_SUCCESS -> {
+
+                        CardState.AUTHENTICATED -> {
                             cancelTimeout()
                             navigateToCategories()
                             viewModel.mockupOrdering()
                         }
+
                         CardState.AUTHENTICATING_ERROR -> {
                             cancelTimeout()
+                            Toast.makeText(
+                                requireContext(),
+                                "Студент не найден",
+                                Toast.LENGTH_SHORT
+                            ).show()
                             findNavController().navigate(R.id.action_cardFragmentLoading_to_cardFragmentError)
-                            Toast.makeText(requireContext(), "Студент не найден", Toast.LENGTH_SHORT).show()
                         }
+
                         else -> {}
                     }
                 }
@@ -102,7 +112,7 @@ class CardFragmentLoading : Fragment(
 
     fun handleNfcTag(cardUuid: String) {
         viewModel.setCardUuid(cardUuid)
-        viewModel.authenticateCard()
+        viewModel.authenticateCard(sharedViewModel)
         cancelTimeout()
         setupTimeoutForNfc()
     }

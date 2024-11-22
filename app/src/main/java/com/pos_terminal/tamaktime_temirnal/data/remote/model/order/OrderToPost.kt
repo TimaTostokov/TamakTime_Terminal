@@ -8,4 +8,5 @@ import kotlinx.parcelize.Parcelize
 data class OrderToPost(
     @SerializedName("products")
     val products: List<OrderItem>,
+    @SerializedName("total") val total: Double
 ) : Parcelable

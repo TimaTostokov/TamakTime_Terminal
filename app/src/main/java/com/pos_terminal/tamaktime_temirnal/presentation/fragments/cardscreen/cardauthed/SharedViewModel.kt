@@ -28,6 +28,13 @@ class SharedViewModel @Inject constructor(
         MutableStateFlow<List<Product>>(savedStateHandle["products"] ?: emptyList())
     val products: StateFlow<List<Product>> = _products.asStateFlow()
 
+    private val _isUserAuthenticated = MutableStateFlow(false)
+    val isUserAuthenticated: StateFlow<Boolean> = _isUserAuthenticated.asStateFlow()
+
+    fun setUserAuthenticated(isAuthenticated: Boolean) {
+        _isUserAuthenticated.value = isAuthenticated
+    }
+
     init {
         viewModelScope.launch {
             _products.collect { products ->
@@ -38,13 +45,6 @@ class SharedViewModel @Inject constructor(
 
     fun loadProducts(newProducts: List<Product>) {
         _products.value = newProducts
-    }
-
-    private val _isUserAuthenticated = MutableStateFlow(false)
-    val isUserAuthenticated: StateFlow<Boolean> = _isUserAuthenticated.asStateFlow()
-
-    fun setUserAuthenticated(isAuthenticated: Boolean) {
-        _isUserAuthenticated.value = isAuthenticated
     }
 
     fun resetOrder() {
