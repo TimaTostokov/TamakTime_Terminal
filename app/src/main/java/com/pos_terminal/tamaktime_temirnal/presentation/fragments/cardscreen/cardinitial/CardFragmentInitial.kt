@@ -46,7 +46,9 @@ class CardFragmentInitial : Fragment() {
     override fun onStart() {
         super.onStart()
         binding.mrlBtnUnAuth.requestFocus()
+        binding.mrlBtnUnAuthQR.requestFocus()
     }
+
     private fun navigateToNextFragment() {
         findNavController().navigate(
             R.id.action_cardFragmentInitial_to_cardFragmentLoading,

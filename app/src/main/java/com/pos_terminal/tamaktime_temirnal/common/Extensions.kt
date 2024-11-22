@@ -17,10 +17,6 @@ object Extensions {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
-    fun ImageView.loadImage(url: String) {
-        Glide.with(this).load(url).into(this)
-    }
-
     @SuppressLint("DefaultLocale")
     fun formatPrice(price: Double): String {
         if (price % 1.0 == 0.0) {

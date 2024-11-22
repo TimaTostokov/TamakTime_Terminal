@@ -85,7 +85,7 @@ class CardFragmentViewModel @Inject constructor(
     private val _errorMessage = MutableStateFlow("")
     val errorMessage: StateFlow<String> = _errorMessage.asStateFlow()
 
-    private var orderId = -1L
+    private var orderId: Long? = null
 
     private val _studentLimit = MutableStateFlow<String?>(null)
     val studentLimit: StateFlow<String?> = _studentLimit.asStateFlow()
@@ -147,7 +147,7 @@ class CardFragmentViewModel @Inject constructor(
         }
     }
 
-    fun authenticateStudentByQR(cardUUID: String,sharedViewModel: SharedViewModel) {
+    fun authenticateStudentByQR(cardUUID: String, sharedViewModel: SharedViewModel) {
         _cardState.value = CardState.AUTHENTICATING
         _loading.value = true
 
@@ -211,8 +211,6 @@ class CardFragmentViewModel @Inject constructor(
         orderingSuccess = null
     }
 
-
-
     fun loadStudentLimit(studentId: Long) {
         viewModelScope.launch {
             val credentials = userRepository.getCredentials() ?: return@launch
@@ -265,17 +263,20 @@ class CardFragmentViewModel @Inject constructor(
 
     fun updateDocument(date: String, lines: List<LineRequest>) {
         _updateDocumentState.value = UiState.Loading
+        Log.d("updateDocument", "Starting updateDocument with date: $date and lines: $lines")
 
         viewModelScope.launch {
             try {
                 val authHeader = userRepository.getCredentials() ?: return@launch
                 val canteenId = userRepository.getCanteenId().toString()
+                Log.d("updateDocument", "AuthHeader: $authHeader, CanteenId: $canteenId")
 
                 val documentRequestBody = DocumentRequestBody(
                     date = date,
                     docsType = 1,
                     lines = lines
                 )
+                Log.d("updateDocument", "RequestBody: $documentRequestBody")
 
                 val result = docsRepository.updateDocument(
                     authHeader = authHeader,
@@ -283,16 +284,19 @@ class CardFragmentViewModel @Inject constructor(
                     documentId = "1",
                     documentRequestBody = documentRequestBody
                 )
+                Log.d("updateDocument", "Response: $result")
 
                 when (result.status) {
                     Resource.Status.SUCCESS -> {
                         val data = result.data ?: throw Exception("Пустой ответ от сервера")
+                        Log.d("updateDocument", "Success: $data")
                         Log.d("arsenchik228", "${result.data}")
                         Log.d("arsenchik228", "${result}")
                         _updateDocumentState.value = UiState.Success(data)
                     }
 
                     Resource.Status.ERROR -> {
+                        Log.e("updateDocument", "Error: ${result.message}")
                         _updateDocumentState.value = UiState.Error(
                             throwable = Exception(result.message ?: "Неизвестная ошибка"),
                             message = result.message ?: "Произошла ошибка"
@@ -300,11 +304,13 @@ class CardFragmentViewModel @Inject constructor(
                     }
 
                     Resource.Status.LOADING -> {
+                        Log.d("updateDocument", "Loading state")
                         _updateDocumentState.value = UiState.Loading
                     }
                 }
 
             } catch (e: Exception) {
+                Log.e("updateDocument", "Exception: ${e.localizedMessage}")
                 _updateDocumentState.value = UiState.Error(
                     throwable = e,
                     message = e.localizedMessage ?: "Неизвестная ошибка"
@@ -313,9 +319,9 @@ class CardFragmentViewModel @Inject constructor(
         }
     }
 
-    fun postOrder(orderItems: List<Product>,totalPrice: Double) {
-        resetCardState()
+    fun postOrder(orderItems: List<Product>, totalPrice: Double) {
         _postOrderState.value = UiState.Loading
+        Log.d("postOrder", "Starting postOrder with items: $orderItems and totalPrice: $totalPrice")
         val orderList = mutableListOf<OrderItem>()
         if (orderItems.isNotEmpty()) {
             orderItems.forEach { product ->
@@ -326,15 +332,20 @@ class CardFragmentViewModel @Inject constructor(
                 _postOrderState.value = UiState.Loading
                 val credentials = userRepository.getCredentials() ?: return@launch
                 val canteenId = userRepository.getCanteenId() ?: return@launch
-                val orderToPost = OrderToPost(orderList,total = totalPrice)
+                val orderToPost = OrderToPost(orderList, total = totalPrice)
+                Log.d("postOrder", "Credentials: $credentials, CanteenId: $canteenId")
+                Log.d("postOrder", "RequestBody: $orderToPost")
                 if (canteenId > 0) {
                     val result = orderRepository.postOrder(credentials, canteenId, orderToPost)
+                    Log.d("postOrder", "Response: $result")
                     when (result.status) {
                         Resource.Status.LOADING -> {
+                            Log.d("postOrder", "Loading state")
                             _postOrderState.value = UiState.Loading
                         }
 
                         Resource.Status.ERROR -> {
+                            Log.e("postOrder", "Error: ${result.message}")
                             _postOrderState.value = UiState.Error(
                                 throwable = Exception(result.message ?: "Неизвестная ошибка"),
                                 message = result.message ?: "Произошла ошибка"
@@ -345,9 +356,12 @@ class CardFragmentViewModel @Inject constructor(
 
                         Resource.Status.SUCCESS -> {
                             val data = result.data ?: throw Exception("Пустой ответ от сервера")
-                            _cardState.value = CardState.ORDER_SUCCESS
+                            Log.d("postOrder", "Success: $data")
                             _postOrderState.value = UiState.Success(data)
-                            resetCardState()
+
+                            orderId = data.id
+                            Log.d("postOrder", "Order ID set to: $orderId")
+                            ordering()
                         }
                     }
                 }
@@ -357,27 +371,39 @@ class CardFragmentViewModel @Inject constructor(
     }
 
     fun ordering() {
+        val currentOrderId = orderId
+        if (currentOrderId == null) {
+            Log.e("ordering", "Order ID is not set. Cannot proceed with ordering.")
+            return
+        }
+
         _cardState.value = CardState.ORDERING
+        Log.d("ordering", "Starting ordering process")
         viewModelScope.launch {
             val credentials = userRepository.getCredentials() ?: return@launch
             val canteenId = userRepository.getCanteenId() ?: return@launch
             val cardKey = "${_key1.value}${_key2.value}".replace("-", "")
+            Log.d("ordering", "Credentials: $credentials, CanteenId: $canteenId, CardKey: $cardKey")
             val result = orderRepository.ordering(
                 credentials,
                 canteenId,
-                orderId,
+                currentOrderId,
                 StudentCardKey(cardKey)
             )
+            Log.d("ordering", "Response: $result")
 
             when (result.status) {
                 Resource.Status.LOADING -> {
+                    Log.d("ordering", "Loading state")
                 }
 
                 Resource.Status.ERROR -> {
+                    Log.e("ordering", "Error: ${result.message}")
                     _cardState.value = CardState.ORDER_ERROR
                 }
 
                 Resource.Status.SUCCESS -> {
+                    Log.d("ordering", "Success: ${result.data}")
                     _cardState.value = CardState.ORDER_SUCCESS
                 }
             }

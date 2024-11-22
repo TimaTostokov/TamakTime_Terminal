@@ -14,6 +14,7 @@
         android:layout_height="66dp"
         android:layout_marginStart="20dp"
         android:adjustViewBounds="true"
+        android:background="@drawable/custom_image_corner"
         android:contentDescription="@string/foodDescription"
         android:scaleType="center"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -90,16 +90,16 @@ class CardFragmentAuthed : Fragment() {
             }
         }
     }
+
     private fun processOrder() {
         val orderItems = sharedViewModel.orderItems.value
         val totalPrice = sharedViewModel.totalPrice.value
         viewModel.postOrder(orderItems, totalPrice)
+        viewModel.ordering()
         updateDocument()
         Log.d("arsenchik","{${sharedViewModel.orderItems.value}}")
         Log.d("arsenchik","{${totalPrice}}")
-        viewModel.resetCardState()
-        sharedViewModel.resetOrder()
-
+        Log.d("arsenchik","{${viewModel.ordering()}}")
     }
 
     private fun resetStateAndNavigate() {
@@ -117,12 +117,6 @@ class CardFragmentAuthed : Fragment() {
         findNavController().navigate(R.id.action_cardFragmentAuthed_to_cardFragmentError)
         Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
     }
-
-  /*  private fun postOrdering() {
-        val totalPrice = sharedViewModel.totalPrice.value
-        viewModel.postOrder(sharedViewModel.orderItems.value, totalPrice)
-
-    }*/
 
     private fun observePostOrderState() {
         viewLifecycleOwner.lifecycleScope.launch {
