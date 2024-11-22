@@ -1,6 +1,7 @@
 package com.pos_terminal.tamaktime_temirnal.presentation.fragments.productscreen
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -55,6 +56,12 @@ class ProductAdapter(
         fun bind(product: Product?) {
             if (product == null) return
 
+            product.thumbnail?.let {
+                binding.foodImage.loadImageApi(it)
+                Log.w("ProductViewHolder", "Thumbnail URL is null${it}")
+            } ?: run {
+                binding.foodImage.setImageResource(R.drawable.img_food)
+            }
             binding.foodImage.loadImageApi(product.thumbnail.toString())
             binding.foodName.text = product.title
             binding.foodCount.text = "${product.count} шт"

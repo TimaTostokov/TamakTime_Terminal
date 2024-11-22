@@ -47,10 +47,7 @@ class CardFragmentLoading : Fragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewModel.resetCardState()
-        sharedViewModel.resetOrder()
-
+        resetState()
         setupTimeoutForNfc()
 
         viewModel.authenticateCard(sharedViewModel)
@@ -123,9 +120,15 @@ class CardFragmentLoading : Fragment(
         }
     }
 
+
     override fun onDestroyView() {
         super.onDestroyView()
         cancelTimeout()
+    }
+
+    private fun resetState() {
+        viewModel.resetCardState()
+        sharedViewModel.resetOrder()
     }
 
 }
