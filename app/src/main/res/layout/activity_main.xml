@@ -9,8 +9,8 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="0dp"
-        android:layout_height="96dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,39 +21,42 @@
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/category_fcv"
         android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="850dp"
-        android:layout_marginTop="130dp"
-        android:layout_marginBottom="34dp"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_height="0dp"
         app:defaultNavHost="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/card_fcv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintWidth_percent="0.65"
+        app:layout_constraintHeight_percent="0.9"
         app:navGraph="@navigation/category_nav" />
 
     <View
         android:id="@+id/view"
-        android:layout_width="30dp"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="@id/category_fcv"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/card_fcv"
         app:layout_constraintStart_toEndOf="@id/category_fcv"
-        app:layout_constraintTop_toTopOf="@id/category_fcv" />
+        app:layout_constraintTop_toTopOf="@id/category_fcv"
+        app:layout_constraintWidth_percent="0.02" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/card_fcv"
         android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="351dp"
-        android:layout_marginVertical="34dp"
+        android:layout_width="0dp"
+        android:layout_marginVertical="16dp"
         android:layout_height="0dp"
-        android:layout_marginStart="15dp"
         app:defaultNavHost="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1"
-        app:layout_constraintStart_toEndOf="@id/category_fcv"
+        app:layout_constraintStart_toEndOf="@id/view"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintWidth_percent="0.3"
+        app:layout_constraintHeight_percent="0.9"
         app:navGraph="@navigation/card_nav" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

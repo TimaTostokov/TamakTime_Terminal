@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
+    android:layout_height="wrap_content"
     android:layout_marginHorizontal="10dp"
     android:layout_marginVertical="5dp"
     android:background="@drawable/lyt_order_item_background">
@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="@dimen/spacing_middle"
+        android:layout_marginTop="8dp"
         android:lines="1"
         android:text="@string/title"
         android:textColor="@android:color/black"
@@ -37,7 +37,7 @@
     <LinearLayout
         android:layout_width="91dp"
         android:layout_height="30dp"
-        android:layout_marginBottom="@dimen/spacing_middle"
+        android:layout_marginBottom="8dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/image">
@@ -72,8 +72,8 @@
         android:id="@+id/total"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_middle"
-        android:layout_marginEnd="@dimen/spacing_large"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         android:lines="1"
         android:text="@string/price"
         android:textColor="@android:color/black"

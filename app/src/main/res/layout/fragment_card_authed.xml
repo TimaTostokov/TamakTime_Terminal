@@ -108,7 +108,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="57.5dp"
+                android:layout_marginTop="24dp"
                 android:contentDescription="@string/cardDescription"
                 android:src="@drawable/shopping_cart" />
 
@@ -117,7 +117,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="90dp"
+                android:layout_marginTop="24dp"
                 android:gravity="center"
                 android:text="@string/choose_product"
                 android:textColor="@android:color/black"
@@ -197,7 +197,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight=".4"
-
                     android:orientation="vertical">
 
                     <View

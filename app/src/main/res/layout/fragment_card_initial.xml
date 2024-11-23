@@ -16,18 +16,18 @@
 
         <TextView
             android:id="@+id/title"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="120dp"
-            android:gravity="center"
+            android:layout_gravity="center"
             android:text="@string/attach_card"
             android:textColor="@android:color/black"
             android:textSize="24sp" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_image"
-            android:layout_width="158dp"
-            android:layout_height="145dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="73dp">
 
@@ -62,13 +62,15 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity=""
-            android:layout_marginTop="30dp">
+            android:layout_marginTop="30dp"
+            app:layout_constraintTop_toBottomOf="@id/cl_image"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/mrlBtnUnAuth"
-                android:layout_width="239dp"
-                android:layout_height="59dp"
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
                 android:backgroundTint="@color/primaryDark"
                 android:elevation="0dp"
                 android:focusable="true"
@@ -76,16 +78,16 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:cornerRadius="14dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:rippleColor="@color/purple_200" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/mrlBtnUnAuthQR"
+                android:layout_marginBottom="16dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/mrlBtnUnAuthQR"
-                android:layout_width="239dp"
-                android:layout_height="59dp"
-                android:layout_gravity="center"
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
                 android:backgroundTint="@color/primaryDark"
                 android:elevation="0dp"
                 android:focusable="true"
@@ -93,10 +95,9 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:cornerRadius="14dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/mrlBtnUnAuth"
-                app:rippleColor="@color/purple_200" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

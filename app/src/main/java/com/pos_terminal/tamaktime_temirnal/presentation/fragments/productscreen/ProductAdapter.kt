@@ -95,7 +95,6 @@ class ProductAdapter(
     }
 }
 
-
 class ProductDiffCallback : DiffUtil.ItemCallback<Product>() {
     override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean =
         oldItem.id == newItem.id

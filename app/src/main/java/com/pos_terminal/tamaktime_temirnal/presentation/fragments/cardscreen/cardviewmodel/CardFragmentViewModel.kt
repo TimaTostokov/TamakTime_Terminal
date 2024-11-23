@@ -103,11 +103,11 @@ class CardFragmentViewModel @Inject constructor(
             val credentials = userRepository.getCredentials() ?: return@launch
             val schoolId = userRepository.getSchoolId() ?: return@launch
 
-//            val cardUUID = _cardUuid.value ?: return@launch
-//            cardUUIDInteractor.cardUuid.takeIf { it.isNotEmpty() }
-//                ?: _cardUuid.value ?: return@launch
+            val cardUUID = _cardUuid.value ?: return@launch
+            cardUUIDInteractor.cardUuid.takeIf { it.isNotEmpty() }
+                ?: _cardUuid.value ?: return@launch
 
-            val cardUUID = "62A2742E"
+//            val cardUUID = "62A2742E"
 //            val cardUUID = "36c2b7f44fdb473ea19d527c6220a959"
 
             if (schoolId > 0) {
@@ -410,18 +410,18 @@ class CardFragmentViewModel @Inject constructor(
         }
     }
 
-    fun mockupOrdering() = viewModelScope.launch {
-        _cardState.value = CardState.ORDERING
-        orderingSuccess = orderingSuccess ?: Random.nextBoolean()
-
-        if (orderingSuccess == true) {
-            _cardState.value = CardState.ORDER_SUCCESS
-        } else {
-            _cardState.value = CardState.ORDER_ERROR
-            orderingSuccess = true
-            orderSuccessChange = true
-        }
-    }
+//    fun mockupOrdering() = viewModelScope.launch {
+//        _cardState.value = CardState.ORDERING
+//        orderingSuccess = orderingSuccess ?: Random.nextBoolean()
+//
+//        if (orderingSuccess == true) {
+//            _cardState.value = CardState.ORDER_SUCCESS
+//        } else {
+//            _cardState.value = CardState.ORDER_ERROR
+//            orderingSuccess = true
+//            orderSuccessChange = true
+//        }
+//    }
 
     interface CardNavigationListener {
         fun navigateToCategories()

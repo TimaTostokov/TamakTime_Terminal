@@ -3,5 +3,11 @@
 
     <dimen name="spacing_middle">10dp</dimen>
     <dimen name="spacing_large">15dp</dimen>
+    <dimen name="toolbar_height">128dp</dimen>
+    <dimen name="content_margin_horizontal">32dp</dimen>
+    <dimen name="content_margin_vertical">40dp</dimen>
+    <dimen name="padding_horizontal">32dp</dimen>
+    <dimen name="padding_vertical">20dp</dimen>
+    <dimen name="button_height">70dp</dimen>
 
 </resources>

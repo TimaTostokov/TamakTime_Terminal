@@ -55,7 +55,6 @@ class CardFragmentLoading : Fragment(
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.student.collect { student ->
                     if (student != null) {
-                        Log.d("arsenchik", "${student.balance}")
                         navigateToCategories()
                     }
                 }
@@ -73,14 +72,14 @@ class CardFragmentLoading : Fragment(
                         CardState.AUTHENTICATED -> {
                             cancelTimeout()
                             navigateToCategories()
-                            viewModel.mockupOrdering()
+//                            viewModel.mockupOrdering()
                         }
 
                         CardState.AUTHENTICATING_ERROR -> {
                             cancelTimeout()
                             Toast.makeText(
                                 requireContext(),
-                                "Студент не найден",
+                                "Пользователь не найден",
                                 Toast.LENGTH_SHORT
                             ).show()
                             findNavController().navigate(R.id.action_cardFragmentLoading_to_cardFragmentError)
