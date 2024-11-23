@@ -86,7 +86,7 @@ class CardFragmentAuthed : Fragment() {
             sharedViewModel.orderItems.collect { orderItems ->
                 orderItemAdapter.submitList(orderItems)
                 val totalPrice = sharedViewModel.totalPrice.value
-                // viewModel.checkStudentLimit(totalPrice) // Закомментировал эту строку
+                 viewModel.checkStudentLimit(totalPrice)
             }
         }
     }
@@ -210,36 +210,33 @@ class CardFragmentAuthed : Fragment() {
                 orderItemAdapter.submitList(orderItems)
                 orderItemAdapter.notifyDataSetChanged()
                 val totalPrice = sharedViewModel.totalPrice.value
-                // Закомментированы проверки баланса и лимита
-                // val balance = viewModel.student.value?.balance?.toDoubleOrNull() ?: 0.0
-                // val limit = viewModel.studentLimit.value?.toDoubleOrNull() ?: Double.MAX_VALUE
+                 val balance = viewModel.student.value?.balance?.toDoubleOrNull() ?: 0.0
+                 val limit = viewModel.studentLimit.value?.toDoubleOrNull() ?: Double.MAX_VALUE
 
-                // val canPay = balance >= totalPrice
-                // val withinLimit = totalPrice <= limit
+                 val canPay = balance >= totalPrice
+                 val withinLimit = totalPrice <= limit
 
-                // if (!canPay || !withinLimit) {
-                //     binding.tvTotal.setTextColor(requireContext().getColor(R.color.balance_error))
-                //     binding.tvTotalLabel.setTextColor(requireContext().getColor(R.color.balance_error))
-                //     binding.tvNotEnoughMoney.visibility = View.VISIBLE
-                //     binding.mrlBtnPay.isEnabled = false
-                //     binding.mrlBtnPay.isClickable = false
-                //     binding.mrlBtnPay.setBackgroundColor(requireContext().getColor(R.color.disabled_btn))
+                 if (!canPay || !withinLimit) {
+                     binding.tvTotal.setTextColor(requireContext().getColor(R.color.balance_error))
+                     binding.tvTotalLabel.setTextColor(requireContext().getColor(R.color.balance_error))
+                     binding.tvNotEnoughMoney.visibility = View.VISIBLE
+                     binding.mrlBtnPay.isEnabled = false
+                     binding.mrlBtnPay.isClickable = false
+                     binding.mrlBtnPay.setBackgroundColor(requireContext().getColor(R.color.disabled_btn))
 
-                //     binding.tvNotEnoughMoney.text = when {
-                //         !canPay -> "Недостаточно средств для оплаты"
-                //         !withinLimit -> "Превышен лимит заказа"
-                //         else -> "Недостаточно средств для дальнейшей оплаты"
-                //     }
-                // } else {
-                //     binding.tvTotal.setTextColor(requireContext().getColor(android.R.color.black))
-                //     binding.tvTotalLabel.setTextColor(requireContext().getColor(android.R.color.black))
-                //     binding.tvNotEnoughMoney.visibility = View.INVISIBLE
-                //     binding.mrlBtnPay.isEnabled = true
-                //     binding.mrlBtnPay.isClickable = true
-                //     binding.mrlBtnPay.setBackgroundColor(requireContext().getColor(R.color.primaryDark))
-                // }
-
-                // Убираем все проверки баланса и лимита
+                     binding.tvNotEnoughMoney.text = when {
+                         !canPay -> "Недостаточно средств для оплаты"
+                         !withinLimit -> "Превышен лимит заказа"
+                         else -> "Недостаточно средств для дальнейшей оплаты"
+                     }
+                 } else {
+                     binding.tvTotal.setTextColor(requireContext().getColor(android.R.color.black))
+                     binding.tvTotalLabel.setTextColor(requireContext().getColor(android.R.color.black))
+                     binding.tvNotEnoughMoney.visibility = View.INVISIBLE
+                     binding.mrlBtnPay.isEnabled = true
+                     binding.mrlBtnPay.isClickable = true
+                     binding.mrlBtnPay.setBackgroundColor(requireContext().getColor(R.color.primaryDark))
+                 }
                 binding.tvTotal.setTextColor(requireContext().getColor(android.R.color.black))
                 binding.tvTotalLabel.setTextColor(requireContext().getColor(android.R.color.black))
                 binding.tvNotEnoughMoney.visibility = View.INVISIBLE

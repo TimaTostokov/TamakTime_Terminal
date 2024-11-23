@@ -1,9 +1,12 @@
 package com.pos_terminal.tamaktime_temirnal.presentation.activity
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.nfc.NfcAdapter
 import android.os.Bundle
 import android.util.Log
@@ -21,6 +24,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.snackbar.Snackbar
 import com.pos_terminal.tamaktime_temirnal.R
+import com.pos_terminal.tamaktime_temirnal.common.Constants.APP_ACTIVITY
 import com.pos_terminal.tamaktime_temirnal.common.Extensions
 import com.pos_terminal.tamaktime_temirnal.common.Extensions.changeLanguage
 import com.pos_terminal.tamaktime_temirnal.common.Extensions.loadLocale
@@ -40,10 +44,16 @@ class MainActivity : AppCompatActivity() {
 
     private var nfcAdapter: NfcAdapter? = null
 
+    @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         loadLocale(this)
         super.onCreate(savedInstanceState)
+        APP_ACTIVITY = this
+        if (resources.configuration.smallestScreenWidthDp < 600) {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
+
         val binding: ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
@@ -52,8 +62,6 @@ class MainActivity : AppCompatActivity() {
 
        if (nfcAdapter == null) {
            showSnackbar(binding.root, "NFC в данном устройстве недоступно")
-//            finish()
-//            return
         }
 
         val navHostFragment: NavHostFragment =
@@ -176,6 +184,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    @SuppressLint("SwitchIntDef")
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        when (newConfig.orientation) {
+            Configuration.ORIENTATION_LANDSCAPE -> {}
+            Configuration.ORIENTATION_PORTRAIT -> {}
+        }
     }
 
     private fun showSignInDialog() {
