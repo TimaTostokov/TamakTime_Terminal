@@ -46,6 +46,7 @@ class CardFragmentViewModel @Inject constructor(
 
     private var orderingSuccess: Boolean? = null
     private var orderSuccessChange = false
+    var isTimerRunning: Boolean = false
 
     private val _postOrderState = MutableStateFlow<UiState<OrderResponse>>(UiState.Loading)
     val postOrderState: StateFlow<UiState<OrderResponse>> = _postOrderState.asStateFlow()

@@ -68,8 +68,8 @@ class QrOrderFragment : Fragment() {
 
         codeScanner.decodeCallback = DecodeCallback {
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
-                Toast.makeText(requireContext(), "Scan result: ${it.text}", Toast.LENGTH_SHORT)
-                    .show()
+//                Toast.makeText(requireContext(), "Scan result: ${it.text}", Toast.LENGTH_SHORT)
+//                    .show()
                 Log.e("scanResult", "Result: ${it.text}")
                 viewModel.setCardUuid(it.text)
                 findNavController().navigate(R.id.action_qrOrderFragment_to_qrOrderFragmentLoading)

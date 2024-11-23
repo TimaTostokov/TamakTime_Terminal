@@ -15,6 +15,7 @@ appcompat = "1.7.0"
 kotlinxCoroutinesCore = "1.7.3"
 kotlinxCoroutinesAndroid = "1.8.1"
 lifecycleVersion = "2.8.7"
+lottie = "4.2.2"
 material = "1.12.0"
 activity = "1.9.3"
 constraintlayout = "2.2.0"
@@ -57,6 +58,7 @@ androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref
 androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
 androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationFragmentKtx" }
 
+lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 multidex = { module = "com.android.support:multidex", version.ref = "multidex" }
 
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }

@@ -87,6 +87,14 @@ class CardFragmentAuthed : Fragment() {
                 orderItemAdapter.submitList(orderItems)
                 val totalPrice = sharedViewModel.totalPrice.value
                 viewModel.checkStudentLimit(totalPrice)
+
+                if (orderItems.isEmpty()) {
+                    binding.lytContent.visibility = View.VISIBLE
+                    binding.lytOrderContent.visibility = View.GONE
+                } else {
+                    binding.lytContent.visibility = View.GONE
+                    binding.lytOrderContent.visibility = View.VISIBLE
+                }
             }
         }
     }

@@ -12,6 +12,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.airbnb.lottie.LottieAnimationView
 import com.pos_terminal.tamaktime_temirnal.R
 import com.pos_terminal.tamaktime_temirnal.common.CardState
 import com.pos_terminal.tamaktime_temirnal.common.autoCleared
@@ -31,6 +32,8 @@ class QrOrderFragmentLoading : Fragment(), CardFragmentViewModel.CardNavigationL
     private val viewModel: CardFragmentViewModel by activityViewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
+    private lateinit var lottieAnimationView: LottieAnimationView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -41,6 +44,11 @@ class QrOrderFragmentLoading : Fragment(), CardFragmentViewModel.CardNavigationL
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        resetState()
+
+        lottieAnimationView = binding.progress
+        lottieAnimationView.playAnimation()
 
         fun onQrCodeScanned(qrCode: String) {
             handleQrTag(qrCode)
@@ -83,9 +91,11 @@ class QrOrderFragmentLoading : Fragment(), CardFragmentViewModel.CardNavigationL
                         when (state) {
                             CardState.AUTHENTICATING -> {
                                 binding.title.text = resources.getString(R.string.card_reading_wait)
+                                lottieAnimationView.playAnimation()
                             }
 
                             CardState.AUTHENTICATED -> {
+                                lottieAnimationView.cancelAnimation()
                                 navigateToCategories()
                             }
 
@@ -94,6 +104,7 @@ class QrOrderFragmentLoading : Fragment(), CardFragmentViewModel.CardNavigationL
                             }
 
                             CardState.AUTHENTICATING_ERROR -> {
+                                lottieAnimationView.cancelAnimation()
                                 findNavController().navigate(R.id.action_qrOrderFragmentLoading_to_cardFragmentError)
                                 Toast.makeText(
                                     requireContext(),
@@ -119,6 +130,11 @@ class QrOrderFragmentLoading : Fragment(), CardFragmentViewModel.CardNavigationL
         kotlin.runCatching {
             findNavController().navigate(R.id.action_qrOrderFragmentLoading_to_cardFragmentAuthed)
         }
+    }
+
+    private fun resetState() {
+        viewModel.resetCardState()
+        sharedViewModel.resetOrder()
     }
 
 }

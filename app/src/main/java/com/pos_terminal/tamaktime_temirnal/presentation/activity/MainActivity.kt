@@ -2,7 +2,6 @@ package com.pos_terminal.tamaktime_temirnal.presentation.activity
 
 import android.annotation.SuppressLint
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ActivityInfo
@@ -12,9 +11,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Button
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.lifecycleScope
@@ -22,9 +19,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
-import com.google.android.material.snackbar.Snackbar
 import com.pos_terminal.tamaktime_temirnal.R
-import com.pos_terminal.tamaktime_temirnal.common.Constants.APP_ACTIVITY
 import com.pos_terminal.tamaktime_temirnal.common.Extensions
 import com.pos_terminal.tamaktime_temirnal.common.Extensions.changeLanguage
 import com.pos_terminal.tamaktime_temirnal.common.Extensions.loadLocale
@@ -35,7 +30,6 @@ import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.car
 import com.pos_terminal.tamaktime_temirnal.presentation.fragments.dialoglogin.LoginDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.util.Locale
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -49,7 +43,6 @@ class MainActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         loadLocale(this)
         super.onCreate(savedInstanceState)
-        APP_ACTIVITY = this
         if (resources.configuration.smallestScreenWidthDp < 600) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
@@ -154,7 +147,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun saveCardUuidToSharedPreferences(cardUuid: String) {
         viewModel.setUuid(cardUuid)
-        val sharedPreferences = getSharedPreferences("CardPrefs", Context.MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences("CardPrefs", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putString("card_uuid", cardUuid)
         editor.apply()

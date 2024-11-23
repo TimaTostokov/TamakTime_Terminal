@@ -87,6 +87,8 @@ dependencies {
 
     implementation(libs.glide)
 
+    implementation (libs.lottie)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
