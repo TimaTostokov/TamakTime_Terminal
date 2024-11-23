@@ -60,6 +60,7 @@ class ProductFragment : Fragment(), ProductAdapter.OnProductClickListener, MenuP
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return if (menuItem.itemId == android.R.id.home) {
+            sharedViewModel.resetOrderAndProducts()
             navigateBack()
             true
         } else {

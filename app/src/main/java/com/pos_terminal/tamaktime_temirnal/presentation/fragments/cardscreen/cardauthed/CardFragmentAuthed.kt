@@ -86,7 +86,7 @@ class CardFragmentAuthed : Fragment() {
             sharedViewModel.orderItems.collect { orderItems ->
                 orderItemAdapter.submitList(orderItems)
                 val totalPrice = sharedViewModel.totalPrice.value
-                 viewModel.checkStudentLimit(totalPrice)
+                viewModel.checkStudentLimit(totalPrice)
             }
         }
     }
@@ -97,9 +97,9 @@ class CardFragmentAuthed : Fragment() {
         viewModel.postOrder(orderItems, totalPrice)
         viewModel.ordering()
         updateDocument()
-        Log.d("arsenchik","{${sharedViewModel.orderItems.value}}")
-        Log.d("arsenchik","{${totalPrice}}")
-        Log.d("arsenchik","{${viewModel.ordering()}}")
+        Log.d("arsenchik", "{${sharedViewModel.orderItems.value}}")
+        Log.d("arsenchik", "{${totalPrice}}")
+        Log.d("arsenchik", "{${viewModel.ordering()}}")
     }
 
     private fun resetStateAndNavigate() {
@@ -130,6 +130,7 @@ class CardFragmentAuthed : Fragment() {
                         viewModel.resetCardState()
                         sharedViewModel.resetOrder()
                     }
+
                     is UiState.Error -> {
                         resetStateAndNavigateError(state.message)
                     }
@@ -177,7 +178,7 @@ class CardFragmentAuthed : Fragment() {
                 student?.let {
                     binding.tvClientName.text = "${it.firstName} ${it.lastName}"
                     binding.tvClientBalance.text =
-                        it.balance?.let { it1 -> formatPrice(it1.toDouble()) }
+                        it.balance?.let { balance -> formatPrice(balance.toDouble()) }
                 }
             }
         }
@@ -202,6 +203,34 @@ class CardFragmentAuthed : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             sharedViewModel.totalPrice.collect { totalPrice ->
                 binding.tvTotal.text = formatPrice(totalPrice)
+
+                val balance = viewModel.student.value?.balance?.toDoubleOrNull() ?: 0.0
+                val limit = viewModel.studentLimit.value?.toDoubleOrNull() ?: Double.MAX_VALUE
+
+                val canPay = balance >= totalPrice
+                val withinLimit = totalPrice <= limit
+
+                if (!canPay || !withinLimit) {
+                    binding.tvTotal.setTextColor(requireContext().getColor(R.color.balance_error))
+                    binding.tvTotalLabel.setTextColor(requireContext().getColor(R.color.balance_error))
+                    binding.tvNotEnoughMoney.visibility = View.VISIBLE
+                    binding.mrlBtnPay.isEnabled = false
+                    binding.mrlBtnPay.isClickable = false
+                    binding.mrlBtnPay.setBackgroundColor(requireContext().getColor(R.color.disabled_btn))
+
+                    binding.tvNotEnoughMoney.text = when {
+                        !canPay -> "Недостаточно средств для оплаты"
+                        !withinLimit -> "Превышен лимит заказа"
+                        else -> "Недостаточно средств для дальнейшей оплаты"
+                    }
+                } else {
+                    binding.tvTotal.setTextColor(requireContext().getColor(android.R.color.black))
+                    binding.tvTotalLabel.setTextColor(requireContext().getColor(android.R.color.black))
+                    binding.tvNotEnoughMoney.visibility = View.INVISIBLE
+                    binding.mrlBtnPay.isEnabled = true
+                    binding.mrlBtnPay.isClickable = true
+                    binding.mrlBtnPay.setBackgroundColor(requireContext().getColor(R.color.primaryDark))
+                }
             }
         }
 
@@ -209,40 +238,6 @@ class CardFragmentAuthed : Fragment() {
             sharedViewModel.orderItems.collect { orderItems ->
                 orderItemAdapter.submitList(orderItems)
                 orderItemAdapter.notifyDataSetChanged()
-                val totalPrice = sharedViewModel.totalPrice.value
-                 val balance = viewModel.student.value?.balance?.toDoubleOrNull() ?: 0.0
-                 val limit = viewModel.studentLimit.value?.toDoubleOrNull() ?: Double.MAX_VALUE
-
-                 val canPay = balance >= totalPrice
-                 val withinLimit = totalPrice <= limit
-
-                 if (!canPay || !withinLimit) {
-                     binding.tvTotal.setTextColor(requireContext().getColor(R.color.balance_error))
-                     binding.tvTotalLabel.setTextColor(requireContext().getColor(R.color.balance_error))
-                     binding.tvNotEnoughMoney.visibility = View.VISIBLE
-                     binding.mrlBtnPay.isEnabled = false
-                     binding.mrlBtnPay.isClickable = false
-                     binding.mrlBtnPay.setBackgroundColor(requireContext().getColor(R.color.disabled_btn))
-
-                     binding.tvNotEnoughMoney.text = when {
-                         !canPay -> "Недостаточно средств для оплаты"
-                         !withinLimit -> "Превышен лимит заказа"
-                         else -> "Недостаточно средств для дальнейшей оплаты"
-                     }
-                 } else {
-                     binding.tvTotal.setTextColor(requireContext().getColor(android.R.color.black))
-                     binding.tvTotalLabel.setTextColor(requireContext().getColor(android.R.color.black))
-                     binding.tvNotEnoughMoney.visibility = View.INVISIBLE
-                     binding.mrlBtnPay.isEnabled = true
-                     binding.mrlBtnPay.isClickable = true
-                     binding.mrlBtnPay.setBackgroundColor(requireContext().getColor(R.color.primaryDark))
-                 }
-                binding.tvTotal.setTextColor(requireContext().getColor(android.R.color.black))
-                binding.tvTotalLabel.setTextColor(requireContext().getColor(android.R.color.black))
-                binding.tvNotEnoughMoney.visibility = View.INVISIBLE
-                binding.mrlBtnPay.isEnabled = true
-                binding.mrlBtnPay.isClickable = true
-                binding.mrlBtnPay.setBackgroundColor(requireContext().getColor(R.color.primaryDark))
             }
         }
     }

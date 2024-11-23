@@ -58,8 +58,8 @@ class ProductAdapter(
 
         @SuppressLint("SetTextI18n")
         fun bind(product: Product?) {
-            if (product == null) return
 
+            if (product == null) return
             product.thumbnail?.let {
                 binding.foodImage.loadImageApi(it)
                 Log.w("ProductViewHolder", "Thumbnail URL is null${it}")
