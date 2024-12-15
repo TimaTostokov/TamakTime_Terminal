@@ -9,7 +9,6 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import com.google.android.material.snackbar.Snackbar
 import java.util.Locale
 
@@ -48,7 +47,7 @@ object Extensions {
 
     fun Activity.changeLanguage() {
         val listItems = arrayOf("English", "Русский", "Türkçe")
-        val mBuilder = AlertDialog.Builder(this)
+        val mBuilder = android.app.AlertDialog.Builder(this)
         mBuilder.setTitle("Выберите язык")
         mBuilder.setSingleChoiceItems(listItems, -1) { dialog, which ->
             when (which) {

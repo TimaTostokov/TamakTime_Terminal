@@ -1,6 +1,7 @@
 package com.pos_terminal.tamaktime_temirnal.presentation.activity
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.IntentFilter
@@ -11,6 +12,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -20,7 +22,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.pos_terminal.tamaktime_temirnal.R
-import com.pos_terminal.tamaktime_temirnal.common.Extensions
 import com.pos_terminal.tamaktime_temirnal.common.Extensions.changeLanguage
 import com.pos_terminal.tamaktime_temirnal.common.Extensions.loadLocale
 import com.pos_terminal.tamaktime_temirnal.common.Extensions.showSnackbar
@@ -30,11 +31,12 @@ import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.car
 import com.pos_terminal.tamaktime_temirnal.presentation.fragments.dialoglogin.LoginDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlin.system.exitProcess
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private val viewModel: MainActivityViewModel by viewModels()
+    val viewModel: MainActivityViewModel by viewModels()
 
     private var nfcAdapter: NfcAdapter? = null
 
@@ -47,14 +49,20 @@ class MainActivity : AppCompatActivity() {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
 
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                showExitConfirmationDialog()
+            }
+        })
+
         val binding: ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
-       nfcAdapter = NfcAdapter.getDefaultAdapter(this)
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this)
 
-       if (nfcAdapter == null) {
-           showSnackbar(binding.root, "NFC в данном устройстве недоступно")
+        if (nfcAdapter == null) {
+            showSnackbar(binding.root, "NFC в данном устройстве недоступно")
         }
 
         val navHostFragment: NavHostFragment =
@@ -165,14 +173,31 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
+    fun showExitConfirmationDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Закрыть приложение?")
+            .setMessage("Вы уверены, что хотите выйти?")
+            .setPositiveButton("Да") { _, _ ->
+                finishAffinity()
+                exitProcess(0)
+            }
+            .setNegativeButton("Нет", null)
+            .show()
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_exit -> {
-                lifecycleScope.launch { viewModel.exit() }
+                lifecycleScope.launch {
+//                    viewModel.exit()
+                    showExitConfirmationDialog()
+                }
+                return true
             }
 
             R.id.ic_menu -> {
                 changeLanguage()
+                return true
             }
         }
 

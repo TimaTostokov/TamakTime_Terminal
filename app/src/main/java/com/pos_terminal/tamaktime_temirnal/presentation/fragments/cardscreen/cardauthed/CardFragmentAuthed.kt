@@ -105,9 +105,9 @@ class CardFragmentAuthed : Fragment() {
         viewModel.postOrder(orderItems, totalPrice)
         viewModel.ordering()
         updateDocument()
-        Log.d("arsenchik", "{${sharedViewModel.orderItems.value}}")
-        Log.d("arsenchik", "{${totalPrice}}")
-        Log.d("arsenchik", "{${viewModel.ordering()}}")
+        Log.d("authUpdateDocumentPut", "{${sharedViewModel.orderItems.value}}")
+        Log.d("authUpdateDocumentPut", "{${totalPrice}}")
+        Log.d("authUpdateDocumentPut", "{${viewModel.ordering()}}")
     }
 
     private fun resetStateAndNavigate() {

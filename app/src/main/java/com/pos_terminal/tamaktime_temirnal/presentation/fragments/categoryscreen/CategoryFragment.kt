@@ -18,10 +18,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.pos_terminal.tamaktime_temirnal.R
+import com.pos_terminal.tamaktime_temirnal.common.Extensions.changeLanguage
 import com.pos_terminal.tamaktime_temirnal.common.UiState
 import com.pos_terminal.tamaktime_temirnal.common.autoCleared
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.category.Category
 import com.pos_terminal.tamaktime_temirnal.databinding.FragmentCategoryBinding
+import com.pos_terminal.tamaktime_temirnal.presentation.activity.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -134,10 +136,16 @@ class CategoryFragment : Fragment(), MenuProvider {
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
             R.id.action_exit -> {
+                (activity as? MainActivity)?.let { mainActivity ->
+                    mainActivity.lifecycleScope.launch {
+//                        mainActivity.viewModel.exit()
+                        mainActivity.showExitConfirmationDialog()
+                    }
+                }
                 return true
             }
-
             R.id.ic_menu -> {
+                (activity as? MainActivity)?.changeLanguage()
                 return true
             }
         }

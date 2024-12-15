@@ -163,12 +163,12 @@ class CardFragmentViewModel @Inject constructor(
 
                 Resource.Status.ERROR -> {
                     _cardState.value = CardState.AUTHENTICATING_ERROR
-                    Log.e("marsel", "NatureError: ${result.message.toString()}")
+                    Log.e("authenticateStudentByQR", "NatureError: ${result.message.toString()}")
                 }
 
                 Resource.Status.SUCCESS -> {
                     _loading.value = false
-                    Log.e("marsel", "Success: ${result.message.toString()}")
+                    Log.e("authenticateStudentByQR", "Success: ${result.message.toString()}")
                     val qrOrderItems = result.data
                     if (!qrOrderItems.isNullOrEmpty()) {
                         val studentData = qrOrderItems[0].creator
@@ -291,8 +291,8 @@ class CardFragmentViewModel @Inject constructor(
                     Resource.Status.SUCCESS -> {
                         val data = result.data ?: throw Exception("Пустой ответ от сервера")
                         Log.d("updateDocument", "Success: $data")
-                        Log.d("arsenchik228", "${result.data}")
-                        Log.d("arsenchik228", "${result}")
+                        Log.d("updateDocument", "${result.data}")
+                        Log.d("updateDocument", "${result}")
                         _updateDocumentState.value = UiState.Success(data)
                     }
 
