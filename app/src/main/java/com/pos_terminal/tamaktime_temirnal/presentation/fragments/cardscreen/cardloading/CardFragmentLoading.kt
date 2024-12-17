@@ -16,18 +16,17 @@ import androidx.navigation.fragment.findNavController
 import com.airbnb.lottie.LottieAnimationView
 import com.pos_terminal.tamaktime_temirnal.R
 import com.pos_terminal.tamaktime_temirnal.common.CardState
-import com.pos_terminal.tamaktime_temirnal.common.autoCleared
 import com.pos_terminal.tamaktime_temirnal.databinding.FragmentCardLoadingBinding
 import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardauthed.SharedViewModel
 import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardviewmodel.CardFragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CardFragmentLoading : Fragment(), CardFragmentViewModel.CardNavigationListener {
 
-    private var binding: FragmentCardLoadingBinding by autoCleared()
+    private var _binding: FragmentCardLoadingBinding? = null
+    private val binding get() = _binding!!
 
     private val viewModel: CardFragmentViewModel by activityViewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
@@ -44,7 +43,7 @@ class CardFragmentLoading : Fragment(), CardFragmentViewModel.CardNavigationList
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = FragmentCardLoadingBinding.inflate(inflater, container, false)
+        _binding = FragmentCardLoadingBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -93,7 +92,7 @@ class CardFragmentLoading : Fragment(), CardFragmentViewModel.CardNavigationList
                             lottieAnimationView.cancelAnimation()
                             Toast.makeText(
                                 requireContext(),
-                                "Пользователь не найден",
+                                getString(R.string.student_not_found),
                                 Toast.LENGTH_SHORT
                             ).show()
                             findNavController().navigate(R.id.action_cardFragmentLoading_to_cardFragmentError)
@@ -147,6 +146,7 @@ class CardFragmentLoading : Fragment(), CardFragmentViewModel.CardNavigationList
 
     override fun onDestroyView() {
         super.onDestroyView()
+        _binding = null
         cancelInactivityTimer()
     }
 

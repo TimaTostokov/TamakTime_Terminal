@@ -10,6 +10,7 @@ import android.content.res.Configuration
 import android.view.View
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
+import com.pos_terminal.tamaktime_temirnal.R
 import java.util.Locale
 
 object Extensions {
@@ -39,21 +40,20 @@ object Extensions {
     @SuppressLint("DefaultLocale")
     fun formatPrice(price: Double): String {
         if (price % 1.0 == 0.0) {
-            return String.format("%.0f с", price)
+            return String.format("%.0f ₺", price)
         } else {
-            return String.format("%.2f с", price)
+            return String.format("%.2f ₺", price)
         }
     }
 
     fun Activity.changeLanguage() {
-        val listItems = arrayOf("English", "Русский", "Türkçe")
+        val listItems = arrayOf("English", "Türkçe")
         val mBuilder = android.app.AlertDialog.Builder(this)
-        mBuilder.setTitle("Выберите язык")
+        mBuilder.setTitle(getString(R.string.select_language))
         mBuilder.setSingleChoiceItems(listItems, -1) { dialog, which ->
             when (which) {
                 0 -> setLocale("en", this)
-                1 -> setLocale("ru", this)
-                2 -> setLocale("tr", this)
+                1 -> setLocale("tr", this)
             }
             dialog.dismiss()
             val intent = Intent(this, this::class.java)

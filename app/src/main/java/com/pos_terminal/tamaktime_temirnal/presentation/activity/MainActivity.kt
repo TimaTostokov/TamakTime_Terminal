@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         nfcAdapter = NfcAdapter.getDefaultAdapter(this)
 
         if (nfcAdapter == null) {
-            showSnackbar(binding.root, "NFC в данном устройстве недоступно")
+            showSnackbar(binding.root, getString(R.string.nfc_unavailable))
         }
 
         val navHostFragment: NavHostFragment =
@@ -175,13 +175,13 @@ class MainActivity : AppCompatActivity() {
 
     fun showExitConfirmationDialog() {
         AlertDialog.Builder(this)
-            .setTitle("Закрыть приложение?")
-            .setMessage("Вы уверены, что хотите выйти?")
-            .setPositiveButton("Да") { _, _ ->
+            .setTitle(getString(R.string.exit_dialog_title))
+            .setMessage(getString(R.string.exit_dialog_message))
+            .setPositiveButton(getString(R.string.exit_dialog_positive)) { _, _ ->
                 finishAffinity()
                 exitProcess(0)
             }
-            .setNegativeButton("Нет", null)
+            .setNegativeButton(getString(R.string.exit_dialog_negative), null)
             .show()
     }
 

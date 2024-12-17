@@ -6,35 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.pos_terminal.tamaktime_temirnal.R
-import com.pos_terminal.tamaktime_temirnal.common.CardState
-import com.pos_terminal.tamaktime_temirnal.common.autoCleared
+import com.pos_terminal.tamaktime_temirnal.common.viewBinding
 import com.pos_terminal.tamaktime_temirnal.databinding.FragmentCardSuccessBinding
 import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardauthed.SharedViewModel
 import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardviewmodel.CardFragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class CardFragmentSuccess : Fragment() {
+class CardFragmentSuccess : Fragment(R.layout.fragment_card_success) {
 
-    private var binding: FragmentCardSuccessBinding by autoCleared()
+    private val binding by viewBinding(FragmentCardSuccessBinding::bind)
+
     private val viewModel: CardFragmentViewModel by activityViewModels()
-    private val sharedViewModel: SharedViewModel by activityViewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        binding = FragmentCardSuccessBinding.inflate(inflater, container, false)
-        return binding.root
-        resetState()
-    }
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

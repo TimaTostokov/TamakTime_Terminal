@@ -9,7 +9,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.pos_terminal.tamaktime_temirnal.R
-import com.pos_terminal.tamaktime_temirnal.common.autoCleared
 import com.pos_terminal.tamaktime_temirnal.databinding.FragmentCardInitialBinding
 import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardauthed.SharedViewModel
 import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardviewmodel.CardFragmentViewModel
@@ -18,7 +17,9 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class CardFragmentInitial : Fragment() {
 
-    private var binding: FragmentCardInitialBinding by autoCleared()
+    private var _binding: FragmentCardInitialBinding? = null
+    private val binding get() = _binding!!
+
     private val viewModel: CardFragmentViewModel by activityViewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
@@ -27,7 +28,7 @@ class CardFragmentInitial : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = FragmentCardInitialBinding.inflate(inflater, container, false)
+        _binding = FragmentCardInitialBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -63,6 +64,11 @@ class CardFragmentInitial : Fragment() {
         viewModel.resetCardState()
         sharedViewModel.resetOrder()
         sharedViewModel.resetUserAuthentication()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

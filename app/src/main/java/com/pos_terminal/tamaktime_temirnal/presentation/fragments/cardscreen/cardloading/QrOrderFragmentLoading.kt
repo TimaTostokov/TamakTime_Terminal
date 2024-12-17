@@ -15,9 +15,8 @@ import androidx.navigation.fragment.findNavController
 import com.airbnb.lottie.LottieAnimationView
 import com.pos_terminal.tamaktime_temirnal.R
 import com.pos_terminal.tamaktime_temirnal.common.CardState
-import com.pos_terminal.tamaktime_temirnal.common.autoCleared
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.student.Student
-import com.pos_terminal.tamaktime_temirnal.databinding.FragmentCardLoadingBinding
+import com.pos_terminal.tamaktime_temirnal.databinding.FragmentQrOrderLoadingBinding
 import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardauthed.SharedViewModel
 import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardviewmodel.CardFragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,7 +26,8 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class QrOrderFragmentLoading : Fragment(), CardFragmentViewModel.CardNavigationListener {
 
-    private var binding: FragmentCardLoadingBinding by autoCleared()
+    private var _binding: FragmentQrOrderLoadingBinding? = null
+    private val binding get() = _binding!!
 
     private val viewModel: CardFragmentViewModel by activityViewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
@@ -38,7 +38,7 @@ class QrOrderFragmentLoading : Fragment(), CardFragmentViewModel.CardNavigationL
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = FragmentCardLoadingBinding.inflate(inflater, container, false)
+        _binding = FragmentQrOrderLoadingBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -108,7 +108,7 @@ class QrOrderFragmentLoading : Fragment(), CardFragmentViewModel.CardNavigationL
                                 findNavController().navigate(R.id.action_qrOrderFragmentLoading_to_cardFragmentError)
                                 Toast.makeText(
                                     requireContext(),
-                                    "Студент не найден",
+                                    getString(R.string.student_not_found),
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
@@ -122,7 +122,7 @@ class QrOrderFragmentLoading : Fragment(), CardFragmentViewModel.CardNavigationL
 
     fun handleQrTag(cardUuid: String) {
         viewModel.setCardUuid(cardUuid)
-        viewModel.authenticateStudentByQR(cardUuid,sharedViewModel)
+        viewModel.authenticateStudentByQR(cardUuid, sharedViewModel)
         viewModel.authenticateCard(sharedViewModel)
     }
 
@@ -135,6 +135,11 @@ class QrOrderFragmentLoading : Fragment(), CardFragmentViewModel.CardNavigationL
     private fun resetState() {
         viewModel.resetCardState()
         sharedViewModel.resetOrder()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

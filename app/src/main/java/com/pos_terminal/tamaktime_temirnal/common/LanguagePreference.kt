@@ -9,7 +9,7 @@ class LanguagePreference private constructor(context: Context) {
         context.getSharedPreferences("my_language", Context.MODE_PRIVATE)
 
     fun getLanguage(): String? {
-        return preferences.getString("language_", "en")
+        return preferences.getString("language_", "tr")
     }
 
     fun saveLanguage(languageCode: String) {

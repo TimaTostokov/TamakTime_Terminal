@@ -1,5 +1,6 @@
 package com.pos_terminal.tamaktime_temirnal.di
 
+import android.util.Log
 import com.pos_terminal.tamaktime_temirnal.common.LanguagePreference
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -14,9 +15,9 @@ class LanguageInterceptor @Inject constructor(
         val originalRequest = chain.request()
 
         val languageCode = languagePreference.getLanguage() ?: Locale.getDefault().language
-
+        Log.e("ololo", "работает${languageCode}")
         val newRequest = originalRequest.newBuilder()
-            .addHeader("Accept-Language", languageCode)
+            .addHeader("Content-Language", languageCode)
             .build()
 
         return chain.proceed(newRequest)

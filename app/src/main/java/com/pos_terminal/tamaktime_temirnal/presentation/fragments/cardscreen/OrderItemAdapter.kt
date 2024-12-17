@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.pos_terminal.tamaktime_temirnal.R
 import com.pos_terminal.tamaktime_temirnal.common.Extensions.formatPrice
 import com.pos_terminal.tamaktime_temirnal.common.loadImageApi
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.product.Product
@@ -46,7 +47,7 @@ class OrderItemAdapter(
                     } else {
                         Toast.makeText(
                             binding.root.context,
-                            "Товар закончился",
+                            binding.root.context.getString(R.string.product_out_of_stock),
                             Toast.LENGTH_SHORT
                         ).show()
                     }

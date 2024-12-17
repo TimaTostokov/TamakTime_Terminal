@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.pos_terminal.tamaktime_temirnal.R
 import com.pos_terminal.tamaktime_temirnal.common.Extensions.formatPrice
 import com.pos_terminal.tamaktime_temirnal.common.UiState
-import com.pos_terminal.tamaktime_temirnal.common.autoCleared
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.documents.LineRequest
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.product.Product
 import com.pos_terminal.tamaktime_temirnal.databinding.FragmentCardAuthedBinding
@@ -23,7 +22,6 @@ import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.Ord
 import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardviewmodel.CardFragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -32,7 +30,8 @@ import java.util.Locale
 @AndroidEntryPoint
 class CardFragmentAuthed : Fragment() {
 
-    private var binding: FragmentCardAuthedBinding by autoCleared()
+    private var _binding: FragmentCardAuthedBinding? = null
+    private val binding get() = _binding!!
 
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
@@ -43,7 +42,7 @@ class CardFragmentAuthed : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCardAuthedBinding.inflate(inflater, container, false)
+        _binding = FragmentCardAuthedBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -166,7 +165,7 @@ class CardFragmentAuthed : Fragment() {
                     }
 
                     is UiState.Success -> {
-                        Toast.makeText(requireContext(), "Документ обновлён", Toast.LENGTH_LONG)
+                        Toast.makeText(requireContext(), getString(R.string.document_updated), Toast.LENGTH_LONG)
                             .show()
                     }
 
@@ -227,9 +226,9 @@ class CardFragmentAuthed : Fragment() {
                     binding.mrlBtnPay.setBackgroundColor(requireContext().getColor(R.color.disabled_btn))
 
                     binding.tvNotEnoughMoney.text = when {
-                        !canPay -> "Недостаточно средств для оплаты"
-                        !withinLimit -> "Превышен лимит заказа"
-                        else -> "Недостаточно средств для дальнейшей оплаты"
+                        !canPay -> getString(R.string.not_enough_money)
+                        !withinLimit -> getString(R.string.limit_exceeded)
+                        else -> getString(R.string.not_enough_money_for_further_payment)
                     }
                 } else {
                     binding.tvTotal.setTextColor(requireContext().getColor(android.R.color.black))
@@ -248,6 +247,11 @@ class CardFragmentAuthed : Fragment() {
                 orderItemAdapter.notifyDataSetChanged()
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

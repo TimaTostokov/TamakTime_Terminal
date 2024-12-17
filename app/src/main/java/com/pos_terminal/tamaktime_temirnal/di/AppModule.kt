@@ -70,15 +70,20 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
-        return OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
-            .connectTimeout(NETWORK_TIMEOUT, TimeUnit.SECONDS)
-            .readTimeout(NETWORK_TIMEOUT, TimeUnit.SECONDS)
-            .writeTimeout(NETWORK_TIMEOUT, TimeUnit.SECONDS)
-            .callTimeout(NETWORK_TIMEOUT, TimeUnit.SECONDS)
-            .build()
-    }
+    fun provideOkHttpClient(
+        languageInterceptor: LanguageInterceptor
+    ): OkHttpClient = OkHttpClient().newBuilder()
+        .addInterceptor(languageInterceptor)
+        .addInterceptor(
+            HttpLoggingInterceptor().setLevel(
+                HttpLoggingInterceptor.Level.BODY
+            )
+        )
+        .connectTimeout(NETWORK_TIMEOUT, TimeUnit.SECONDS)
+        .readTimeout(NETWORK_TIMEOUT, TimeUnit.SECONDS)
+        .writeTimeout(NETWORK_TIMEOUT, TimeUnit.SECONDS)
+        .callTimeout(NETWORK_TIMEOUT, TimeUnit.SECONDS)
+        .build()
 
     @Provides
     @Singleton

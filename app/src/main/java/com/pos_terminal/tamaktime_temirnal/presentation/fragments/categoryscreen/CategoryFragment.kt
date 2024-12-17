@@ -20,7 +20,6 @@ import androidx.navigation.fragment.findNavController
 import com.pos_terminal.tamaktime_temirnal.R
 import com.pos_terminal.tamaktime_temirnal.common.Extensions.changeLanguage
 import com.pos_terminal.tamaktime_temirnal.common.UiState
-import com.pos_terminal.tamaktime_temirnal.common.autoCleared
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.category.Category
 import com.pos_terminal.tamaktime_temirnal.databinding.FragmentCategoryBinding
 import com.pos_terminal.tamaktime_temirnal.presentation.activity.MainActivity
@@ -30,7 +29,8 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class CategoryFragment : Fragment(), MenuProvider {
 
-    private var binding: FragmentCategoryBinding by autoCleared()
+    private var _binding: FragmentCategoryBinding? = null
+    private val binding get() = _binding!!
 
     private val viewModel: CategoryViewModel by viewModels()
 
@@ -46,7 +46,7 @@ class CategoryFragment : Fragment(), MenuProvider {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCategoryBinding.inflate(inflater, container, false)
+        _binding = FragmentCategoryBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -79,7 +79,7 @@ class CategoryFragment : Fragment(), MenuProvider {
                         is UiState.Success -> {
                             binding.progress.visibility = View.GONE
                             binding.recyclerView.visibility = View.VISIBLE
-                            Log.d("arsenchik", "${uiState.data}")
+                            Log.d("tolyan", "${uiState.data}")
                             adapter.submitList(uiState.data)
                         }
 
@@ -144,12 +144,18 @@ class CategoryFragment : Fragment(), MenuProvider {
                 }
                 return true
             }
+
             R.id.ic_menu -> {
                 (activity as? MainActivity)?.changeLanguage()
                 return true
             }
         }
         return false
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

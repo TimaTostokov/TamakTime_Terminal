@@ -1,6 +1,7 @@
 package com.pos_terminal.tamaktime_temirnal.presentation.fragments.productscreen
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -68,7 +69,7 @@ class ProductAdapter(
             }
             binding.foodImage.loadImageApi(product.thumbnail.toString())
             binding.foodName.text = product.title
-            binding.foodCount.text = "${product.count} шт"
+            binding.foodCount.text = "${product.count} ${itemView.context.getString(R.string.pieces_of_goods)}"
             binding.foodPrice.text = formatPrice(product.sellingPrice?.toDoubleOrNull() ?: 0.0)
 
             val isClickable = product.count > 0 && isUserAuthenticated
@@ -81,7 +82,7 @@ class ProductAdapter(
                 } else {
                     Toast.makeText(
                         itemView.context,
-                        "Пожалуйста, пройдите аутентификацию",
+                        itemView.context.getString(R.string.please_authenticate),
                         Toast.LENGTH_SHORT
                     ).show()
                 }

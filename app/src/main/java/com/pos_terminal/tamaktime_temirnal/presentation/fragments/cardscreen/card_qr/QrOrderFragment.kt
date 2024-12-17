@@ -21,7 +21,6 @@ import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
 import com.pos_terminal.tamaktime_temirnal.R
-import com.pos_terminal.tamaktime_temirnal.common.autoCleared
 import com.pos_terminal.tamaktime_temirnal.databinding.FragmentQrOrderBinding
 import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardviewmodel.CardFragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,15 +30,18 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class QrOrderFragment : Fragment() {
 
+    private var _binding: FragmentQrOrderBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var codeScanner: CodeScanner
-    private var binding: FragmentQrOrderBinding by autoCleared()
+
     private val viewModel: CardFragmentViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentQrOrderBinding.inflate(inflater, container, false)
+        _binding = FragmentQrOrderBinding.inflate(inflater, container, false)
 
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) ==
             PackageManager.PERMISSION_DENIED
@@ -97,7 +99,7 @@ class QrOrderFragment : Fragment() {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 startScanning()
             } else {
-                Toast.makeText(requireContext(), "permission denied", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.error_permission_denied), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -114,6 +116,11 @@ class QrOrderFragment : Fragment() {
             codeScanner.releaseResources()
         }
         super.onPause()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

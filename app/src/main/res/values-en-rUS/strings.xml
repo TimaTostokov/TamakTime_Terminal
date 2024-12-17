@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="tamak">Kantin</string>
     <string name="time">deyim</string>
     <string name="tt_logo">logo_tamaktime</string>
@@ -15,8 +15,8 @@
     <string name="invalid_password">Password is too short</string>
 
     <string name="title">title</string>
-    <string name="count" translatable="false">1</string>
-    <string name="price" translatable="false">10 ₺</string>
+    <string name="count">1</string>
+    <string name="price">10 ₺</string>
 
     <string name="categories">Categories</string>
     <string name="products">Products</string>
@@ -32,7 +32,7 @@
     <string name="sets">Sets</string>
     <string name="candies">Sweet</string>
     <string name="bakery">Bakery products</string>
-    <string name="pizza" translatable="false">Pizza</string>
+    <string name="pizza">Pizza</string>
     <string name="desserts">Desserts</string>
 
     <!-- Card Fragment-->
@@ -48,9 +48,8 @@
     <string name="to_payments">Proceed to checkout</string>
     <string name="choose_product">Select a product to add to cart</string>
     <string name="tryAgain">Repeat</string>
-    <string name="ok" translatable="false">OK</string>
+    <string name="ok">OK</string>
     <string name="balance">Balance</string>
-    <string name="not_enough_money">*Insufficient funds for further payment</string>
     <string name="order_success">Payment was successful</string>
     <string name="order_error">Payment error</string>
     <string name="ordering">Waiting for a response from the server</string>
@@ -61,21 +60,44 @@
     <string name="cancel">Cancel</string>
     <string name="total">Total</string>
 
-    <string name="emptyDescription" translatable="false">empty_box_pic</string>
-    <string name="cardDescription" translatable="false">card_pic</string>
-    <string name="errorDescription" translatable="false">error</string>
-    <string name="successDescription" translatable="false">success</string>
-    <string name="foodDescription" translatable="false">food_pic</string>
-    <string name="removeDescription" translatable="false">icon_remove</string>
-    <string name="deleteDescription" translatable="false">icon_delete</string>
-    <string name="addDescription" translatable="false">icon_add</string>
-    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
-    <string name="iseedeadpeople" translatable="false">You shouldnt have seen this inscription</string>
-    <string name="iseedeadpeoplebtn" translatable="false">Ysnhsti</string>
-    <string name="mock_user_name" translatable="false">Константинов К.</string>
-    <string name="vhod_cashier" translatable="false">Login as cashier</string>
+    <string name="emptyDescription">empty_box_pic</string>
+    <string name="cardDescription">card_pic</string>
+    <string name="errorDescription">error</string>
+    <string name="successDescription">success</string>
+    <string name="foodDescription">food_pic</string>
+    <string name="removeDescription">icon_remove</string>
+    <string name="deleteDescription">icon_delete</string>
+    <string name="addDescription">icon_add</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="iseedeadpeople">You shouldnt have seen this inscription</string>
+    <string name="iseedeadpeoplebtn">Ysnhsti</string>
+    <string name="mock_user_name">Константинов К.</string>
+    <string name="vhod_cashier">Login as cashier</string>
     <string name="orders">Place an order</string>
     <string name="orderqr">Place an order via QR</string>
     <string name="qr_code">readout QR Code</string>
+    <string name="nfc_unavailable">NFC is not available on this device</string>
+    <string name="exit_dialog_title">Close the app?</string>
+    <string name="exit_dialog_message">Are you sure you want to exit?</string>
+    <string name="exit_dialog_positive">Yes</string>
+    <string name="exit_dialog_negative">No</string>
+    <string name="document_updated">Document updated</string>
+    <string name="not_enough_money">*Not enough funds for payment</string>
+    <string name="limit_exceeded">Order limit exceeded</string>
+    <string name="not_enough_money_for_further_payment">Not enough funds for further payment</string>
+    <string name="student_not_found">Student not found</string>
+    <string name="product_out_of_stock">Product is out of stock</string>
+    <string name="please_authenticate">Please authenticate</string>
+    <string name="error_invalid_credentials">Invalid login or password</string>
+    <string name="error_forbidden">You do not have permission to perform this operation</string>
+    <string name="error_not_found">Server not found: %1$s</string>
+    <string name="error_server">Server error</string>
+    <string name="error_generic">%1$d %2$s</string>
+    <string name="error_prefix">Error: %1$s</string>
+    <string name="select_language">Select language</string>
+    <string name="error_permission_denied">Permission denied</string>
+    <string name="pieces_of_goods">pcs</string>
+    <string name="two_thousand_txt">200 ₺</string>
+    <string name="count_txt">30 adet</string>
 
 </resources>

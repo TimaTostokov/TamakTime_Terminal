@@ -16,7 +16,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.pos_terminal.tamaktime_temirnal.common.autoCleared
 import com.pos_terminal.tamaktime_temirnal.databinding.FragmentLoginDialogBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -24,7 +23,8 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class LoginDialogFragment : DialogFragment() {
 
-    private var binding: FragmentLoginDialogBinding by autoCleared()
+    private var _binding: FragmentLoginDialogBinding? = null
+    private val binding get() = _binding!!
 
     private val viewModel: LoginDialogFragmentViewModel by viewModels()
 
@@ -42,7 +42,7 @@ class LoginDialogFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = FragmentLoginDialogBinding.inflate(inflater, container, false)
+        _binding = FragmentLoginDialogBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -118,6 +118,11 @@ class LoginDialogFragment : DialogFragment() {
                 )
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name" translatable="false">TamakTime_Temirnal</string>
+
     <string name="tamak">Kantin</string>
     <string name="time">deyim</string>
     <string name="tt_logo">логотип_тамаквремя</string>
@@ -13,8 +15,8 @@
     <string name="invalid_phone">Неправильный номер телефона</string>
     <string name="invalid_password">Пароль слишком короткий</string>
     <string name="title">заголовок</string>
-    <string name="count" translatable="false">1</string>
-    <string name="price" translatable="false">10 ₺</string>
+    <string name="count">1</string>
+    <string name="price">10 ₺</string>
     <string name="categories">Категории</string>
     <string name="products">Продукты</string>
     <string name="breakfast">Завтрак</string>
@@ -29,15 +31,14 @@
     <string name="sets">Наборы</string>
     <string name="candies">Сладости</string>
     <string name="bakery">Выпечка</string>
-    <string name="pizza" translatable="false">Пицца</string>
+    <string name="pizza">Пицца</string>
     <string name="desserts">Десерты</string>
 
     <!-- Фрагмент карты -->
     <string name="attach_card">Предъявите карту для оформления заказа</string>
     <string name="card_reading">Карта считывается</string>
     <string name="wait">Пожалуйста, подождите</string>
-    <string name="card_reading_wait">Идёт считывание карты
-Пожалуйста, подождите</string>
+    <string name="card_reading_wait">Идёт считывание картыПожалуйста, подождите</string>
     <string name="card_authentication_wait">Аутентификация владельца карты. Пожалуйста, подождите</string>
     <string name="smth_wrong">Что-то пошло не так</string>
     <string name="try_again">Попробуйте снова</string>
@@ -46,9 +47,8 @@
     <string name="to_payments">Перейти к оплате</string>
     <string name="choose_product">Выберите продукт, чтобы добавить в корзину</string>
     <string name="tryAgain">Повторить</string>
-    <string name="ok" translatable="false">OK</string>
+    <string name="ok">OK</string>
     <string name="balance">Баланс</string>
-    <string name="not_enough_money">*Недостаточно средств для дальнейшей оплаты</string>
     <string name="order_success">Оплата прошла успешно</string>
     <string name="order_error">Ошибка оплаты</string>
     <string name="ordering">Ожидание ответа от сервера</string>
@@ -58,21 +58,44 @@
     <string name="order">Заказ</string>
     <string name="cancel">Отмена</string>
     <string name="total">Итого</string>
-    <string name="emptyDescription" translatable="false">пустая_коробка_картинка</string>
-    <string name="cardDescription" translatable="false">карта_картинка</string>
-    <string name="errorDescription" translatable="false">ошибка</string>
-    <string name="successDescription" translatable="false">успех</string>
-    <string name="foodDescription" translatable="false">еда_картинка</string>
-    <string name="removeDescription" translatable="false">иконка_удалить</string>
-    <string name="deleteDescription" translatable="false">иконка_удалить</string>
-    <string name="addDescription" translatable="false">иконка_добавить</string>
-    <string name="hello_blank_fragment" translatable="false">Привет, пустой фрагмент</string>
-    <string name="iseedeadpeople" translatable="false">Вы не должны были видеть эту надпись</string>
-    <string name="iseedeadpeoplebtn" translatable="false">Ysnhsti</string>
-    <string name="mock_user_name" translatable="false">Константинов К.</string>
-    <string name="vhod_cashier" translatable="false">Войдите как кассир</string>
+    <string name="emptyDescription">пустая_коробка_картинка</string>
+    <string name="cardDescription">карта_картинка</string>
+    <string name="errorDescription">ошибка</string>
+    <string name="successDescription">успех</string>
+    <string name="foodDescription">еда_картинка</string>
+    <string name="removeDescription">иконка_удалить</string>
+    <string name="deleteDescription">иконка_удалить</string>
+    <string name="addDescription">иконка_добавить</string>
+    <string name="hello_blank_fragment">Привет, пустой фрагмент</string>
+    <string name="iseedeadpeople">Вы не должны были видеть эту надпись</string>
+    <string name="iseedeadpeoplebtn">Ysnhsti</string>
+    <string name="mock_user_name">Константинов К.</string>
+    <string name="vhod_cashier">Войдите как кассир</string>
     <string name="orders">Оформить заказ</string>
     <string name="orderqr">Оформить заказ по QR</string>
     <string name="qr_code">Считывание QR Code</string>
+    <string name="nfc_unavailable">NFC в данном устройстве недоступно</string>
+    <string name="exit_dialog_title">Закрыть приложение?</string>
+    <string name="exit_dialog_message">Вы уверены, что хотите выйти?</string>
+    <string name="exit_dialog_positive">Да</string>
+    <string name="exit_dialog_negative">Нет</string>
+    <string name="document_updated">Документ обновлён</string>
+    <string name="not_enough_money">*Недостаточно средств для оплаты</string>
+    <string name="limit_exceeded">Превышен лимит заказа</string>
+    <string name="not_enough_money_for_further_payment">Недостаточно средств для дальнейшей оплаты</string>
+    <string name="student_not_found">Студент не найден</string>
+    <string name="product_out_of_stock">Товар закончился</string>
+    <string name="please_authenticate">Пожалуйста, пройдите аутентификацию</string>
+    <string name="error_invalid_credentials">Неверный логин или пароль</string>
+    <string name="error_forbidden">У Вас нет прав на выполнение этой операции</string>
+    <string name="error_not_found">Сервер не найден: %1$s</string>
+    <string name="error_server">Ошибка сервера</string>
+    <string name="error_generic">%1$d %2$s</string>
+    <string name="error_prefix">Ошибка: %1$s</string>
+    <string name="select_language">Выберите язык</string>
+    <string name="error_permission_denied">Доступ запрещен</string>
+    <string name="pieces_of_goods">шт</string>
+    <string name="two_thousand_txt">200 ₺</string>
+    <string name="count_txt">30 шт</string>
 
 </resources>

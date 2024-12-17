@@ -24,7 +24,6 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.pos_terminal.tamaktime_temirnal.R
 import com.pos_terminal.tamaktime_temirnal.common.UiState
-import com.pos_terminal.tamaktime_temirnal.common.autoCleared
 import com.pos_terminal.tamaktime_temirnal.data.remote.model.product.Product
 import com.pos_terminal.tamaktime_temirnal.databinding.FragmentProductBinding
 import com.pos_terminal.tamaktime_temirnal.presentation.fragments.cardscreen.cardauthed.SharedViewModel
@@ -34,7 +33,8 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class ProductFragment : Fragment(), ProductAdapter.OnProductClickListener, MenuProvider {
 
-    private var binding: FragmentProductBinding by autoCleared()
+    private var _binding: FragmentProductBinding? = null
+    private val binding get() = _binding!!
 
     private val viewModel: ProductViewModel by viewModels()
 
@@ -47,7 +47,7 @@ class ProductFragment : Fragment(), ProductAdapter.OnProductClickListener, MenuP
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = FragmentProductBinding.inflate(inflater, container, false)
+        _binding = FragmentProductBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -150,8 +150,13 @@ class ProductFragment : Fragment(), ProductAdapter.OnProductClickListener, MenuP
         if (product.count > 0) {
             sharedViewModel.addProductToOrder(product)
         } else {
-            Toast.makeText(requireContext(), "Товар закончился", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.product_out_of_stock), Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }
